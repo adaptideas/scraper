@@ -8,7 +8,11 @@ import java.io.InputStream;
  */
 final public class Template<T> {
 
-    public Template(final InputStream inputStream, final Class<Item> type) {
+    public Template(final InputStream inputStream, final Class<T> type) {
+    }
+
+    public boolean matches(final Html html) {
+        return false;
     }
 
 }

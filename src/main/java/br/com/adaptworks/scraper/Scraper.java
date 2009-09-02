@@ -9,7 +9,9 @@ import java.util.List;
 final public class Scraper<T> {
 
     public Scraper(final Template<T> template) {
-        // TODO Auto-generated constructor stub
+        if (template == null) {
+            throw new IllegalArgumentException("template cannot be null.");
+        }
     }
 
     public List<T> parse(final Html html) {

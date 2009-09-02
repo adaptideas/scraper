@@ -46,4 +46,11 @@
 		</developer>
 	</developers>
 	
+	<repositories>
+		<repository>
+			<id>Archiva interno</id>
+			<url>http://192.168.0.123:8081/archiva/repository/internal/</url>
+		</repository>
+	</repositories>
+	
 </project>

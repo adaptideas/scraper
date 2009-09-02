@@ -1,5 +1,6 @@
 package br.com.adaptworks.scraper;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.List;
 
@@ -19,7 +20,7 @@ final public class InterfaceDevelopmentTest {
     }
 
     private InputStream getInputStream() {
-        return null;
+        return new ByteArrayInputStream("".getBytes());
     }
 
 }
