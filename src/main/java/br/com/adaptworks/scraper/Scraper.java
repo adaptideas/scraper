@@ -15,8 +15,10 @@ final public class Scraper<T> {
     }
 
     public List<T> parse(final Html html) {
+        if (html == null) {
+            throw new IllegalArgumentException("html cannot be null");
+        }
         return null;
-        // TODO Auto-generated method stub
 
     }
 
