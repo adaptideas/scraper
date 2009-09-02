@@ -22,7 +22,7 @@ final public class ScraperTest {
     }
 
     private InputStream getInputStream() {
-        return new ByteArrayInputStream("".getBytes());
+        return new ByteArrayInputStream("abc".getBytes());
     }
 
 }

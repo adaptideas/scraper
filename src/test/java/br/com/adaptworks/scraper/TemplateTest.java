@@ -18,7 +18,22 @@ final public class TemplateTest {
         Assert.assertFalse(new Template<Item>(getInputStream(), Item.class).matches(new Html(getInputStream())));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testThatThrowsExceptionIfInputStreamIsNull() {
+        new Template<Item>((InputStream) null, Item.class);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testThatThrowsExceptionIfTemplateIsNull() {
+        new Template<Item>((String) null, Item.class);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testThatThrowsExceptionIfTypeIsNull() {
+        new Template<Item>("", null);
+    }
+
     private InputStream getInputStream() {
-        return new ByteArrayInputStream("".getBytes());
+        return new ByteArrayInputStream("abc".getBytes());
     }
 }

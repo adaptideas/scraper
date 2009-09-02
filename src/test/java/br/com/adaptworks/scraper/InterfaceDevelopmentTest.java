@@ -20,7 +20,7 @@ final public class InterfaceDevelopmentTest {
     }
 
     private InputStream getInputStream() {
-        return new ByteArrayInputStream("".getBytes());
+        return new ByteArrayInputStream("abc".getBytes());
     }
 
 }
