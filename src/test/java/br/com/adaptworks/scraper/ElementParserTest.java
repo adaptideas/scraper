@@ -148,4 +148,18 @@ final public class ElementParserTest {
 
     }
 
+    @Test
+    public void testThatIgnoresWhiteCharOnTagName() {
+        List<Element> elements = parser.parse("<\n/\tbar > content <\n foo> foo content </foo>");
+
+        Assert.assertEquals(3, elements.size());
+        Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
+        Assert.assertEquals(OpenTagElement.class, elements.get(1).getClass());
+        Assert.assertEquals(CloseTagElement.class, elements.get(2).getClass());
+        Assert.assertEquals("bar", elements.get(0).getName());
+        Assert.assertEquals("foo", elements.get(1).getName());
+        Assert.assertEquals("foo", elements.get(2).getName());
+        Assert.assertEquals(" content ", elements.get(0).getContent());
+        Assert.assertEquals(" foo content ", elements.get(1).getContent());
+    }
 }
