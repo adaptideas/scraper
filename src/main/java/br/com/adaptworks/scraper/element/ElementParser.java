@@ -1,4 +1,4 @@
-package br.com.adaptworks.scraper;
+package br.com.adaptworks.scraper.element;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ final public class ElementParser {
     private final Pattern pattern;
 
     public ElementParser() {
-        pattern = Pattern.compile("(?s)<([^><]*?)>");
+        pattern = Pattern.compile("(?s)<([^<>]*?)>([^<>]*)");
     }
 
     public List<Element> parse(final String template) {
@@ -22,10 +22,14 @@ final public class ElementParser {
         Matcher matcher = pattern.matcher(template);
         while (matcher.find()) {
             String tagName = matcher.group(1);
+            String tagContent = null;
+            if (matcher.group(2).length() != 0) {
+                tagContent = matcher.group(2);
+            }
             if (!tagName.startsWith("/")) {
-                elements.add(new OpenTagElement(tagName));
+                elements.add(new OpenTagElement(tagName, tagContent));
             } else {
-                elements.add(new CloseTagElement(tagName.substring(1)));
+                elements.add(new CloseTagElement(tagName.substring(1), tagContent));
             }
         }
 

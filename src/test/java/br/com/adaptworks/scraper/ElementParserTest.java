@@ -7,6 +7,11 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.adaptworks.scraper.element.CloseTagElement;
+import br.com.adaptworks.scraper.element.Element;
+import br.com.adaptworks.scraper.element.ElementParser;
+import br.com.adaptworks.scraper.element.OpenTagElement;
+
 /**
  * @author jonasabreu
  * 
@@ -98,6 +103,49 @@ final public class ElementParserTest {
         Assert.assertEquals(OpenTagElement.class, elements.get(1).getClass());
         Assert.assertEquals("td", elements.get(0).getName());
         Assert.assertEquals("td", elements.get(1).getName());
+    }
+
+    @Test
+    public void testThatRecognizesAnyOpenTag() {
+        List<Element> elements = parser.parse("<foo>");
+
+        Assert.assertEquals(1, elements.size());
+        Assert.assertEquals(OpenTagElement.class, elements.get(0).getClass());
+        Assert.assertEquals("foo", elements.get(0).getName());
+    }
+
+    @Test
+    public void testThatRecognizesAnyCloseTag() {
+        List<Element> elements = parser.parse("</bar>");
+
+        Assert.assertEquals(1, elements.size());
+        Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
+        Assert.assertEquals("bar", elements.get(0).getName());
+    }
+
+    @Test
+    public void testThatFindsContent() {
+        List<Element> elements = parser.parse("</bar> content ");
+        Assert.assertEquals(1, elements.size());
+        Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
+        Assert.assertEquals("bar", elements.get(0).getName());
+        Assert.assertEquals(" content ", elements.get(0).getContent());
+    }
+
+    @Test
+    public void testThatKeepsContentOnFirstTag() {
+        List<Element> elements = parser.parse("</bar> content <foo> foo content </foo>");
+
+        Assert.assertEquals(3, elements.size());
+        Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
+        Assert.assertEquals(OpenTagElement.class, elements.get(1).getClass());
+        Assert.assertEquals(CloseTagElement.class, elements.get(2).getClass());
+        Assert.assertEquals("bar", elements.get(0).getName());
+        Assert.assertEquals("foo", elements.get(1).getName());
+        Assert.assertEquals("foo", elements.get(2).getName());
+        Assert.assertEquals(" content ", elements.get(0).getContent());
+        Assert.assertEquals(" foo content ", elements.get(1).getContent());
+
     }
 
 }

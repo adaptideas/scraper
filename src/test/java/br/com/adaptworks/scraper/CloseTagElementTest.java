@@ -3,6 +3,8 @@ package br.com.adaptworks.scraper;
 import org.junit.Assert;
 import org.junit.Test;
 
+import br.com.adaptworks.scraper.element.CloseTagElement;
+
 /**
  * @author jonasabreu
  * 
@@ -10,6 +12,6 @@ import org.junit.Test;
 final public class CloseTagElementTest {
     @Test
     public void testTrimsTagName() {
-        Assert.assertEquals("td", new CloseTagElement("\n\ttd  ").getName());
+        Assert.assertEquals("td", new CloseTagElement("\n\ttd  ", null).getName());
     }
 }

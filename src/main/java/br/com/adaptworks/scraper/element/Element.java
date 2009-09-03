@@ -1,4 +1,4 @@
-package br.com.adaptworks.scraper;
+package br.com.adaptworks.scraper.element;
 
 /**
  * @author jonasabreu
@@ -7,5 +7,7 @@ package br.com.adaptworks.scraper;
 public interface Element {
 
     String getName();
+
+    String getContent();
 
 }

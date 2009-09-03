@@ -4,6 +4,9 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Scanner;
 
+import br.com.adaptworks.scraper.element.Element;
+import br.com.adaptworks.scraper.element.ElementParser;
+
 /**
  * @author jonasabreu
  * 
