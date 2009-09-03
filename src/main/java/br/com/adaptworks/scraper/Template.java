@@ -1,6 +1,7 @@
 package br.com.adaptworks.scraper;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Scanner;
 final public class Template<T> {
 
     private final Class<T> type;
-    private final String template;
+    private final List<Element> template;
 
     public Template(final InputStream inputStream, final Class<T> type) {
         this(readInputStream(inputStream), type);
@@ -23,7 +24,7 @@ final public class Template<T> {
         if (type == null) {
             throw new IllegalArgumentException("type cannot be null");
         }
-        this.template = template;
+        this.template = new ElementParser().parse(template);
         this.type = type;
     }
 
