@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import br.com.adaptworks.scraper.element.CloseTagElement;
-import br.com.adaptworks.scraper.element.TagReader;
+import br.com.adaptworks.scraper.tag.TagReader;
 
 /**
  * @author jonasabreu

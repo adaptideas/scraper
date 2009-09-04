@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import br.com.adaptworks.scraper.tag.Tag;
+import br.com.adaptworks.scraper.tag.TagReader;
+
 /**
  * @author jonasabreu
  * 

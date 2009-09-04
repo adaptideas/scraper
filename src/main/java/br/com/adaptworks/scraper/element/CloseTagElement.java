@@ -2,6 +2,8 @@ package br.com.adaptworks.scraper.element;
 
 import java.util.Map;
 
+import br.com.adaptworks.scraper.tag.Tag;
+
 /**
  * @author jonasabreu
  * 

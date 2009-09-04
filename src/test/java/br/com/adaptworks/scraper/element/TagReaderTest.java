@@ -5,6 +5,9 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.adaptworks.scraper.tag.Tag;
+import br.com.adaptworks.scraper.tag.TagReader;
+
 /**
  * @author jonasabreu
  * 
