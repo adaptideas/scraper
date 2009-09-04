@@ -162,4 +162,24 @@ final public class ElementParserTest {
         Assert.assertEquals(" content ", elements.get(0).getContent());
         Assert.assertEquals(" foo content ", elements.get(1).getContent());
     }
+
+    @Test
+    public void testThatRecognizesAtributes() {
+        List<Element> elements = parser.parse("<\n/\tbar id=\"bla\"> content <\n foo attr='pong'> foo content </foo>");
+
+        Assert.assertEquals(3, elements.size());
+        Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
+        Assert.assertEquals(OpenTagElement.class, elements.get(1).getClass());
+        Assert.assertEquals(CloseTagElement.class, elements.get(2).getClass());
+
+        Assert.assertEquals("bar", elements.get(0).getName());
+        Assert.assertEquals("foo", elements.get(1).getName());
+        Assert.assertEquals("foo", elements.get(2).getName());
+
+        Assert.assertEquals(" content ", elements.get(0).getContent());
+        Assert.assertEquals(" foo content ", elements.get(1).getContent());
+
+        Assert.assertEquals("bla", elements.get(0).getAttributes().get("id"));
+        Assert.assertEquals("pong", elements.get(1).getAttributes().get("attr"));
+    }
 }

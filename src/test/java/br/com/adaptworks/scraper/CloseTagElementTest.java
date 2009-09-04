@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import br.com.adaptworks.scraper.element.CloseTagElement;
+import br.com.adaptworks.scraper.element.TagReader;
 
 /**
  * @author jonasabreu
@@ -12,6 +13,6 @@ import br.com.adaptworks.scraper.element.CloseTagElement;
 final public class CloseTagElementTest {
     @Test
     public void testTrimsTagName() {
-        Assert.assertEquals("td", new CloseTagElement("\n\ttd  ", null).getName());
+        Assert.assertEquals("td", new CloseTagElement(new TagReader().readTag("\n\ttd  "), null).getName());
     }
 }
