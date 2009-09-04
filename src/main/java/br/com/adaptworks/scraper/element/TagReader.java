@@ -11,7 +11,6 @@ final public class TagReader {
 
     public Tag readTag(final String declaration) {
         String tag = sanitize(declaration);
-        System.out.println(tag);
         Map<String, String> attributes = recoverAttributes(tag);
         String tagName = recoverName(tag);
         boolean isOpen = recoverType(tag);
@@ -49,7 +48,6 @@ final public class TagReader {
         while ((i < declaration.length()) && !isWhiteChar(declaration.charAt(i))) {
             clean += declaration.charAt(i++);
         }
-        System.out.println(clean);
 
         clean += ' ';
 
