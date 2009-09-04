@@ -1,11 +1,14 @@
 package br.com.adaptworks.scraper;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
+import br.com.adaptworks.scraper.element.DefaultElementMatcher;
 import br.com.adaptworks.scraper.element.Element;
+import br.com.adaptworks.scraper.element.ElementListMatcher;
 import br.com.adaptworks.scraper.element.ElementParser;
+import br.com.adaptworks.scraper.infra.InputStreamToStringReader;
 
 /**
  * @author jonasabreu
@@ -17,7 +20,7 @@ final public class Template<T> {
     private final List<Element> template;
 
     public Template(final InputStream inputStream, final Class<T> type) {
-        this(readInputStream(inputStream), type);
+        this(new InputStreamToStringReader().read(inputStream), type);
     }
 
     public Template(final String template, final Class<T> type) {
@@ -31,14 +34,9 @@ final public class Template<T> {
         this.type = type;
     }
 
-    public boolean matches(final Html html) {
-        return false;
+    public List<T> match(final Html html) {
+        List<Integer> indexes = new ElementListMatcher(new DefaultElementMatcher()).match(template, html.elements());
+        return new ArrayList<T>();
     }
 
-    private static String readInputStream(final InputStream inputStream) {
-        if (inputStream == null) {
-            throw new IllegalArgumentException("inputStream cannot be null");
-        }
-        return new Scanner(inputStream).useDelimiter("$$").next();
-    }
 }

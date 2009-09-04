@@ -1,9 +1,6 @@
 package br.com.adaptworks.scraper;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-
-import junit.framework.Assert;
 
 import org.junit.Test;
 
@@ -12,11 +9,6 @@ import org.junit.Test;
  * 
  */
 final public class TemplateTest {
-
-    @Test
-    public void testThatDoesNotMatchIfCantFindAnyHtmlElements() {
-        Assert.assertFalse(new Template<Item>(getInputStream(), Item.class).matches(new Html(getInputStream())));
-    }
 
     @Test(expected = IllegalArgumentException.class)
     public void testThatThrowsExceptionIfInputStreamIsNull() {
@@ -33,7 +25,4 @@ final public class TemplateTest {
         new Template<Item>("", null);
     }
 
-    private InputStream getInputStream() {
-        return new ByteArrayInputStream("abc".getBytes());
-    }
 }
