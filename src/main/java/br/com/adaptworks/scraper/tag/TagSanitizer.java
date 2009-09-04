@@ -35,7 +35,7 @@ final public class TagSanitizer {
             }
             i++;
         }
-        return clean;
+        return clean.endsWith(" ") ? clean.substring(0, clean.length() - 1) : clean;
     }
 
     private int nextNonWhiteChar(final String declaration, int i) {

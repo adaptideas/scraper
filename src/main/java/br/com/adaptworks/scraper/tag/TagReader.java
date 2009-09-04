@@ -23,7 +23,7 @@ final public class TagReader {
     }
 
     private String recoverName(final String tag) {
-        String tagName = tag.substring(0, tag.indexOf(" "));
+        String tagName = tag.substring(0, tag.indexOf(" ") == -1 ? tag.length() : tag.indexOf(" "));
 
         return tagName.startsWith("/") ? tagName.substring(1) : tagName;
     }
