@@ -23,4 +23,28 @@ final public class TagSanitizerTest {
         String tag = "td id=\"foo\" bar=\"foo\"";
         Assert.assertEquals(tag, sanitizer.sanitize(tag));
     }
+
+    @Test
+    public void testThatIgnoresWhiteChars() {
+        String tag = "td id=\"foo\" bar=\"foo\"";
+        Assert.assertEquals(tag, sanitizer.sanitize("\n\ttd \nid \n= \"foo\" \r bar=\"foo\"\n"));
+    }
+
+    @Test
+    public void testThatKeepsWhiteCharsInsideAttributeValue() {
+        String tag = "td id=\" foo\n \" bar=\"foo\"";
+        Assert.assertEquals(tag, sanitizer.sanitize("td id=\" foo\n \" bar=\"foo\""));
+    }
+
+    @Test
+    public void testThatKeepsWhiteCharsInsideAttributeValueAndRemovesThoseOutside() {
+        String tag = "td id=\" foo\n \" bar=\"foo\"";
+        Assert.assertEquals(tag, sanitizer.sanitize("td  \n id\t\r= \" foo\n \" \n\n\n\n\nbar =\t\"foo\"\t"));
+    }
+
+    @Test
+    public void testThatChangesSingleQuoteToDoubleQuote() {
+        String tag = "td id=\" foo\n \" bar=\"foo\"";
+        Assert.assertEquals(tag, sanitizer.sanitize("td id=' foo\n ' bar='foo'"));
+    }
 }
