@@ -47,4 +47,16 @@ final public class TagSanitizerTest {
         String tag = "td id=\" foo\n \" bar=\"foo\"";
         Assert.assertEquals(tag, sanitizer.sanitize("td id=' foo\n ' bar='foo'"));
     }
+
+    @Test
+    public void testThatWorksOnTagsWithoutAttributes() {
+        String tag = "td";
+        Assert.assertEquals(tag, sanitizer.sanitize("td"));
+    }
+
+    @Test
+    public void testThatWorksOnMessyTagsWithoutAttributes() {
+        String tag = "td";
+        Assert.assertEquals(tag, sanitizer.sanitize("   \t \n \rtd   \n"));
+    }
 }
