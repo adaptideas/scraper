@@ -14,7 +14,7 @@ final public class OpenTagElement implements Element {
     private final String tagContent;
 
     public OpenTagElement(final Tag tag, final String tagContent) {
-        this.tagContent = tagContent;
+        this.tagContent = tagContent == null ? "" : tagContent;
         this.tag = tag;
     }
 

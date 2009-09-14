@@ -12,13 +12,19 @@
 	</organization>
 	
 	<dependencies>
+		
+		<dependency>
+			<groupId>net.vidageek</groupId>
+			<artifactId>mirror</artifactId>
+			<version>1.5.1</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.7</version>
 			<scope>test</scope>
 		</dependency>
-		
 	</dependencies>
 	<build>
 		<plugins>

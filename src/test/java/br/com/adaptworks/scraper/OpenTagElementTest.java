@@ -16,4 +16,10 @@ final public class OpenTagElementTest {
     public void testTrimsTagName() {
         Assert.assertEquals("td", new OpenTagElement(new TagReader().readTag("\n\ttd  "), null).getName());
     }
+
+    @Test
+    public void testThatReturnsEmptyStringIfCreatedWithNullContent() {
+        Assert.assertEquals("", new OpenTagElement(new TagReader().readTag("td"), null).getContent());
+    }
+
 }

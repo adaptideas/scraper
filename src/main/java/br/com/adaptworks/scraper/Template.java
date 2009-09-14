@@ -2,8 +2,13 @@ package br.com.adaptworks.scraper;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import net.vidageek.mirror.dsl.Mirror;
 import br.com.adaptworks.scraper.element.DefaultElementMatcher;
 import br.com.adaptworks.scraper.element.Element;
 import br.com.adaptworks.scraper.element.ElementListMatcher;
@@ -18,6 +23,7 @@ final public class Template<T> {
 
     private final Class<T> type;
     private final List<Element> template;
+    private final Pattern pattern = Pattern.compile("\\$\\{(.*?)\\}");
 
     public Template(final InputStream inputStream, final Class<T> type) {
         this(new InputStreamToStringReader().read(inputStream), type);
@@ -36,7 +42,37 @@ final public class Template<T> {
 
     public List<T> match(final Html html) {
         List<Integer> indexes = new ElementListMatcher(new DefaultElementMatcher()).match(template, html.elements());
-        return new ArrayList<T>();
+        List<Map<String, String>> data = recoverData(template, html.elements(), indexes);
+        return convertDataToList(type, data);
     }
 
+    private List<T> convertDataToList(final Class<T> type, final List<Map<String, String>> data) {
+        List<T> list = new ArrayList<T>();
+        for (Map<String, String> map : data) {
+            T instance = new Mirror().on(type).invoke().constructor().withoutArgs();
+            for (String field : map.keySet()) {
+                new Mirror().on(instance).set().field(field).withValue(map.get(field));
+            }
+            list.add(instance);
+        }
+        return list;
+    }
+
+    private List<Map<String, String>> recoverData(final List<Element> template, final List<Element> html,
+            final List<Integer> indexes) {
+        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+
+        for (int i = 0; i < indexes.size(); i++) {
+            Map<String, String> map = new HashMap<String, String>();
+            for (int j = 0; j < template.size(); j++) {
+                Matcher matcher = pattern.matcher(template.get(j).getContent());
+                if (matcher.find()) {
+                    map.put(matcher.group(1), html.get(indexes.get(i) + j).getContent());
+                }
+            }
+            list.add(map);
+        }
+
+        return list;
+    }
 }
