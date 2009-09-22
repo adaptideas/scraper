@@ -12,7 +12,10 @@ final public class TagSanitizer {
         i = nextNonWhiteChar(declaration, i);
         clean += declaration.charAt(i++);// either / or first tag name char
 
-        i = nextNonWhiteChar(declaration, i);
+        if (declaration.charAt(i - 1) == '/') {
+            i = nextNonWhiteChar(declaration, i);
+        }
+
         while ((i < declaration.length()) && !isWhiteChar(declaration.charAt(i))) {
             clean += declaration.charAt(i++);
         }

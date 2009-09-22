@@ -59,4 +59,14 @@ final public class TagReaderTest {
         Assert.assertEquals("bla", tag.attribute("id"));
         Assert.assertEquals("bar", tag.attribute("foo"));
     }
+
+    @Test
+    public void testThatWorksForTagA() {
+        Tag tag = reader.readTag("a href=\"http://foo.bar\"");
+        Assert.assertEquals("a", tag.name());
+        Assert.assertTrue(tag.isOpen());
+        Assert.assertEquals(1, tag.attributes().size());
+        Assert.assertEquals("http://foo.bar", tag.attribute("href"));
+    }
+
 }

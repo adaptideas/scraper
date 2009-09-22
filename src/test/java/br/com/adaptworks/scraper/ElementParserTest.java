@@ -182,4 +182,14 @@ final public class ElementParserTest {
         Assert.assertEquals("bla", elements.get(0).getAttributes().get("id"));
         Assert.assertEquals("pong", elements.get(1).getAttributes().get("attr"));
     }
+
+    @Test
+    public void testThatAcceptsWhiteSpaceOnAttributeValue() {
+        List<Element> parse = parser.parse("<a href=\"http://blog.caelum.com.br \" a=\"b\">Comunidade</a>");
+    }
+
+    @Test
+    public void testThatAcceptsSelfClosingTag() {
+        List<Element> parse = parser.parse("<hr />");
+    }
 }

@@ -20,4 +20,10 @@ final public class CloseTagElementTest {
     public void testThatReturnsEmptyStringIfCreatedWithNullContent() {
         Assert.assertEquals("", new CloseTagElement(new TagReader().readTag("td"), null).getContent());
     }
+
+    @Test
+    public void testThatToStringReturnsSomethingGoodToRead() {
+        Assert.assertEquals("td with attributes [class=bla]", new CloseTagElement(new TagReader()
+            .readTag("td class=\"bla\""), null).toString());
+    }
 }

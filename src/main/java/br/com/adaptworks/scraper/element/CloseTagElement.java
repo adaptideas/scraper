@@ -30,4 +30,9 @@ final public class CloseTagElement implements Element {
         return tag.attributes();
     }
 
+    @Override
+    public String toString() {
+        return tag.toString();
+    }
+
 }

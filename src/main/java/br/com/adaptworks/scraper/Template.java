@@ -9,6 +9,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.vidageek.mirror.dsl.Mirror;
+
+import org.apache.log4j.Logger;
+
 import br.com.adaptworks.scraper.element.DefaultElementMatcher;
 import br.com.adaptworks.scraper.element.Element;
 import br.com.adaptworks.scraper.element.ElementListMatcher;
@@ -25,6 +28,8 @@ final public class Template<T> {
     private final List<Element> template;
     private final Pattern pattern = Pattern.compile("\\$\\{(.*?)\\}");
 
+    private static final Logger log = Logger.getLogger(Template.class);
+
     public Template(final InputStream inputStream, final Class<T> type) {
         this(new InputStreamToStringReader().read(inputStream), type);
     }
@@ -36,11 +41,15 @@ final public class Template<T> {
         if (type == null) {
             throw new IllegalArgumentException("type cannot be null");
         }
+
+        log.debug("Creating template for type " + type.getName());
+
         this.template = new ElementParser().parse(template);
         this.type = type;
     }
 
     public List<T> match(final Html html) {
+        log.debug("Matching html: " + html);
         List<Integer> indexes = new ElementListMatcher(new DefaultElementMatcher()).match(template, html.elements());
         List<Map<String, String>> data = recoverData(template, html.elements(), indexes);
         return convertDataToList(type, data);

@@ -22,4 +22,10 @@ final public class OpenTagElementTest {
         Assert.assertEquals("", new OpenTagElement(new TagReader().readTag("td"), null).getContent());
     }
 
+    @Test
+    public void testThatToStringReturnsSomethingGoodToRead() {
+        Assert.assertEquals("td with attributes [class=bla]", new OpenTagElement(new TagReader()
+            .readTag("td class=\"bla\""), null).toString());
+    }
+
 }

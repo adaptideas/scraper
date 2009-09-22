@@ -30,4 +30,8 @@ final public class OpenTagElement implements Element {
         return tag.attributes();
     }
 
+    @Override
+    public String toString() {
+        return tag.toString();
+    }
 }

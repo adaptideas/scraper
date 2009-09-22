@@ -10,21 +10,29 @@
 		<name>Adaptworks</name>
 		<url>http://www.adaptworks.com.br</url>
 	</organization>
-	
+
 	<dependencies>
-		
+
 		<dependency>
 			<groupId>net.vidageek</groupId>
 			<artifactId>mirror</artifactId>
 			<version>1.5.1</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.13</version>
+		</dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.7</version>
 			<scope>test</scope>
 		</dependency>
+
+
 	</dependencies>
 	<build>
 		<plugins>
@@ -51,14 +59,14 @@
 			</roles>
 		</developer>
 	</developers>
-	
+
 	<repositories>
 		<repository>
 			<id>Archiva interno</id>
 			<url>http://192.168.0.123:8081/archiva/repository/internal/</url>
 		</repository>
 	</repositories>
-	
+
 	<reporting>
 		<plugins>
 			<plugin>
@@ -67,5 +75,5 @@
 			</plugin>
 		</plugins>
 	</reporting>
-	
+
 </project>
