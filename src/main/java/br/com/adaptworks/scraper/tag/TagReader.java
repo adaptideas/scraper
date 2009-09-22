@@ -9,33 +9,51 @@ import java.util.Map;
  */
 final public class TagReader {
 
-    public Tag readTag(final String declaration) {
-        String tag = new TagSanitizer().sanitize(declaration);
-        Map<String, String> attributes = recoverAttributes(tag);
-        String tagName = recoverName(tag);
-        boolean isOpen = recoverType(tag);
+	public Tag readTag(final String declaration) {
+		String tag = new TagSanitizer().sanitize(declaration);
+		Map<String, String> attributes = this.recoverAttributes(tag);
+		String tagName = this.recoverName(tag);
+		boolean isOpen = this.recoverType(tag);
 
-        return new Tag(tagName, isOpen, attributes);
-    }
+		return new Tag(tagName, isOpen, attributes);
+	}
 
-    private boolean recoverType(final String tag) {
-        return !tag.startsWith("/");
-    }
+	private boolean recoverType(final String tag) {
+		return !tag.startsWith("/");
+	}
 
-    private String recoverName(final String tag) {
-        String tagName = tag.substring(0, tag.indexOf(" ") == -1 ? tag.length() : tag.indexOf(" "));
+	private String recoverName(final String tag) {
+		String tagName = tag.substring(0, tag.indexOf(" ") == -1 ? tag.length() : tag.indexOf(" "));
 
-        return tagName.startsWith("/") ? tagName.substring(1) : tagName;
-    }
+		return tagName.startsWith("/") ? tagName.substring(1) : tagName;
+	}
 
-    private Map<String, String> recoverAttributes(final String declaration) {
-        String[] split = declaration.split(" ");
-        Map<String, String> map = new HashMap<String, String>();
-        for (int i = 1; i < split.length; i++) {
-            String[] attribute = split[i].split("=\"|\"");
-            map.put(attribute[0], attribute[1]);
-        }
-        return map;
-    }
+	private Map<String, String> recoverAttributes(final String declaration) {
+		String[] tokens = this.tokenize(declaration);
+		Map<String, String> map = new HashMap<String, String>();
+
+		for (int i = 1; i < tokens.length; i++) {
+			String[] attribute = tokens[i].split("=\"|\"");
+			map.put(attribute[0], attribute[1]);
+		}
+		return map;
+	}
+
+	private String[] tokenize(final String declaration) {
+		boolean dentroDeAspas = false;
+		String temp = "";
+
+		for (int i = 0; i < declaration.length(); i++) {
+			if (declaration.charAt(i) == '"') {
+				dentroDeAspas = !dentroDeAspas;
+			}
+			if ((declaration.charAt(i) == ' ') && !dentroDeAspas) {
+				temp += '#';
+			} else {
+				temp += declaration.charAt(i);
+			}
+		}
+		return temp.split("#");
+	}
 
 }
