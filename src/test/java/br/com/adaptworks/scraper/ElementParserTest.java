@@ -206,4 +206,17 @@ final public class ElementParserTest {
 	public void testThatAcceptsSelfClosingTag() {
 		List<Element> parse = this.parser.parse("<hr />");
 	}
+
+	public void testThatAcceptsTheTagA() {
+		List<Element> elements = this.parser.parse("<a href=\"http://bla\">");
+
+		Assert.assertEquals(1, elements.size());
+
+		Assert.assertEquals(OpenTagElement.class, elements.get(0).getClass());
+
+		Assert.assertEquals("a", elements.get(0).getName());
+
+		Assert.assertEquals("http://bla", elements.get(0).getAttributes().get("href"));
+
+	}
 }
