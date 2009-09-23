@@ -12,7 +12,6 @@ import br.com.adaptworks.scraper.element.Element;
 import br.com.adaptworks.scraper.element.ElementParser;
 import br.com.adaptworks.scraper.element.OpenTagElement;
 import br.com.adaptworks.scraper.tag.BangTagElement;
-import br.com.adaptworks.scraper.tag.SelfClosedTagElement;
 
 /**
  * @author jonasabreu
@@ -233,7 +232,7 @@ final public class ElementParserTest {
 
         Assert.assertEquals(1, elements.size());
 
-        Assert.assertEquals(SelfClosedTagElement.class, elements.get(0).getClass());
+        Assert.assertEquals(OpenTagElement.class, elements.get(0).getClass());
 
         Assert.assertEquals("hr", elements.get(0).getName());
 
