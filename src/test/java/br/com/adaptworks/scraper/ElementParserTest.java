@@ -235,6 +235,18 @@ final public class ElementParserTest {
         Assert.assertEquals(OpenTagElement.class, elements.get(0).getClass());
 
         Assert.assertEquals("hr", elements.get(0).getName());
+    }
 
+    @Test
+    public void testThatAcceptsSelfClosingTagWithAttributes() {
+        List<Element> elements = parser.parse("<hr a=\"b\"/>");
+
+        Assert.assertEquals(1, elements.size());
+
+        Assert.assertEquals(OpenTagElement.class, elements.get(0).getClass());
+
+        Assert.assertEquals("hr", elements.get(0).getName());
+
+        Assert.assertEquals("b", elements.get(0).getAttributes().get("a"));
     }
 }
