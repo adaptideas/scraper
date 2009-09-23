@@ -10,38 +10,38 @@ import org.apache.log4j.Logger;
  */
 final public class Tag {
 
-    private final String name;
-    private final boolean isOpen;
-    private final Map<String, String> attributes;
+	private final String name;
+	private final TagType tagType;
+	private final Map<String, String> attributes;
 
-    private static final Logger log = Logger.getLogger(Tag.class);
+	private static final Logger log = Logger.getLogger(Tag.class);
 
-    public Tag(final String name, final boolean isOpen, final Map<String, String> attributes) {
-        this.name = name;
-        this.isOpen = isOpen;
-        this.attributes = attributes;
-        log.trace("Creating tag " + toString());
-    }
+	public Tag(final String name, final TagType tagType, final Map<String, String> attributes) {
+		this.name = name;
+		this.tagType = tagType;
+		this.attributes = attributes;
+		log.trace("Creating tag " + this.toString());
+	}
 
-    public String name() {
-        return name;
-    }
+	public String name() {
+		return this.name;
+	}
 
-    public boolean isOpen() {
-        return isOpen;
-    }
+	public TagType type() {
+		return this.tagType;
+	}
 
-    public String attribute(final String key) {
-        return attributes.get(key);
-    }
+	public String attribute(final String key) {
+		return this.attributes.get(key);
+	}
 
-    public Map<String, String> attributes() {
-        return attributes;
-    }
+	public Map<String, String> attributes() {
+		return this.attributes;
+	}
 
-    @Override
-    public String toString() {
-        return (isOpen ? "" : "/") + name + " with attributes " + attributes.entrySet();
-    }
+	@Override
+	public String toString() {
+		return this.tagType + this.name + " with attributes " + this.attributes.entrySet();
+	}
 
 }

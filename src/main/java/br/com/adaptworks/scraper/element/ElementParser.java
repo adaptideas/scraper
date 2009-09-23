@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import br.com.adaptworks.scraper.tag.BangTagElement;
 import br.com.adaptworks.scraper.tag.Tag;
 import br.com.adaptworks.scraper.tag.TagReader;
+import br.com.adaptworks.scraper.tag.TagType;
 
 /**
  * @author jonasabreu
@@ -14,29 +16,31 @@ import br.com.adaptworks.scraper.tag.TagReader;
  */
 final public class ElementParser {
 
-    private final Pattern pattern;
+	private final Pattern pattern;
 
-    public ElementParser() {
-        pattern = Pattern.compile("(?s)<([^<>]*?)>([^<>]*)");
-    }
+	public ElementParser() {
+		this.pattern = Pattern.compile("(?s)<([^<>]*?)>([^<>]*)");
+	}
 
-    public List<Element> parse(final String template) {
-        ArrayList<Element> elements = new ArrayList<Element>();
-        Matcher matcher = pattern.matcher(template);
-        while (matcher.find()) {
-            Tag tag = new TagReader().readTag(matcher.group(1));
-            String elementContent = null;
-            if (matcher.group(2).length() != 0) {
-                elementContent = matcher.group(2);
-            }
-            if (tag.isOpen()) {
-                elements.add(new OpenTagElement(tag, elementContent));
-            } else {
-                elements.add(new CloseTagElement(tag, elementContent));
-            }
-        }
+	public List<Element> parse(final String template) {
+		ArrayList<Element> elements = new ArrayList<Element>();
+		Matcher matcher = this.pattern.matcher(template);
+		while (matcher.find()) {
+			Tag tag = new TagReader().readTag(matcher.group(1));
+			String elementContent = null;
+			if (matcher.group(2).length() != 0) {
+				elementContent = matcher.group(2);
+			}
+			if (tag.type().equals(TagType.OPEN)) {
+				elements.add(new OpenTagElement(tag, elementContent));
+			} else if (tag.type().equals(TagType.CLOSE)) {
+				elements.add(new CloseTagElement(tag, elementContent));
+			} else {
+				elements.add(new BangTagElement());
+			}
+		}
 
-        return elements;
-    }
+		return elements;
+	}
 
 }

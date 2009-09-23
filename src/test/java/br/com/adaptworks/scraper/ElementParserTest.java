@@ -11,6 +11,7 @@ import br.com.adaptworks.scraper.element.CloseTagElement;
 import br.com.adaptworks.scraper.element.Element;
 import br.com.adaptworks.scraper.element.ElementParser;
 import br.com.adaptworks.scraper.element.OpenTagElement;
+import br.com.adaptworks.scraper.tag.BangTagElement;
 
 /**
  * @author jonasabreu
@@ -207,6 +208,7 @@ final public class ElementParserTest {
 		List<Element> parse = this.parser.parse("<hr />");
 	}
 
+	@Test
 	public void testThatAcceptsTheTagA() {
 		List<Element> elements = this.parser.parse("<a href=\"http://bla\">");
 
@@ -217,6 +219,16 @@ final public class ElementParserTest {
 		Assert.assertEquals("a", elements.get(0).getName());
 
 		Assert.assertEquals("http://bla", elements.get(0).getAttributes().get("href"));
+
+	}
+
+	@Test
+	public void testThatGeneratesBangTags() {
+		List<Element> elements = this.parser.parse("<!-- -->");
+
+		Assert.assertEquals(1, elements.size());
+
+		Assert.assertEquals(BangTagElement.class, elements.get(0).getClass());
 
 	}
 }

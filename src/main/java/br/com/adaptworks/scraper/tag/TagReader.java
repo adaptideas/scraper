@@ -13,13 +13,13 @@ final public class TagReader {
 		String tag = new TagSanitizer().sanitize(declaration);
 		Map<String, String> attributes = this.recoverAttributes(tag);
 		String tagName = this.recoverName(tag);
-		boolean isOpen = this.recoverType(tag);
+		TagType tagType = this.recoverType(tag);
 
-		return new Tag(tagName, isOpen, attributes);
+		return new Tag(tagName, tagType, attributes);
 	}
 
-	private boolean recoverType(final String tag) {
-		return !tag.startsWith("/");
+	private TagType recoverType(final String tag) {
+		return TagType.fromValue(tag.charAt(0));
 	}
 
 	private String recoverName(final String tag) {
@@ -34,7 +34,9 @@ final public class TagReader {
 
 		for (int i = 1; i < tokens.length; i++) {
 			String[] attribute = tokens[i].split("=\"|\"");
-			map.put(attribute[0], attribute[1]);
+			if (attribute.length == 2) {
+				map.put(attribute[0], attribute[1]);
+			}
 		}
 		return map;
 	}
