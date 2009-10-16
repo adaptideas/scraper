@@ -79,7 +79,7 @@ final public class TemplateTest {
         List<Converter> list = new ArrayList<Converter>();
         list.add(converter);
 
-        List<Item> match = new Template<Item>("<td>${test}</td>", Item.class, list).match(new Html("<td>123</td>"));
+        new Template<Item>("<td>${test}</td>", Item.class, list).match(new Html("<td>123</td>"));
 
         mockery.assertIsSatisfied();
     }
