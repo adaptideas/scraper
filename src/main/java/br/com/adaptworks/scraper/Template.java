@@ -19,6 +19,7 @@ import br.com.adaptworks.scraper.element.DefaultElementMatcher;
 import br.com.adaptworks.scraper.element.Element;
 import br.com.adaptworks.scraper.element.ElementListMatcher;
 import br.com.adaptworks.scraper.element.ElementParser;
+import br.com.adaptworks.scraper.exception.ScraperException;
 import br.com.adaptworks.scraper.infra.InputStreamToStringReader;
 
 /**
@@ -86,6 +87,9 @@ final public class Template<T> {
 
     private Converter<?> getConverterFor(final String fieldName) {
         Field field = new Mirror().on(type).reflect().field(fieldName);
+        if (field == null) {
+            throw new ScraperException("Could not find field for " + fieldName + " on class " + type.getName());
+        }
 
         for (Converter converter : converters) {
             if (converter.accept(field.getType())) {

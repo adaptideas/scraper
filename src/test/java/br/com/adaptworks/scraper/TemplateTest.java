@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import br.com.adaptworks.scraper.converter.Converter;
 import br.com.adaptworks.scraper.converter.NoOpConverter;
+import br.com.adaptworks.scraper.exception.ScraperException;
 
 /**
  * @author jonasabreu
@@ -31,6 +32,11 @@ final public class TemplateTest {
     @Test(expected = IllegalArgumentException.class)
     public void testThatThrowsExceptionIfTypeIsNull() {
         new Template<Item>("", null);
+    }
+
+    @Test(expected = ScraperException.class)
+    public void testThatThrowsExceptionFieldDoenstExists() {
+        new Template<Item>("<td>${fieldThatDoesntExist}</td>", Item.class).match(new Html("<td>123</td>"));
     }
 
     @Test
