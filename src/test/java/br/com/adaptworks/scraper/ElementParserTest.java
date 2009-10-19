@@ -11,7 +11,6 @@ import br.com.adaptworks.scraper.element.CloseTagElement;
 import br.com.adaptworks.scraper.element.Element;
 import br.com.adaptworks.scraper.element.ElementParser;
 import br.com.adaptworks.scraper.element.OpenTagElement;
-import br.com.adaptworks.scraper.tag.BangTagElement;
 
 /**
  * @author jonasabreu
@@ -214,11 +213,10 @@ final public class ElementParserTest {
     }
 
     @Test
-    public void testThatGeneratesBangTags() {
-        List<Element> elements = new ElementParser("!--").parse("<!-- -->");
+    public void testThatIgnoresComments() {
+        List<Element> elements = parser.parse("<!-- -->");
 
-        Assert.assertEquals(1, elements.size());
-        Assert.assertEquals(BangTagElement.class, elements.get(0).getClass());
+        Assert.assertEquals(0, elements.size());
 
     }
 

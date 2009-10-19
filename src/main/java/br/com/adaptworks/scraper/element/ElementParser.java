@@ -51,7 +51,7 @@ final public class ElementParser {
     }
 
     private String cleanTemplate(final String relevantTags, final String template) {
-        String regex = "(?s)(?i)<(?!(?i:" + relevantTags + ")\\b)[^<>-]+>";
+        String regex = "(?s)(?i)<(?!(?i:" + relevantTags + ")\\b)[^<>]+>";
         return template.replaceAll(regex, "");
     }
 
