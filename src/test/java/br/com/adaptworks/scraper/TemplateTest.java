@@ -84,4 +84,24 @@ final public class TemplateTest {
         mockery.assertIsSatisfied();
     }
 
+    @Test
+    public void testThatOnlySearchTagsOnTemplate2() {
+        List<Item> match = new Template<Item>("<td>${test}</td>", Item.class).match(new Html("<td>123"));
+        Assert.assertEquals(0, match.size());
+    }
+
+    @Test
+    public void testThatOnlySearchTagsOnTemplate() {
+        List<Item> match = new Template<Item>("<td>${test}</td>", Item.class).match(new Html("<td><a>123</a></td>"));
+        Assert.assertEquals(1, match.size());
+        Assert.assertEquals("123", match.get(0).test());
+    }
+
+    @Test
+    public void testThatOnlySearchTagsOnTemplate3() {
+        List<Item> match = new Template<Item>("<td>${test}</td>", Item.class).match(new Html("<td><a>123</td>a"));
+        Assert.assertEquals(1, match.size());
+        Assert.assertEquals("123", match.get(0).test());
+    }
+
 }

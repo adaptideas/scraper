@@ -14,15 +14,27 @@ import br.com.adaptworks.scraper.tag.TagReader;
  */
 final public class ElementParser {
 
-    private final Pattern pattern;
+    private final Pattern pattern = Pattern.compile("(?s)<([^<>]*?)>([^<>]*)");
+    private final String relevantTags;
+    private final boolean shouldClean;
+
+    public ElementParser(final String relevantTags) {
+        this.relevantTags = relevantTags;
+        shouldClean = true;
+    }
 
     public ElementParser() {
-        pattern = Pattern.compile("(?s)<([^<>]*?)>([^<>]*)");
+        shouldClean = false;
+        relevantTags = null;
     }
 
     public List<Element> parse(final String template) {
+        String cleanTemplate = template;
+        if (shouldClean) {
+            cleanTemplate = cleanTemplate(relevantTags, template);
+        }
         ArrayList<Element> elements = new ArrayList<Element>();
-        Matcher matcher = pattern.matcher(template);
+        Matcher matcher = pattern.matcher(cleanTemplate);
         while (matcher.find()) {
             Tag tag = new TagReader().readTag(matcher.group(1));
             String elementContent = null;
@@ -36,6 +48,11 @@ final public class ElementParser {
         }
 
         return elements;
+    }
+
+    private String cleanTemplate(final String relevantTags, final String template) {
+        String regex = "(?s)(?i)<(?!(?i:" + relevantTags + ")\\b)[^<>-]+>";
+        return template.replaceAll(regex, "");
     }
 
 }

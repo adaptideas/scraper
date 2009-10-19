@@ -61,14 +61,24 @@ final public class Template<T> {
         this.converters = converters;
         converters.add(new NoOpConverter());
         this.template = new ElementParser().parse(template);
+
         this.type = type;
     }
 
     public List<T> match(final Html html) {
         log.debug("Matching html: " + html);
-        List<Integer> indexes = new ElementListMatcher(new DefaultElementMatcher()).match(template, html.elements());
-        List<Map<String, String>> data = recoverData(template, html.elements(), indexes);
+        List<Element> htmlElements = html.elements(getAllTags(template));
+        List<Integer> indexes = new ElementListMatcher(new DefaultElementMatcher()).match(template, htmlElements);
+        List<Map<String, String>> data = recoverData(template, htmlElements, indexes);
         return convertDataToList(type, data);
+    }
+
+    private String getAllTags(final List<Element> template) {
+        String res = "";
+        for (Element element : template) {
+            res += element.getName().trim() + "|";
+        }
+        return res.substring(0, res.length() - 1);
     }
 
     private List<T> convertDataToList(final Class<T> type, final List<Map<String, String>> data) {

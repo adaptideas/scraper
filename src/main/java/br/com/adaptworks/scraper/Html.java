@@ -17,8 +17,6 @@ final public class Html {
 
     private final String html;
 
-    private List<Element> elements;
-
     private static final Logger log = Logger.getLogger(Html.class);
 
     public Html(final InputStream inputStream) {
@@ -30,11 +28,8 @@ final public class Html {
         this.html = html;
     }
 
-    public List<Element> elements() {
-        if (elements == null) {
-            elements = new ElementParser().parse(html);
-        }
-        return elements;
+    public List<Element> elements(final String relevantTags) {
+        return new ElementParser(relevantTags).parse(html);
     }
 
 }

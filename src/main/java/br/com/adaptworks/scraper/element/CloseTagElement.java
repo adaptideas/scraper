@@ -19,7 +19,7 @@ final public class CloseTagElement implements Element {
     }
 
     public String getName() {
-        return tag.name();
+        return tag.type() + tag.name();
     }
 
     public String getContent() {

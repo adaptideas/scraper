@@ -11,19 +11,19 @@ import br.com.adaptworks.scraper.tag.TagReader;
  * 
  */
 final public class CloseTagElementTest {
-	@Test
-	public void testTrimsTagName() {
-		Assert.assertEquals("td", new CloseTagElement(new TagReader().readTag("\n\ttd  "), null).getName());
-	}
+    @Test
+    public void testTrimsTagName() {
+        Assert.assertEquals("/td", new CloseTagElement(new TagReader().readTag("\n\t/td  "), null).getName());
+    }
 
-	@Test
-	public void testThatReturnsEmptyStringIfCreatedWithNullContent() {
-		Assert.assertEquals("", new CloseTagElement(new TagReader().readTag("td"), null).getContent());
-	}
+    @Test
+    public void testThatReturnsEmptyStringIfCreatedWithNullContent() {
+        Assert.assertEquals("", new CloseTagElement(new TagReader().readTag("td"), null).getContent());
+    }
 
-	@Test
-	public void testThatToStringReturnsSomethingGoodToRead() {
-		Assert.assertEquals(" td with attributes [class=bla]", new CloseTagElement(new TagReader()
-				.readTag("td class=\"bla\""), null).toString());
-	}
+    @Test
+    public void testThatToStringReturnsSomethingGoodToRead() {
+        Assert.assertEquals("/td with attributes [class=bla]", new CloseTagElement(new TagReader()
+            .readTag("/td class=\"bla\""), null).toString());
+    }
 }

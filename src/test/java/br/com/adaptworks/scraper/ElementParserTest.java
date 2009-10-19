@@ -23,7 +23,7 @@ final public class ElementParserTest {
 
     @Before
     public void setup() {
-        parser = new ElementParser();
+        parser = new ElementParser("td|/td|tr|/tr|foo|bar|/foo|/bar|a|/a|hr");
     }
 
     @Test
@@ -47,7 +47,7 @@ final public class ElementParserTest {
 
         Assert.assertEquals(1, elements.size());
         Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
-        Assert.assertEquals("td", elements.get(0).getName());
+        Assert.assertEquals("/td", elements.get(0).getName());
     }
 
     @Test
@@ -57,7 +57,7 @@ final public class ElementParserTest {
         Assert.assertEquals(2, elements.size());
         Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
         Assert.assertEquals(OpenTagElement.class, elements.get(1).getClass());
-        Assert.assertEquals("td", elements.get(0).getName());
+        Assert.assertEquals("/td", elements.get(0).getName());
         Assert.assertEquals("td", elements.get(1).getName());
     }
 
@@ -68,7 +68,7 @@ final public class ElementParserTest {
         Assert.assertEquals(2, elements.size());
         Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
         Assert.assertEquals(OpenTagElement.class, elements.get(1).getClass());
-        Assert.assertEquals("td", elements.get(0).getName());
+        Assert.assertEquals("/td", elements.get(0).getName());
         Assert.assertEquals("td", elements.get(1).getName());
     }
 
@@ -79,7 +79,7 @@ final public class ElementParserTest {
         Assert.assertEquals(2, elements.size());
         Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
         Assert.assertEquals(OpenTagElement.class, elements.get(1).getClass());
-        Assert.assertEquals("td", elements.get(0).getName());
+        Assert.assertEquals("/td", elements.get(0).getName());
         Assert.assertEquals("td", elements.get(1).getName());
     }
 
@@ -90,7 +90,7 @@ final public class ElementParserTest {
         Assert.assertEquals(2, elements.size());
         Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
         Assert.assertEquals(OpenTagElement.class, elements.get(1).getClass());
-        Assert.assertEquals("td", elements.get(0).getName());
+        Assert.assertEquals("/td", elements.get(0).getName());
         Assert.assertEquals("td", elements.get(1).getName());
 
     }
@@ -102,7 +102,7 @@ final public class ElementParserTest {
         Assert.assertEquals(2, elements.size());
         Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
         Assert.assertEquals(OpenTagElement.class, elements.get(1).getClass());
-        Assert.assertEquals("td", elements.get(0).getName());
+        Assert.assertEquals("/td", elements.get(0).getName());
         Assert.assertEquals("td", elements.get(1).getName());
     }
 
@@ -121,7 +121,7 @@ final public class ElementParserTest {
 
         Assert.assertEquals(1, elements.size());
         Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
-        Assert.assertEquals("bar", elements.get(0).getName());
+        Assert.assertEquals("/bar", elements.get(0).getName());
     }
 
     @Test
@@ -129,7 +129,7 @@ final public class ElementParserTest {
         List<Element> elements = parser.parse("</bar> content ");
         Assert.assertEquals(1, elements.size());
         Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
-        Assert.assertEquals("bar", elements.get(0).getName());
+        Assert.assertEquals("/bar", elements.get(0).getName());
         Assert.assertEquals(" content ", elements.get(0).getContent());
     }
 
@@ -141,9 +141,9 @@ final public class ElementParserTest {
         Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
         Assert.assertEquals(OpenTagElement.class, elements.get(1).getClass());
         Assert.assertEquals(CloseTagElement.class, elements.get(2).getClass());
-        Assert.assertEquals("bar", elements.get(0).getName());
+        Assert.assertEquals("/bar", elements.get(0).getName());
         Assert.assertEquals("foo", elements.get(1).getName());
-        Assert.assertEquals("foo", elements.get(2).getName());
+        Assert.assertEquals("/foo", elements.get(2).getName());
         Assert.assertEquals(" content ", elements.get(0).getContent());
         Assert.assertEquals(" foo content ", elements.get(1).getContent());
 
@@ -151,31 +151,31 @@ final public class ElementParserTest {
 
     @Test
     public void testThatIgnoresWhiteCharOnTagName() {
-        List<Element> elements = parser.parse("<\n/\tbar > content <\n foo> foo content </foo>");
+        List<Element> elements = parser.parse("</bar > content <foo> foo content </foo>");
 
         Assert.assertEquals(3, elements.size());
         Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
         Assert.assertEquals(OpenTagElement.class, elements.get(1).getClass());
         Assert.assertEquals(CloseTagElement.class, elements.get(2).getClass());
-        Assert.assertEquals("bar", elements.get(0).getName());
+        Assert.assertEquals("/bar", elements.get(0).getName());
         Assert.assertEquals("foo", elements.get(1).getName());
-        Assert.assertEquals("foo", elements.get(2).getName());
+        Assert.assertEquals("/foo", elements.get(2).getName());
         Assert.assertEquals(" content ", elements.get(0).getContent());
         Assert.assertEquals(" foo content ", elements.get(1).getContent());
     }
 
     @Test
     public void testThatRecognizesAtributes() {
-        List<Element> elements = parser.parse("<\n/\tbar id=\"bla\"> content <\n foo attr='pong'> foo content </foo>");
+        List<Element> elements = parser.parse("</bar id=\"bla\"> content <foo attr='pong'> foo content </foo>");
 
         Assert.assertEquals(3, elements.size());
         Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
         Assert.assertEquals(OpenTagElement.class, elements.get(1).getClass());
         Assert.assertEquals(CloseTagElement.class, elements.get(2).getClass());
 
-        Assert.assertEquals("bar", elements.get(0).getName());
+        Assert.assertEquals("/bar", elements.get(0).getName());
         Assert.assertEquals("foo", elements.get(1).getName());
-        Assert.assertEquals("foo", elements.get(2).getName());
+        Assert.assertEquals("/foo", elements.get(2).getName());
 
         Assert.assertEquals(" content ", elements.get(0).getContent());
         Assert.assertEquals(" foo content ", elements.get(1).getContent());
@@ -194,7 +194,7 @@ final public class ElementParserTest {
         Assert.assertEquals(CloseTagElement.class, elements.get(1).getClass());
 
         Assert.assertEquals("a", elements.get(0).getName());
-        Assert.assertEquals("a", elements.get(1).getName());
+        Assert.assertEquals("/a", elements.get(1).getName());
 
         Assert.assertEquals("http://blog.caelum.com.br ", elements.get(0).getAttributes().get("href"));
         Assert.assertEquals("b", elements.get(0).getAttributes().get("a"));
@@ -207,21 +207,17 @@ final public class ElementParserTest {
         List<Element> elements = parser.parse("<a href=\"http://bla\">");
 
         Assert.assertEquals(1, elements.size());
-
         Assert.assertEquals(OpenTagElement.class, elements.get(0).getClass());
-
         Assert.assertEquals("a", elements.get(0).getName());
-
         Assert.assertEquals("http://bla", elements.get(0).getAttributes().get("href"));
 
     }
 
     @Test
     public void testThatGeneratesBangTags() {
-        List<Element> elements = parser.parse("<!-- -->");
+        List<Element> elements = new ElementParser("!--").parse("<!-- -->");
 
         Assert.assertEquals(1, elements.size());
-
         Assert.assertEquals(BangTagElement.class, elements.get(0).getClass());
 
     }
@@ -231,9 +227,7 @@ final public class ElementParserTest {
         List<Element> elements = parser.parse("<hr />");
 
         Assert.assertEquals(1, elements.size());
-
         Assert.assertEquals(OpenTagElement.class, elements.get(0).getClass());
-
         Assert.assertEquals("hr", elements.get(0).getName());
     }
 
@@ -242,11 +236,18 @@ final public class ElementParserTest {
         List<Element> elements = parser.parse("<hr a=\"b\"/>");
 
         Assert.assertEquals(1, elements.size());
-
         Assert.assertEquals(OpenTagElement.class, elements.get(0).getClass());
-
         Assert.assertEquals("hr", elements.get(0).getName());
-
         Assert.assertEquals("b", elements.get(0).getAttributes().get("a"));
+    }
+
+    @Test
+    public void testThatReadsOnlyRelevantTags() {
+        List<Element> elements = new ElementParser("tr").parse("<a> <b> <c> <tr> </tr> <td> <ty>");
+
+        Assert.assertEquals(1, elements.size());
+        Assert.assertEquals(OpenTagElement.class, elements.get(0).getClass());
+        Assert.assertEquals("tr", elements.get(0).getName());
+
     }
 }
