@@ -13,12 +13,15 @@ final public class DefaultTag implements Tag {
     private final String name;
     private final TagType tagType;
     private final Map<String, String> attributes;
+    private final String content;
 
     private static final Logger log = Logger.getLogger(DefaultTag.class);
 
-    public DefaultTag(final String name, final TagType tagType, final Map<String, String> attributes) {
+    public DefaultTag(final String name, final TagType tagType, final String content,
+            final Map<String, String> attributes) {
         this.name = name;
         this.tagType = tagType;
+        this.content = content;
         this.attributes = attributes;
         log.trace("Creating tag " + toString());
     }
@@ -37,6 +40,10 @@ final public class DefaultTag implements Tag {
 
     public Map<String, String> attributes() {
         return attributes;
+    }
+
+    public String content() {
+        return content;
     }
 
     @Override

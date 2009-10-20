@@ -36,13 +36,13 @@ final public class ElementParser {
         ArrayList<Element> elements = new ArrayList<Element>();
         Matcher matcher = pattern.matcher(cleanTemplate);
         while (matcher.find()) {
-            Tag tag = new TagReader().readTag(matcher.group(1));
             String elementContent = null;
 
             if (matcher.group(2).length() != 0) {
                 elementContent = matcher.group(2);
             }
 
+            Tag tag = new TagReader().readTag(matcher.group(1), elementContent);
             elements.add(tag.type().createElement(tag, elementContent));
 
         }

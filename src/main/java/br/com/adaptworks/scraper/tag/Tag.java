@@ -12,6 +12,8 @@ public interface Tag {
 
     public TagType type();
 
+    public String content();
+
     public String attribute(final String key);
 
     public Map<String, String> attributes();

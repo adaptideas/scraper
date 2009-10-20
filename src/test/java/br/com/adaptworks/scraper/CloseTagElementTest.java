@@ -13,17 +13,17 @@ import br.com.adaptworks.scraper.tag.TagReader;
 final public class CloseTagElementTest {
     @Test
     public void testTrimsTagName() {
-        Assert.assertEquals("/td", new CloseTagElement(new TagReader().readTag("\n\t/td  "), null).getName());
+        Assert.assertEquals("/td", new CloseTagElement(new TagReader().readTag("\n\t/td  ", null), null).getName());
     }
 
     @Test
     public void testThatReturnsEmptyStringIfCreatedWithNullContent() {
-        Assert.assertEquals("", new CloseTagElement(new TagReader().readTag("td"), null).getContent());
+        Assert.assertEquals("", new CloseTagElement(new TagReader().readTag("td", null), null).getContent());
     }
 
     @Test
     public void testThatToStringReturnsSomethingGoodToRead() {
-        Assert.assertEquals("/td with attributes [class=bla]", new CloseTagElement(new TagReader()
-            .readTag("/td class=\"bla\""), null).toString());
+        Assert.assertEquals("/td with attributes [class=bla]", new CloseTagElement(new TagReader().readTag(
+                "/td class=\"bla\"", null), null).toString());
     }
 }

@@ -24,28 +24,28 @@ final public class TagReaderTest {
 
     @Test
     public void testThatFindsTagName() {
-        Tag tag = reader.readTag("td");
+        Tag tag = reader.readTag("td", null);
         Assert.assertEquals("td", tag.name());
         Assert.assertEquals(TagType.OPEN, tag.type());
     }
 
     @Test
     public void testThatRemovesSlash() {
-        Tag tag = reader.readTag("/td");
+        Tag tag = reader.readTag("/td", null);
         Assert.assertEquals("td", tag.name());
         Assert.assertEquals(TagType.CLOSE, tag.type());
     }
 
     @Test
     public void testThatIgnoresBeginningWhiteChars() {
-        Tag tag = reader.readTag("\n \t /\n \rtd");
+        Tag tag = reader.readTag("\n \t /\n \rtd", null);
         Assert.assertEquals("td", tag.name());
         Assert.assertEquals(TagType.CLOSE, tag.type());
     }
 
     @Test
     public void testThatFindsAttributes() {
-        Tag tag = reader.readTag("td id=\"bla\"");
+        Tag tag = reader.readTag("td id=\"bla\"", null);
         Assert.assertEquals("td", tag.name());
         Assert.assertEquals(TagType.OPEN, tag.type());
         Assert.assertEquals("bla", tag.attribute("id"));
@@ -53,7 +53,7 @@ final public class TagReaderTest {
 
     @Test
     public void testThatFindsTwoAttributes() {
-        Tag tag = reader.readTag("td id=\"bla\" foo='bar'");
+        Tag tag = reader.readTag("td id=\"bla\" foo='bar'", null);
         Assert.assertEquals("td", tag.name());
         Assert.assertEquals(TagType.OPEN, tag.type());
         Assert.assertEquals(2, tag.attributes().size());
@@ -63,7 +63,7 @@ final public class TagReaderTest {
 
     @Test
     public void testThatWorksForTagA() {
-        Tag tag = reader.readTag("a href=\"http://foo.bar\"");
+        Tag tag = reader.readTag("a href=\"http://foo.bar\"", null);
         Assert.assertEquals("a", tag.name());
         Assert.assertEquals(TagType.OPEN, tag.type());
         Assert.assertEquals(1, tag.attributes().size());
