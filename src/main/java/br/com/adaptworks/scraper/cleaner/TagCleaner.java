@@ -6,7 +6,7 @@ import br.com.adaptworks.scraper.tag.Tag;
  * @author jonasabreu
  * 
  */
-public interface ElementCleaner {
+public interface TagCleaner {
 
     boolean shouldClean(Tag element);
 

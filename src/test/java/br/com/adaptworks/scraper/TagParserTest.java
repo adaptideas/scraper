@@ -9,6 +9,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.adaptworks.scraper.tag.BangTag;
 import br.com.adaptworks.scraper.tag.CloseTag;
 import br.com.adaptworks.scraper.tag.OpenTag;
 import br.com.adaptworks.scraper.tag.Tag;
@@ -18,26 +19,26 @@ import br.com.adaptworks.scraper.tag.TagParser;
  * @author jonasabreu
  * 
  */
-final public class ElementParserTest {
+final public class TagParserTest {
 
     private TagParser parser;
 
     @SuppressWarnings("unchecked")
     @Before
     public void setup() {
-        List<Tag> elements = new ArrayList<Tag>();
-        elements.add(new OpenTag("td", "", Collections.EMPTY_MAP));
-        elements.add(new OpenTag("tr", "", Collections.EMPTY_MAP));
-        elements.add(new OpenTag("foo", "", Collections.EMPTY_MAP));
-        elements.add(new OpenTag("bar", "", Collections.EMPTY_MAP));
-        elements.add(new OpenTag("a", "", Collections.EMPTY_MAP));
-        elements.add(new OpenTag("hr", "", Collections.EMPTY_MAP));
-        elements.add(new CloseTag("td", "", Collections.EMPTY_MAP));
-        elements.add(new CloseTag("tr", "", Collections.EMPTY_MAP));
-        elements.add(new CloseTag("foo", "", Collections.EMPTY_MAP));
-        elements.add(new CloseTag("bar", "", Collections.EMPTY_MAP));
-        elements.add(new CloseTag("a", "", Collections.EMPTY_MAP));
-        parser = new TagParser(elements);
+        List<Tag> tags = new ArrayList<Tag>();
+        tags.add(new OpenTag("td", "", Collections.EMPTY_MAP));
+        tags.add(new OpenTag("tr", "", Collections.EMPTY_MAP));
+        tags.add(new OpenTag("foo", "", Collections.EMPTY_MAP));
+        tags.add(new OpenTag("bar", "", Collections.EMPTY_MAP));
+        tags.add(new OpenTag("a", "", Collections.EMPTY_MAP));
+        tags.add(new OpenTag("hr", "", Collections.EMPTY_MAP));
+        tags.add(new CloseTag("td", "", Collections.EMPTY_MAP));
+        tags.add(new CloseTag("tr", "", Collections.EMPTY_MAP));
+        tags.add(new CloseTag("foo", "", Collections.EMPTY_MAP));
+        tags.add(new CloseTag("bar", "", Collections.EMPTY_MAP));
+        tags.add(new CloseTag("a", "", Collections.EMPTY_MAP));
+        parser = new TagParser(tags);
     }
 
     @Test
@@ -228,10 +229,11 @@ final public class ElementParserTest {
     }
 
     @Test
-    public void testThatIgnoresComments() {
-        List<Tag> elements = parser.parse("<!-- -->");
+    public void testThatReadsComments() {
+        List<Tag> elements = new TagParser().parse("<!-- -->");
 
-        Assert.assertEquals(0, elements.size());
+        Assert.assertEquals(1, elements.size());
+        Assert.assertEquals(BangTag.class, elements.get(0).getClass());
 
     }
 

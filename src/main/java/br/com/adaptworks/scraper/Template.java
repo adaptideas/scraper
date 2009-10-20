@@ -68,9 +68,9 @@ final public class Template<T> {
 
     public List<T> match(final Html html) {
         log.debug("Matching html: " + html);
-        List<Tag> htmlElements = html.elements(template);
-        List<Integer> indexes = new TagListMatcher(new DefaultTagMatcher()).match(template, htmlElements);
-        List<Map<String, String>> data = recoverData(template, htmlElements, indexes);
+        List<Tag> htmlTags = html.tags(template);
+        List<Integer> indexes = new TagListMatcher(new DefaultTagMatcher()).match(template, htmlTags);
+        List<Map<String, String>> data = recoverData(template, htmlTags, indexes);
         return convertDataToList(type, data);
     }
 
@@ -116,6 +116,8 @@ final public class Template<T> {
             }
             list.add(map);
         }
+
+        log.trace("Maps generated: " + list);
 
         return list;
     }

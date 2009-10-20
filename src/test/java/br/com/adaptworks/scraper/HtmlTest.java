@@ -39,16 +39,17 @@ final public class HtmlTest {
     @DataPoint
     public final static String windows1252 = "windows-1252";
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testThatIgnoresTags() {
         Html html = new Html("<a><tr><td>blablabla</tr></a>");
-        List<Tag> relevantElements = new ArrayList<Tag>();
-        relevantElements.add(new OpenTag("tr", "", Collections.EMPTY_MAP));
-        List<Tag> elements = html.elements(relevantElements);
+        List<Tag> relevantTags = new ArrayList<Tag>();
+        relevantTags.add(new OpenTag("tr", "", Collections.EMPTY_MAP));
+        List<Tag> tags = html.tags(relevantTags);
 
-        Assert.assertEquals(1, elements.size());
-        Assert.assertEquals(OpenTag.class, elements.get(0).getClass());
-        Assert.assertEquals("tr", elements.get(0).name());
+        Assert.assertEquals(1, tags.size());
+        Assert.assertEquals(OpenTag.class, tags.get(0).getClass());
+        Assert.assertEquals("tr", tags.get(0).name());
 
     }
 
@@ -59,7 +60,7 @@ final public class HtmlTest {
         Html html = new Html(new ByteArrayInputStream(latin1), charsetName);
         List<Tag> relevantElements = new ArrayList<Tag>();
         relevantElements.add(new OpenTag("tr", "", Collections.EMPTY_MAP));
-        List<Tag> elements = html.elements(relevantElements);
+        List<Tag> elements = html.tags(relevantElements);
 
         Assert.assertEquals(1, elements.size());
         Assert.assertEquals(OpenTag.class, elements.get(0).getClass());
