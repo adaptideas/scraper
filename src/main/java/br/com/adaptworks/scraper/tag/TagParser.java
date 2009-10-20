@@ -1,39 +1,42 @@
-package br.com.adaptworks.scraper.element;
+package br.com.adaptworks.scraper.tag;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import br.com.adaptworks.scraper.tag.Tag;
-import br.com.adaptworks.scraper.tag.TagReader;
+import org.apache.log4j.Logger;
 
 /**
  * @author jonasabreu
  * 
  */
-final public class ElementParser {
+final public class TagParser {
 
     private final Pattern pattern = Pattern.compile("(?s)<([^<>]*?)>([^<>]*)");
     private final String relevantTags;
     private final boolean shouldClean;
 
-    public ElementParser(final String relevantTags) {
+    private static final Logger log = Logger.getLogger(TagParser.class);
+
+    public TagParser(final String relevantTags) {
         this.relevantTags = relevantTags;
         shouldClean = true;
     }
 
-    public ElementParser() {
+    public TagParser() {
         shouldClean = false;
         relevantTags = null;
     }
 
-    public List<Element> parse(final String template) {
+    public List<Tag> parse(final String template) {
         String cleanTemplate = template;
         if (shouldClean) {
             cleanTemplate = cleanTemplate(relevantTags, template);
         }
-        ArrayList<Element> elements = new ArrayList<Element>();
+        log.trace("Relevant tags: " + relevantTags);
+        log.trace("Clean template: " + cleanTemplate);
+        List<Tag> tags = new ArrayList<Tag>();
         Matcher matcher = pattern.matcher(cleanTemplate);
         while (matcher.find()) {
             String elementContent = null;
@@ -43,11 +46,13 @@ final public class ElementParser {
             }
 
             Tag tag = new TagReader().readTag(matcher.group(1), elementContent);
-            elements.add(tag.type().createElement(tag, elementContent));
+            tags.add(tag);
 
         }
 
-        return elements;
+        log.trace("Parsed html " + template + " and produced these tags: " + tags);
+
+        return tags;
     }
 
     private String cleanTemplate(final String relevantTags, final String template) {

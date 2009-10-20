@@ -7,10 +7,10 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.adaptworks.scraper.element.CloseTagElement;
-import br.com.adaptworks.scraper.element.Element;
-import br.com.adaptworks.scraper.element.ElementParser;
-import br.com.adaptworks.scraper.element.OpenTagElement;
+import br.com.adaptworks.scraper.tag.CloseTag;
+import br.com.adaptworks.scraper.tag.OpenTag;
+import br.com.adaptworks.scraper.tag.Tag;
+import br.com.adaptworks.scraper.tag.TagParser;
 
 /**
  * @author jonasabreu
@@ -18,11 +18,11 @@ import br.com.adaptworks.scraper.element.OpenTagElement;
  */
 final public class ElementParserTest {
 
-    private ElementParser parser;
+    private TagParser parser;
 
     @Before
     public void setup() {
-        parser = new ElementParser("td|/td|tr|/tr|foo|bar|/foo|/bar|a|/a|hr");
+        parser = new TagParser("td|/td|tr|/tr|foo|bar|/foo|/bar|a|/a|hr");
     }
 
     @Test
@@ -33,188 +33,188 @@ final public class ElementParserTest {
 
     @Test
     public void testThatRecognizesOpenHtmlTag() {
-        List<Element> elements = parser.parse("<td>");
+        List<Tag> elements = parser.parse("<td>");
 
         Assert.assertEquals(1, elements.size());
-        Assert.assertEquals(OpenTagElement.class, elements.get(0).getClass());
-        Assert.assertEquals("td", elements.get(0).getName());
+        Assert.assertEquals(OpenTag.class, elements.get(0).getClass());
+        Assert.assertEquals("td", elements.get(0).name());
     }
 
     @Test
     public void testThatRecognizesCloseHtmlTag() {
-        List<Element> elements = parser.parse("</td>");
+        List<Tag> elements = parser.parse("</td>");
 
         Assert.assertEquals(1, elements.size());
-        Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
-        Assert.assertEquals("/td", elements.get(0).getName());
+        Assert.assertEquals(CloseTag.class, elements.get(0).getClass());
+        Assert.assertEquals("td", elements.get(0).name());
     }
 
     @Test
     public void testThatRecognizesTwoTags() {
-        List<Element> elements = parser.parse("</td><td>");
+        List<Tag> elements = parser.parse("</td><td>");
 
         Assert.assertEquals(2, elements.size());
-        Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
-        Assert.assertEquals(OpenTagElement.class, elements.get(1).getClass());
-        Assert.assertEquals("/td", elements.get(0).getName());
-        Assert.assertEquals("td", elements.get(1).getName());
+        Assert.assertEquals(CloseTag.class, elements.get(0).getClass());
+        Assert.assertEquals(OpenTag.class, elements.get(1).getClass());
+        Assert.assertEquals("td", elements.get(0).name());
+        Assert.assertEquals("td", elements.get(1).name());
     }
 
     @Test
     public void testThatIgnoresWhiteChars() {
-        List<Element> elements = parser.parse("\n\n </td>\n <td>");
+        List<Tag> elements = parser.parse("\n\n </td>\n <td>");
 
         Assert.assertEquals(2, elements.size());
-        Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
-        Assert.assertEquals(OpenTagElement.class, elements.get(1).getClass());
-        Assert.assertEquals("/td", elements.get(0).getName());
-        Assert.assertEquals("td", elements.get(1).getName());
+        Assert.assertEquals(CloseTag.class, elements.get(0).getClass());
+        Assert.assertEquals(OpenTag.class, elements.get(1).getClass());
+        Assert.assertEquals("td", elements.get(0).name());
+        Assert.assertEquals("td", elements.get(1).name());
     }
 
     @Test
     public void testThatIgnoresWhiteCharsInsideTag() {
-        List<Element> elements = parser.parse("</td\n> <td >");
+        List<Tag> elements = parser.parse("</td\n> <td >");
 
         Assert.assertEquals(2, elements.size());
-        Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
-        Assert.assertEquals(OpenTagElement.class, elements.get(1).getClass());
-        Assert.assertEquals("/td", elements.get(0).getName());
-        Assert.assertEquals("td", elements.get(1).getName());
+        Assert.assertEquals(CloseTag.class, elements.get(0).getClass());
+        Assert.assertEquals(OpenTag.class, elements.get(1).getClass());
+        Assert.assertEquals("td", elements.get(0).name());
+        Assert.assertEquals("td", elements.get(1).name());
     }
 
     @Test
     public void testThatIgnoresMissingGreaterThanChar() {
-        List<Element> elements = parser.parse("</td> > <td>");
+        List<Tag> elements = parser.parse("</td> > <td>");
 
         Assert.assertEquals(2, elements.size());
-        Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
-        Assert.assertEquals(OpenTagElement.class, elements.get(1).getClass());
-        Assert.assertEquals("/td", elements.get(0).getName());
-        Assert.assertEquals("td", elements.get(1).getName());
+        Assert.assertEquals(CloseTag.class, elements.get(0).getClass());
+        Assert.assertEquals(OpenTag.class, elements.get(1).getClass());
+        Assert.assertEquals("td", elements.get(0).name());
+        Assert.assertEquals("td", elements.get(1).name());
 
     }
 
     @Test
     public void testThatIgnoresMissingLesserThanChar() {
-        List<Element> elements = parser.parse("</td> < <td>");
+        List<Tag> elements = parser.parse("</td> < <td>");
 
         Assert.assertEquals(2, elements.size());
-        Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
-        Assert.assertEquals(OpenTagElement.class, elements.get(1).getClass());
-        Assert.assertEquals("/td", elements.get(0).getName());
-        Assert.assertEquals("td", elements.get(1).getName());
+        Assert.assertEquals(CloseTag.class, elements.get(0).getClass());
+        Assert.assertEquals(OpenTag.class, elements.get(1).getClass());
+        Assert.assertEquals("td", elements.get(0).name());
+        Assert.assertEquals("td", elements.get(1).name());
     }
 
     @Test
     public void testThatRecognizesAnyOpenTag() {
-        List<Element> elements = parser.parse("<foo>");
+        List<Tag> elements = parser.parse("<foo>");
 
         Assert.assertEquals(1, elements.size());
-        Assert.assertEquals(OpenTagElement.class, elements.get(0).getClass());
-        Assert.assertEquals("foo", elements.get(0).getName());
+        Assert.assertEquals(OpenTag.class, elements.get(0).getClass());
+        Assert.assertEquals("foo", elements.get(0).name());
     }
 
     @Test
     public void testThatRecognizesAnyCloseTag() {
-        List<Element> elements = parser.parse("</bar>");
+        List<Tag> elements = parser.parse("</bar>");
 
         Assert.assertEquals(1, elements.size());
-        Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
-        Assert.assertEquals("/bar", elements.get(0).getName());
+        Assert.assertEquals(CloseTag.class, elements.get(0).getClass());
+        Assert.assertEquals("bar", elements.get(0).name());
     }
 
     @Test
     public void testThatFindsContent() {
-        List<Element> elements = parser.parse("</bar> content ");
+        List<Tag> elements = parser.parse("</bar> content ");
         Assert.assertEquals(1, elements.size());
-        Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
-        Assert.assertEquals("/bar", elements.get(0).getName());
-        Assert.assertEquals(" content ", elements.get(0).getContent());
+        Assert.assertEquals(CloseTag.class, elements.get(0).getClass());
+        Assert.assertEquals("bar", elements.get(0).name());
+        Assert.assertEquals(" content ", elements.get(0).content());
     }
 
     @Test
     public void testThatKeepsContentOnFirstTag() {
-        List<Element> elements = parser.parse("</bar> content <foo> foo content </foo>");
+        List<Tag> elements = parser.parse("</bar> content <foo> foo content </foo>");
 
         Assert.assertEquals(3, elements.size());
-        Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
-        Assert.assertEquals(OpenTagElement.class, elements.get(1).getClass());
-        Assert.assertEquals(CloseTagElement.class, elements.get(2).getClass());
-        Assert.assertEquals("/bar", elements.get(0).getName());
-        Assert.assertEquals("foo", elements.get(1).getName());
-        Assert.assertEquals("/foo", elements.get(2).getName());
-        Assert.assertEquals(" content ", elements.get(0).getContent());
-        Assert.assertEquals(" foo content ", elements.get(1).getContent());
+        Assert.assertEquals(CloseTag.class, elements.get(0).getClass());
+        Assert.assertEquals(OpenTag.class, elements.get(1).getClass());
+        Assert.assertEquals(CloseTag.class, elements.get(2).getClass());
+        Assert.assertEquals("bar", elements.get(0).name());
+        Assert.assertEquals("foo", elements.get(1).name());
+        Assert.assertEquals("foo", elements.get(2).name());
+        Assert.assertEquals(" content ", elements.get(0).content());
+        Assert.assertEquals(" foo content ", elements.get(1).content());
 
     }
 
     @Test
     public void testThatIgnoresWhiteCharOnTagName() {
-        List<Element> elements = parser.parse("</bar > content <foo> foo content </foo>");
+        List<Tag> elements = parser.parse("</bar > content <foo> foo content </foo>");
 
         Assert.assertEquals(3, elements.size());
-        Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
-        Assert.assertEquals(OpenTagElement.class, elements.get(1).getClass());
-        Assert.assertEquals(CloseTagElement.class, elements.get(2).getClass());
-        Assert.assertEquals("/bar", elements.get(0).getName());
-        Assert.assertEquals("foo", elements.get(1).getName());
-        Assert.assertEquals("/foo", elements.get(2).getName());
-        Assert.assertEquals(" content ", elements.get(0).getContent());
-        Assert.assertEquals(" foo content ", elements.get(1).getContent());
+        Assert.assertEquals(CloseTag.class, elements.get(0).getClass());
+        Assert.assertEquals(OpenTag.class, elements.get(1).getClass());
+        Assert.assertEquals(CloseTag.class, elements.get(2).getClass());
+        Assert.assertEquals("bar", elements.get(0).name());
+        Assert.assertEquals("foo", elements.get(1).name());
+        Assert.assertEquals("foo", elements.get(2).name());
+        Assert.assertEquals(" content ", elements.get(0).content());
+        Assert.assertEquals(" foo content ", elements.get(1).content());
     }
 
     @Test
     public void testThatRecognizesAtributes() {
-        List<Element> elements = parser.parse("</bar id=\"bla\"> content <foo attr='pong'> foo content </foo>");
+        List<Tag> elements = parser.parse("</bar id=\"bla\"> content <foo attr='pong'> foo content </foo>");
 
         Assert.assertEquals(3, elements.size());
-        Assert.assertEquals(CloseTagElement.class, elements.get(0).getClass());
-        Assert.assertEquals(OpenTagElement.class, elements.get(1).getClass());
-        Assert.assertEquals(CloseTagElement.class, elements.get(2).getClass());
+        Assert.assertEquals(CloseTag.class, elements.get(0).getClass());
+        Assert.assertEquals(OpenTag.class, elements.get(1).getClass());
+        Assert.assertEquals(CloseTag.class, elements.get(2).getClass());
 
-        Assert.assertEquals("/bar", elements.get(0).getName());
-        Assert.assertEquals("foo", elements.get(1).getName());
-        Assert.assertEquals("/foo", elements.get(2).getName());
+        Assert.assertEquals("bar", elements.get(0).name());
+        Assert.assertEquals("foo", elements.get(1).name());
+        Assert.assertEquals("foo", elements.get(2).name());
 
-        Assert.assertEquals(" content ", elements.get(0).getContent());
-        Assert.assertEquals(" foo content ", elements.get(1).getContent());
+        Assert.assertEquals(" content ", elements.get(0).content());
+        Assert.assertEquals(" foo content ", elements.get(1).content());
 
-        Assert.assertEquals("bla", elements.get(0).getAttributes().get("id"));
-        Assert.assertEquals("pong", elements.get(1).getAttributes().get("attr"));
+        Assert.assertEquals("bla", elements.get(0).attributes().get("id"));
+        Assert.assertEquals("pong", elements.get(1).attributes().get("attr"));
     }
 
     @Test
     public void testThatAcceptsWhiteSpaceOnAttributeValue() {
-        List<Element> elements = parser.parse("<a href=\"http://blog.caelum.com.br \" a=\"b\">Comunidade</a>");
+        List<Tag> elements = parser.parse("<a href=\"http://blog.caelum.com.br \" a=\"b\">Comunidade</a>");
 
         Assert.assertEquals(2, elements.size());
 
-        Assert.assertEquals(OpenTagElement.class, elements.get(0).getClass());
-        Assert.assertEquals(CloseTagElement.class, elements.get(1).getClass());
+        Assert.assertEquals(OpenTag.class, elements.get(0).getClass());
+        Assert.assertEquals(CloseTag.class, elements.get(1).getClass());
 
-        Assert.assertEquals("a", elements.get(0).getName());
-        Assert.assertEquals("/a", elements.get(1).getName());
+        Assert.assertEquals("a", elements.get(0).name());
+        Assert.assertEquals("a", elements.get(1).name());
 
-        Assert.assertEquals("http://blog.caelum.com.br ", elements.get(0).getAttributes().get("href"));
-        Assert.assertEquals("b", elements.get(0).getAttributes().get("a"));
+        Assert.assertEquals("http://blog.caelum.com.br ", elements.get(0).attributes().get("href"));
+        Assert.assertEquals("b", elements.get(0).attributes().get("a"));
 
-        Assert.assertEquals("Comunidade", elements.get(0).getContent());
+        Assert.assertEquals("Comunidade", elements.get(0).content());
     }
 
     @Test
     public void testThatAcceptsTheTagA() {
-        List<Element> elements = parser.parse("<a href=\"http://bla\">");
+        List<Tag> elements = parser.parse("<a href=\"http://bla\">");
 
         Assert.assertEquals(1, elements.size());
-        Assert.assertEquals(OpenTagElement.class, elements.get(0).getClass());
-        Assert.assertEquals("a", elements.get(0).getName());
-        Assert.assertEquals("http://bla", elements.get(0).getAttributes().get("href"));
+        Assert.assertEquals(OpenTag.class, elements.get(0).getClass());
+        Assert.assertEquals("a", elements.get(0).name());
+        Assert.assertEquals("http://bla", elements.get(0).attributes().get("href"));
 
     }
 
     @Test
     public void testThatIgnoresComments() {
-        List<Element> elements = parser.parse("<!-- -->");
+        List<Tag> elements = parser.parse("<!-- -->");
 
         Assert.assertEquals(0, elements.size());
 
@@ -222,30 +222,30 @@ final public class ElementParserTest {
 
     @Test
     public void testThatAcceptsSelfClosingTag() {
-        List<Element> elements = parser.parse("<hr />");
+        List<Tag> elements = parser.parse("<hr />");
 
         Assert.assertEquals(1, elements.size());
-        Assert.assertEquals(OpenTagElement.class, elements.get(0).getClass());
-        Assert.assertEquals("hr", elements.get(0).getName());
+        Assert.assertEquals(OpenTag.class, elements.get(0).getClass());
+        Assert.assertEquals("hr", elements.get(0).name());
     }
 
     @Test
     public void testThatAcceptsSelfClosingTagWithAttributes() {
-        List<Element> elements = parser.parse("<hr a=\"b\"/>");
+        List<Tag> elements = parser.parse("<hr a=\"b\"/>");
 
         Assert.assertEquals(1, elements.size());
-        Assert.assertEquals(OpenTagElement.class, elements.get(0).getClass());
-        Assert.assertEquals("hr", elements.get(0).getName());
-        Assert.assertEquals("b", elements.get(0).getAttributes().get("a"));
+        Assert.assertEquals(OpenTag.class, elements.get(0).getClass());
+        Assert.assertEquals("hr", elements.get(0).name());
+        Assert.assertEquals("b", elements.get(0).attributes().get("a"));
     }
 
     @Test
     public void testThatReadsOnlyRelevantTags() {
-        List<Element> elements = new ElementParser("tr").parse("<a> <b> <c> <tr> </tr> <td> <ty>");
+        List<Tag> elements = new TagParser("tr").parse("<a> <b> <c> <tr> </tr> <td> <ty>");
 
         Assert.assertEquals(1, elements.size());
-        Assert.assertEquals(OpenTagElement.class, elements.get(0).getClass());
-        Assert.assertEquals("tr", elements.get(0).getName());
+        Assert.assertEquals(OpenTag.class, elements.get(0).getClass());
+        Assert.assertEquals("tr", elements.get(0).name());
 
     }
 }

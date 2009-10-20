@@ -1,13 +1,14 @@
-package br.com.adaptworks.scraper.element;
+package br.com.adaptworks.scraper.tag;
 
 import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.adaptworks.scraper.tag.CloseTag;
+import br.com.adaptworks.scraper.tag.OpenTag;
 import br.com.adaptworks.scraper.tag.Tag;
 import br.com.adaptworks.scraper.tag.TagReader;
-import br.com.adaptworks.scraper.tag.TagType;
 
 /**
  * @author jonasabreu
@@ -26,28 +27,28 @@ final public class TagReaderTest {
     public void testThatFindsTagName() {
         Tag tag = reader.readTag("td", null);
         Assert.assertEquals("td", tag.name());
-        Assert.assertEquals(TagType.OPEN, tag.type());
+        Assert.assertEquals(OpenTag.class, tag.getClass());
     }
 
     @Test
     public void testThatRemovesSlash() {
         Tag tag = reader.readTag("/td", null);
         Assert.assertEquals("td", tag.name());
-        Assert.assertEquals(TagType.CLOSE, tag.type());
+        Assert.assertEquals(CloseTag.class, tag.getClass());
     }
 
     @Test
     public void testThatIgnoresBeginningWhiteChars() {
         Tag tag = reader.readTag("\n \t /\n \rtd", null);
         Assert.assertEquals("td", tag.name());
-        Assert.assertEquals(TagType.CLOSE, tag.type());
+        Assert.assertEquals(CloseTag.class, tag.getClass());
     }
 
     @Test
     public void testThatFindsAttributes() {
         Tag tag = reader.readTag("td id=\"bla\"", null);
         Assert.assertEquals("td", tag.name());
-        Assert.assertEquals(TagType.OPEN, tag.type());
+        Assert.assertEquals(OpenTag.class, tag.getClass());
         Assert.assertEquals("bla", tag.attribute("id"));
     }
 
@@ -55,7 +56,7 @@ final public class TagReaderTest {
     public void testThatFindsTwoAttributes() {
         Tag tag = reader.readTag("td id=\"bla\" foo='bar'", null);
         Assert.assertEquals("td", tag.name());
-        Assert.assertEquals(TagType.OPEN, tag.type());
+        Assert.assertEquals(OpenTag.class, tag.getClass());
         Assert.assertEquals(2, tag.attributes().size());
         Assert.assertEquals("bla", tag.attribute("id"));
         Assert.assertEquals("bar", tag.attribute("foo"));
@@ -65,7 +66,7 @@ final public class TagReaderTest {
     public void testThatWorksForTagA() {
         Tag tag = reader.readTag("a href=\"http://foo.bar\"", null);
         Assert.assertEquals("a", tag.name());
-        Assert.assertEquals(TagType.OPEN, tag.type());
+        Assert.assertEquals(OpenTag.class, tag.getClass());
         Assert.assertEquals(1, tag.attributes().size());
         Assert.assertEquals("http://foo.bar", tag.attribute("href"));
     }

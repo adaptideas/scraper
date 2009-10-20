@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import br.com.adaptworks.scraper.element.Element;
-import br.com.adaptworks.scraper.element.ElementParser;
 import br.com.adaptworks.scraper.infra.InputStreamToStringReader;
+import br.com.adaptworks.scraper.tag.Tag;
+import br.com.adaptworks.scraper.tag.TagParser;
 
 /**
  * @author jonasabreu
@@ -15,26 +15,26 @@ import br.com.adaptworks.scraper.infra.InputStreamToStringReader;
  */
 final public class Html {
 
-	private final String html;
+    private final String html;
 
-	private static final Logger log = Logger.getLogger(Html.class);
+    private static final Logger log = Logger.getLogger(Html.class);
 
-	public Html(final InputStream inputStream, final String charset) {
-		this(new InputStreamToStringReader(charset).read(inputStream));
-	}
+    public Html(final InputStream inputStream, final String charset) {
+        this(new InputStreamToStringReader(charset).read(inputStream));
+    }
 
-	public Html(final String html) {
-		log.debug("Creating html");
-		this.html = html;
-	}
+    public Html(final String html) {
+        log.debug("Creating html");
+        this.html = html;
+    }
 
-	public List<Element> elements(final String relevantTags) {
-		return new ElementParser(relevantTags).parse(html);
-	}
+    public List<Tag> elements(final String relevantTags) {
+        return new TagParser(relevantTags).parse(html);
+    }
 
-	@Override
-	public String toString() {
-		return html;
-	}
+    @Override
+    public String toString() {
+        return html;
+    }
 
 }

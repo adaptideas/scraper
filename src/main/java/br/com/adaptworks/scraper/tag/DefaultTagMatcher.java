@@ -1,20 +1,28 @@
-package br.com.adaptworks.scraper.element;
+package br.com.adaptworks.scraper.tag;
 
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.apache.log4j.Logger;
+
 
 /**
  * @author jonasabreu
  * 
  */
-final public class DefaultElementMatcher implements ElementMatcher {
+final public class DefaultTagMatcher implements TagMatcher {
 
-    public boolean matches(final Element template, final Element html) {
-        return typeMatches(template.getClass(), html.getClass()) && nameMatches(template.getName(), html.getName())
-                && attributesMatches(template.getAttributes(), html.getAttributes());
+    private static final Logger log = Logger.getLogger(DefaultTagMatcher.class);
+
+    public boolean matches(final Tag template, final Tag html) {
+
+        boolean result = typeMatches(template.getClass(), html.getClass()) && nameMatches(template.name(), html.name())
+                && attributesMatches(template.attributes(), html.attributes());
+        log.trace("Matching: " + template + " with " + html + " resulted " + result);
+        return result;
     }
 
-    private boolean typeMatches(final Class<?> template, final Class<?> html) {
+    private boolean typeMatches(final Class<? extends Tag> template, final Class<? extends Tag> html) {
         return template.equals(html);
     }
 

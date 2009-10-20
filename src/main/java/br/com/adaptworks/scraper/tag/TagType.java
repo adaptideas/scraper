@@ -1,29 +1,27 @@
 package br.com.adaptworks.scraper.tag;
 
-import br.com.adaptworks.scraper.element.CloseTagElement;
-import br.com.adaptworks.scraper.element.Element;
-import br.com.adaptworks.scraper.element.OpenTagElement;
+import java.util.Map;
 
 public enum TagType {
 
     OPEN(' ') {
         @Override
-        public Element createElement(final Tag tag, final String elementContent) {
-            return new OpenTagElement(tag, elementContent);
+        public Tag createTag(final String name, final String content, final Map<String, String> attributes) {
+            return new OpenTag(name, content, attributes);
         }
     },
 
     CLOSE('/') {
         @Override
-        public Element createElement(final Tag tag, final String elementContent) {
-            return new CloseTagElement(tag, elementContent);
+        public Tag createTag(final String name, final String content, final Map<String, String> attributes) {
+            return new CloseTag(name, content, attributes);
         }
     },
 
     BANG('!') {
         @Override
-        public Element createElement(final Tag tag, final String elementContent) {
-            return new BangTagElement();
+        public Tag createTag(final String name, final String content, final Map<String, String> attributes) {
+            return new BangTag(name, content, attributes);
         }
     };
 
@@ -31,8 +29,9 @@ public enum TagType {
 
     private TagType(final char character) {
         this.character = character;
-
     }
+
+    public abstract Tag createTag(String name, String content, Map<String, String> attributes);
 
     public static TagType fromValue(final char character) {
         for (TagType type : values()) {
@@ -42,8 +41,6 @@ public enum TagType {
         }
         return TagType.OPEN;
     }
-
-    public abstract Element createElement(Tag tag, String elementContent);
 
     @Override
     public String toString() {

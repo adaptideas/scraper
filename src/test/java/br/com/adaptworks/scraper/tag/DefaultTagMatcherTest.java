@@ -1,4 +1,4 @@
-package br.com.adaptworks.scraper.element;
+package br.com.adaptworks.scraper.tag;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,49 +8,52 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.adaptworks.scraper.tag.Tag;
+import br.com.adaptworks.scraper.tag.TagMatcher;
+import br.com.adaptworks.scraper.tag.TagType;
+
 /**
  * @author jonasabreu
  * 
  */
-final public class DefaultElementMatcherTest {
+final public class DefaultTagMatcherTest {
 
-    private ElementMatcher matcher;
+    private TagMatcher matcher;
     private final Map<String, String> emptyMap = new HashMap<String, String>();
 
     @Before
     public void setup() {
-        matcher = new DefaultElementMatcher();
+        matcher = new DefaultTagMatcher();
     }
 
     @Test
     public void testThatMatchesSameElement() {
-        Assert.assertTrue(matcher.matches(new FakeElement("td", "", emptyMap), new FakeElement("td", "", emptyMap)));
+        Assert.assertTrue(matcher.matches(new FakeTag("td", "", emptyMap), new FakeTag("td", "", emptyMap)));
     }
 
     @Test
     public void testThatIgnoresContent() {
-        Assert.assertTrue(matcher.matches(new FakeElement("td", "sdkjsadkajsd", emptyMap), new FakeElement("td", "",
-                emptyMap)));
-        Assert.assertTrue(matcher.matches(new FakeElement("td", "", emptyMap), new FakeElement("td", "sdkjsadkajsd",
-                emptyMap)));
+        Assert
+            .assertTrue(matcher.matches(new FakeTag("td", "sdkjsadkajsd", emptyMap), new FakeTag("td", "", emptyMap)));
+        Assert
+            .assertTrue(matcher.matches(new FakeTag("td", "", emptyMap), new FakeTag("td", "sdkjsadkajsd", emptyMap)));
     }
 
     @Test
     public void testThatDoesntMatchDifferentElementType() {
-        Assert.assertFalse(matcher.matches(new FakeElement("td", "", emptyMap),
-                new OtherFakeElement("td", "", emptyMap)));
+        Assert.assertFalse(matcher.matches(new FakeTag("td", "", emptyMap), new OtherFakeTag("td", "", emptyMap)));
     }
 
     @Test
     public void testThatDoenstMatchIfTagNameIsDifferent() {
-        Assert.assertFalse(matcher.matches(new FakeElement("td", "", emptyMap), new FakeElement("td2", "", emptyMap)));
+        Assert.assertFalse(matcher.matches(new FakeTag("td", "", emptyMap), new FakeTag("td2", "", emptyMap)));
     }
 
     @Test
     public void testThatIgnoresAttributesNotSettedOnTemplateElement() {
         Map<String, String> map = new HashMap<String, String>();
         map.put("foo", "bar");
-        Assert.assertTrue(matcher.matches(new FakeElement("td", "", emptyMap), new FakeElement("td", "", map)));
+        Assert.assertTrue(matcher.matches(new FakeTag("td", "", emptyMap), new FakeTag("td", "", map)));
     }
 
     @Test
@@ -60,7 +63,7 @@ final public class DefaultElementMatcherTest {
         map.put("foo2", "bar2");
         Map<String, String> map2 = new HashMap<String, String>(map);
         map2.put("foo3", "bar3");
-        Assert.assertTrue(matcher.matches(new FakeElement("td", "", map), new FakeElement("td", "", map2)));
+        Assert.assertTrue(matcher.matches(new FakeTag("td", "", map), new FakeTag("td", "", map2)));
     }
 
     @Test
@@ -70,7 +73,7 @@ final public class DefaultElementMatcherTest {
         map.put("foo2", "bar2");
         Map<String, String> map2 = new HashMap<String, String>(map);
         map2.put("foo3", "bar3");
-        Assert.assertFalse(matcher.matches(new FakeElement("td", "", map2), new FakeElement("td", "", map)));
+        Assert.assertFalse(matcher.matches(new FakeTag("td", "", map2), new FakeTag("td", "", map)));
     }
 
     @Test
@@ -81,7 +84,7 @@ final public class DefaultElementMatcherTest {
         Map<String, String> map2 = new HashMap<String, String>(map);
         map2.remove("foo2");
         map2.put("foo2", "bar");
-        Assert.assertFalse(matcher.matches(new FakeElement("td", "", map2), new FakeElement("td", "", map)));
+        Assert.assertFalse(matcher.matches(new FakeTag("td", "", map2), new FakeTag("td", "", map)));
     }
 
     @Test
@@ -90,55 +93,72 @@ final public class DefaultElementMatcherTest {
         map.put("foo", "bar");
         Map<String, String> map2 = new HashMap<String, String>();
         map2.put("foo2", "bar");
-        Assert.assertFalse(matcher.matches(new FakeElement("td", "", map2), new FakeElement("td", "", map)));
+        Assert.assertFalse(matcher.matches(new FakeTag("td", "", map2), new FakeTag("td", "", map)));
     }
 
-    private static class FakeElement implements Element {
+    private static class FakeTag implements Tag {
         private final Map<String, String> attributes;
         private final String content;
         private final String name;
 
-        public FakeElement(final String name, final String content, final Map<String, String> attributes) {
+        public FakeTag(final String name, final String content, final Map<String, String> attributes) {
             this.name = name;
             this.content = content;
             this.attributes = attributes;
         }
 
-        public Map<String, String> getAttributes() {
+        public Map<String, String> attributes() {
             return attributes;
         }
 
-        public String getContent() {
+        public String content() {
             return content;
         }
 
-        public String getName() {
+        public String name() {
             return name;
+        }
+
+        public String attribute(final String key) {
+            return attributes.get(key);
+        }
+
+        public TagType type() {
+            return TagType.OPEN;
         }
     }
 
-    private static class OtherFakeElement implements Element {
+    private static class OtherFakeTag implements Tag {
         private final Map<String, String> attributes;
         private final String content;
         private final String name;
 
-        public OtherFakeElement(final String name, final String content, final Map<String, String> attributes) {
+        public OtherFakeTag(final String name, final String content, final Map<String, String> attributes) {
             this.name = name;
             this.content = content;
             this.attributes = attributes;
         }
 
-        public Map<String, String> getAttributes() {
+        public Map<String, String> attributes() {
             return attributes;
         }
 
-        public String getContent() {
+        public String content() {
             return content;
         }
 
-        public String getName() {
+        public String name() {
             return name;
         }
+
+        public String attribute(final String key) {
+            return attributes.get(key);
+        }
+
+        public TagType type() {
+            return TagType.OPEN;
+        }
+
     }
 
 }

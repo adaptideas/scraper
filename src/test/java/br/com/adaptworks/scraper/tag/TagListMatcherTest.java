@@ -1,4 +1,4 @@
-package br.com.adaptworks.scraper.element;
+package br.com.adaptworks.scraper.tag;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,24 +9,26 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.adaptworks.scraper.tag.DefaultTag;
-import br.com.adaptworks.scraper.tag.TagType;
+import br.com.adaptworks.scraper.tag.CloseTag;
+import br.com.adaptworks.scraper.tag.OpenTag;
+import br.com.adaptworks.scraper.tag.Tag;
+import br.com.adaptworks.scraper.tag.TagListMatcher;
 
 /**
  * @author jonasabreu
  * 
  */
-final public class ElementListMatcherTest {
+final public class TagListMatcherTest {
 
-    private ElementListMatcher matcher;
-    private Element openTag;
-    private Element closeTag;
+    private TagListMatcher matcher;
+    private Tag openTag;
+    private Tag closeTag;
 
     @Before
     public void setup() {
-        matcher = new ElementListMatcher(new DefaultElementMatcher());
-        openTag = new OpenTagElement(new DefaultTag("td", TagType.OPEN, "", new HashMap<String, String>()), "");
-        closeTag = new CloseTagElement(new DefaultTag("td", TagType.CLOSE, "", new HashMap<String, String>()), "");
+        matcher = new TagListMatcher(new DefaultTagMatcher());
+        openTag = new OpenTag("td", "", new HashMap<String, String>());
+        closeTag = new CloseTag("td", "", new HashMap<String, String>());
     }
 
     @Test
