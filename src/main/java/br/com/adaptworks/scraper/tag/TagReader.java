@@ -9,7 +9,7 @@ import java.util.Map;
  */
 final public class TagReader {
 
-    public DefaultTag readTag(final String declaration) {
+    public Tag readTag(final String declaration) {
         String tag = new TagSanitizer().sanitize(declaration);
         Map<String, String> attributes = recoverAttributes(tag);
         String tagName = recoverName(tag);
