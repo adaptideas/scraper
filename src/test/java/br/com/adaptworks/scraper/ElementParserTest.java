@@ -1,5 +1,7 @@
 package br.com.adaptworks.scraper;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -20,9 +22,22 @@ final public class ElementParserTest {
 
     private TagParser parser;
 
+    @SuppressWarnings("unchecked")
     @Before
     public void setup() {
-        parser = new TagParser("td|/td|tr|/tr|foo|bar|/foo|/bar|a|/a|hr");
+        List<Tag> elements = new ArrayList<Tag>();
+        elements.add(new OpenTag("td", "", Collections.EMPTY_MAP));
+        elements.add(new OpenTag("tr", "", Collections.EMPTY_MAP));
+        elements.add(new OpenTag("foo", "", Collections.EMPTY_MAP));
+        elements.add(new OpenTag("bar", "", Collections.EMPTY_MAP));
+        elements.add(new OpenTag("a", "", Collections.EMPTY_MAP));
+        elements.add(new OpenTag("hr", "", Collections.EMPTY_MAP));
+        elements.add(new CloseTag("td", "", Collections.EMPTY_MAP));
+        elements.add(new CloseTag("tr", "", Collections.EMPTY_MAP));
+        elements.add(new CloseTag("foo", "", Collections.EMPTY_MAP));
+        elements.add(new CloseTag("bar", "", Collections.EMPTY_MAP));
+        elements.add(new CloseTag("a", "", Collections.EMPTY_MAP));
+        parser = new TagParser(elements);
     }
 
     @Test
@@ -239,9 +254,12 @@ final public class ElementParserTest {
         Assert.assertEquals("b", elements.get(0).attributes().get("a"));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testThatReadsOnlyRelevantTags() {
-        List<Tag> elements = new TagParser("tr").parse("<a> <b> <c> <tr> </tr> <td> <ty>");
+        List<Tag> relevanteElements = new ArrayList<Tag>();
+        relevanteElements.add(new OpenTag("tr", "", Collections.EMPTY_MAP));
+        List<Tag> elements = new TagParser(relevanteElements).parse("<a> <b> <c> <tr> </tr> <td> <ty>");
 
         Assert.assertEquals(1, elements.size());
         Assert.assertEquals(OpenTag.class, elements.get(0).getClass());

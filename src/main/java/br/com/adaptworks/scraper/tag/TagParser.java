@@ -7,6 +7,10 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
+import br.com.adaptworks.scraper.cleaner.Cleaner;
+import br.com.adaptworks.scraper.cleaner.ElementCleaner;
+import br.com.adaptworks.scraper.cleaner.IrrelevantTagElementCleaner;
+
 /**
  * @author jonasabreu
  * 
@@ -14,30 +18,24 @@ import org.apache.log4j.Logger;
 final public class TagParser {
 
     private final Pattern pattern = Pattern.compile("(?s)<([^<>]*?)>([^<>]*)");
-    private final String relevantTags;
-    private final boolean shouldClean;
+    private final Cleaner cleaner;
 
     private static final Logger log = Logger.getLogger(TagParser.class);
 
-    public TagParser(final String relevantTags) {
-        this.relevantTags = relevantTags;
-        shouldClean = true;
+    public TagParser(final List<Tag> relevantElements) {
+        List<ElementCleaner> cleaners = new ArrayList<ElementCleaner>();
+        cleaners.add(new IrrelevantTagElementCleaner(relevantElements));
+        cleaner = new Cleaner(cleaners);
     }
 
     public TagParser() {
-        shouldClean = false;
-        relevantTags = null;
+        cleaner = new Cleaner(new ArrayList<ElementCleaner>());
     }
 
     public List<Tag> parse(final String template) {
-        String cleanTemplate = template;
-        if (shouldClean) {
-            cleanTemplate = cleanTemplate(relevantTags, template);
-        }
-        log.trace("Relevant tags: " + relevantTags);
-        log.trace("Clean template: " + cleanTemplate);
         List<Tag> tags = new ArrayList<Tag>();
-        Matcher matcher = pattern.matcher(cleanTemplate);
+        Matcher matcher = pattern.matcher(template);
+
         while (matcher.find()) {
             String elementContent = null;
 
@@ -49,15 +47,9 @@ final public class TagParser {
             tags.add(tag);
 
         }
-
         log.trace("Parsed html " + template + " and produced these tags: " + tags);
 
-        return tags;
-    }
-
-    private String cleanTemplate(final String relevantTags, final String template) {
-        String regex = "(?s)(?i)<(?!(?i:" + relevantTags + ")\\b)[^<>]+>";
-        return template.replaceAll(regex, "");
+        return cleaner.clean(tags);
     }
 
 }

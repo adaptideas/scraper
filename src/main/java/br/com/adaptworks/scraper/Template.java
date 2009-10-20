@@ -68,19 +68,10 @@ final public class Template<T> {
 
     public List<T> match(final Html html) {
         log.debug("Matching html: " + html);
-        List<Tag> htmlElements = html.elements(getAllTags(template));
+        List<Tag> htmlElements = html.elements(template);
         List<Integer> indexes = new TagListMatcher(new DefaultTagMatcher()).match(template, htmlElements);
-        System.out.println(indexes);
         List<Map<String, String>> data = recoverData(template, htmlElements, indexes);
         return convertDataToList(type, data);
-    }
-
-    private String getAllTags(final List<Tag> template) {
-        String res = "";
-        for (Tag tag : template) {
-            res += tag.type().toString().trim() + tag.name() + "|";
-        }
-        return res.substring(0, res.length() - 1);
     }
 
     private List<T> convertDataToList(final Class<T> type, final List<Map<String, String>> data) {

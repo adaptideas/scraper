@@ -28,7 +28,7 @@ final public class Html {
         this.html = html;
     }
 
-    public List<Tag> elements(final String relevantTags) {
+    public List<Tag> elements(final List<Tag> relevantTags) {
         return new TagParser(relevantTags).parse(html);
     }
 

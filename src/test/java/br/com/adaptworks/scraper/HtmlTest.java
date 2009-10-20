@@ -2,6 +2,8 @@ package br.com.adaptworks.scraper;
 
 import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -40,7 +42,9 @@ final public class HtmlTest {
     @Test
     public void testThatIgnoresTags() {
         Html html = new Html("<a><tr><td>blablabla</tr></a>");
-        List<Tag> elements = html.elements("tr");
+        List<Tag> relevantElements = new ArrayList<Tag>();
+        relevantElements.add(new OpenTag("tr", "", Collections.EMPTY_MAP));
+        List<Tag> elements = html.elements(relevantElements);
 
         Assert.assertEquals(1, elements.size());
         Assert.assertEquals(OpenTag.class, elements.get(0).getClass());
@@ -48,11 +52,14 @@ final public class HtmlTest {
 
     }
 
+    @SuppressWarnings("unchecked")
     @Theory
     public void testLatin1ToUTF8Conversion(final String charsetName) throws UnsupportedEncodingException {
         byte[] latin1 = new String("<a><tr>áéíóú</tr></a>").getBytes(charsetName);
         Html html = new Html(new ByteArrayInputStream(latin1), charsetName);
-        List<Tag> elements = html.elements("tr");
+        List<Tag> relevantElements = new ArrayList<Tag>();
+        relevantElements.add(new OpenTag("tr", "", Collections.EMPTY_MAP));
+        List<Tag> elements = html.elements(relevantElements);
 
         Assert.assertEquals(1, elements.size());
         Assert.assertEquals(OpenTag.class, elements.get(0).getClass());
