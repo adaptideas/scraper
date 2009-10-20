@@ -29,101 +29,102 @@ import br.com.adaptworks.scraper.infra.InputStreamToStringReader;
 @SuppressWarnings("unchecked")
 final public class Template<T> {
 
-    private final Class<T> type;
-    private final List<Element> template;
-    private final Pattern pattern = Pattern.compile("\\$\\{(.*?)\\}");
+	private final Class<T> type;
+	private final List<Element> template;
+	private final Pattern pattern = Pattern.compile("\\$\\{(.*?)\\}");
 
-    private static final Logger log = Logger.getLogger(Template.class);
-    private final List<Converter> converters;
+	private static final String UTF8 = "UTF-8";
+	private static final Logger log = Logger.getLogger(Template.class);
+	private final List<Converter> converters;
 
-    public Template(final InputStream inputStream, final Class<T> type) {
-        this(new InputStreamToStringReader().read(inputStream), type, new ArrayList<Converter>());
-    }
+	public Template(final InputStream inputStream, final Class<T> type) {
+		this(new InputStreamToStringReader(UTF8).read(inputStream), type, new ArrayList<Converter>());
+	}
 
-    public Template(final InputStream inputStream, final Class<T> type, final List<Converter> converters) {
-        this(new InputStreamToStringReader().read(inputStream), type, converters);
-    }
+	public Template(final InputStream inputStream, final Class<T> type, final List<Converter> converters) {
+		this(new InputStreamToStringReader(UTF8).read(inputStream), type, converters);
+	}
 
-    public Template(final String template, final Class<T> type) {
-        this(template, type, new ArrayList<Converter>());
-    }
+	public Template(final String template, final Class<T> type) {
+		this(template, type, new ArrayList<Converter>());
+	}
 
-    public Template(final String template, final Class<T> type, final List<Converter> converters) {
-        if (template == null) {
-            throw new IllegalArgumentException("template cannot be null");
-        }
-        if (type == null) {
-            throw new IllegalArgumentException("type cannot be null");
-        }
+	public Template(final String template, final Class<T> type, final List<Converter> converters) {
+		if (template == null) {
+			throw new IllegalArgumentException("template cannot be null");
+		}
+		if (type == null) {
+			throw new IllegalArgumentException("type cannot be null");
+		}
 
-        log.debug("Creating template for type " + type.getName());
+		log.debug("Creating template for type " + type.getName());
 
-        this.converters = converters;
-        converters.add(new NoOpConverter());
-        this.template = new ElementParser().parse(template);
+		this.converters = converters;
+		converters.add(new NoOpConverter());
+		this.template = new ElementParser().parse(template);
 
-        this.type = type;
-    }
+		this.type = type;
+	}
 
-    public List<T> match(final Html html) {
-        log.debug("Matching html: " + html);
-        List<Element> htmlElements = html.elements(getAllTags(template));
-        List<Integer> indexes = new ElementListMatcher(new DefaultElementMatcher()).match(template, htmlElements);
-        List<Map<String, String>> data = recoverData(template, htmlElements, indexes);
-        return convertDataToList(type, data);
-    }
+	public List<T> match(final Html html) {
+		log.debug("Matching html: " + html);
+		List<Element> htmlElements = html.elements(getAllTags(template));
+		List<Integer> indexes = new ElementListMatcher(new DefaultElementMatcher()).match(template, htmlElements);
+		List<Map<String, String>> data = recoverData(template, htmlElements, indexes);
+		return convertDataToList(type, data);
+	}
 
-    private String getAllTags(final List<Element> template) {
-        String res = "";
-        for (Element element : template) {
-            res += element.getName().trim() + "|";
-        }
-        return res.substring(0, res.length() - 1);
-    }
+	private String getAllTags(final List<Element> template) {
+		String res = "";
+		for (Element element : template) {
+			res += element.getName().trim() + "|";
+		}
+		return res.substring(0, res.length() - 1);
+	}
 
-    private List<T> convertDataToList(final Class<T> type, final List<Map<String, String>> data) {
-        List<T> list = new ArrayList<T>();
-        for (Map<String, String> map : data) {
-            T instance = new Mirror().on(type).invoke().constructor().withoutArgs();
-            for (String field : map.keySet()) {
-                String value = map.get(field);
-                Converter converter = getConverterFor(field);
-                new Mirror().on(instance).set().field(field).withValue(converter.convert(value));
-            }
-            list.add(instance);
-        }
-        return list;
-    }
+	private List<T> convertDataToList(final Class<T> type, final List<Map<String, String>> data) {
+		List<T> list = new ArrayList<T>();
+		for (Map<String, String> map : data) {
+			T instance = new Mirror().on(type).invoke().constructor().withoutArgs();
+			for (String field : map.keySet()) {
+				String value = map.get(field);
+				Converter converter = getConverterFor(field);
+				new Mirror().on(instance).set().field(field).withValue(converter.convert(value));
+			}
+			list.add(instance);
+		}
+		return list;
+	}
 
-    private Converter<?> getConverterFor(final String fieldName) {
-        Field field = new Mirror().on(type).reflect().field(fieldName);
-        if (field == null) {
-            throw new ScraperException("Could not find field for " + fieldName + " on class " + type.getName());
-        }
+	private Converter<?> getConverterFor(final String fieldName) {
+		Field field = new Mirror().on(type).reflect().field(fieldName);
+		if (field == null) {
+			throw new ScraperException("Could not find field for " + fieldName + " on class " + type.getName());
+		}
 
-        for (Converter converter : converters) {
-            if (converter.accept(field.getType())) {
-                return converter;
-            }
-        }
-        return new NoOpConverter();
-    }
+		for (Converter converter : converters) {
+			if (converter.accept(field.getType())) {
+				return converter;
+			}
+		}
+		return new NoOpConverter();
+	}
 
-    private List<Map<String, String>> recoverData(final List<Element> template, final List<Element> html,
-            final List<Integer> indexes) {
-        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+	private List<Map<String, String>> recoverData(final List<Element> template, final List<Element> html,
+			final List<Integer> indexes) {
+		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 
-        for (int i = 0; i < indexes.size(); i++) {
-            Map<String, String> map = new HashMap<String, String>();
-            for (int j = 0; j < template.size(); j++) {
-                Matcher matcher = pattern.matcher(template.get(j).getContent());
-                if (matcher.find()) {
-                    map.put(matcher.group(1), html.get(indexes.get(i) + j).getContent());
-                }
-            }
-            list.add(map);
-        }
+		for (int i = 0; i < indexes.size(); i++) {
+			Map<String, String> map = new HashMap<String, String>();
+			for (int j = 0; j < template.size(); j++) {
+				Matcher matcher = pattern.matcher(template.get(j).getContent());
+				if (matcher.find()) {
+					map.put(matcher.group(1), html.get(indexes.get(i) + j).getContent());
+				}
+			}
+			list.add(map);
+		}
 
-        return list;
-    }
+		return list;
+	}
 }

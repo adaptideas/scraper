@@ -15,21 +15,26 @@ import br.com.adaptworks.scraper.infra.InputStreamToStringReader;
  */
 final public class Html {
 
-    private final String html;
+	private final String html;
 
-    private static final Logger log = Logger.getLogger(Html.class);
+	private static final Logger log = Logger.getLogger(Html.class);
 
-    public Html(final InputStream inputStream) {
-        this(new InputStreamToStringReader().read(inputStream));
-    }
+	public Html(final InputStream inputStream, final String charset) {
+		this(new InputStreamToStringReader(charset).read(inputStream));
+	}
 
-    public Html(final String html) {
-        log.debug("Creating html");
-        this.html = html;
-    }
+	public Html(final String html) {
+		log.debug("Creating html");
+		this.html = html;
+	}
 
-    public List<Element> elements(final String relevantTags) {
-        return new ElementParser(relevantTags).parse(html);
-    }
+	public List<Element> elements(final String relevantTags) {
+		return new ElementParser(relevantTags).parse(html);
+	}
+
+	@Override
+	public String toString() {
+		return html;
+	}
 
 }
