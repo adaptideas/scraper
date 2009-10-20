@@ -9,7 +9,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.adaptworks.scraper.tag.Tag;
+import br.com.adaptworks.scraper.tag.DefaultTag;
 import br.com.adaptworks.scraper.tag.TagType;
 
 /**
@@ -25,8 +25,8 @@ final public class ElementListMatcherTest {
 	@Before
 	public void setup() {
 		this.matcher = new ElementListMatcher(new DefaultElementMatcher());
-		this.openTag = new OpenTagElement(new Tag("td", TagType.OPEN, new HashMap<String, String>()), "");
-		this.closeTag = new CloseTagElement(new Tag("td", TagType.CLOSE, new HashMap<String, String>()), "");
+		this.openTag = new OpenTagElement(new DefaultTag("td", TagType.OPEN, new HashMap<String, String>()), "");
+		this.closeTag = new CloseTagElement(new DefaultTag("td", TagType.CLOSE, new HashMap<String, String>()), "");
 	}
 
 	@Test

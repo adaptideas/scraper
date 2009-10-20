@@ -8,21 +8,21 @@ public enum TagType {
 
     OPEN(' ') {
         @Override
-        public Element createElement(final Tag tag, final String elementContent) {
+        public Element createElement(final DefaultTag tag, final String elementContent) {
             return new OpenTagElement(tag, elementContent);
         }
     },
 
     CLOSE('/') {
         @Override
-        public Element createElement(final Tag tag, final String elementContent) {
+        public Element createElement(final DefaultTag tag, final String elementContent) {
             return new CloseTagElement(tag, elementContent);
         }
     },
 
     BANG('!') {
         @Override
-        public Element createElement(final Tag tag, final String elementContent) {
+        public Element createElement(final DefaultTag tag, final String elementContent) {
             return new BangTagElement();
         }
     };
@@ -43,7 +43,7 @@ public enum TagType {
         return TagType.OPEN;
     }
 
-    public abstract Element createElement(Tag tag, String elementContent);
+    public abstract Element createElement(DefaultTag tag, String elementContent);
 
     @Override
     public String toString() {

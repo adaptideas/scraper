@@ -9,13 +9,13 @@ import java.util.Map;
  */
 final public class TagReader {
 
-    public Tag readTag(final String declaration) {
+    public DefaultTag readTag(final String declaration) {
         String tag = new TagSanitizer().sanitize(declaration);
         Map<String, String> attributes = recoverAttributes(tag);
         String tagName = recoverName(tag);
         TagType tagType = recoverType(tag);
 
-        return new Tag(tagName, tagType, attributes);
+        return new DefaultTag(tagName, tagType, attributes);
     }
 
     private TagType recoverType(final String tag) {

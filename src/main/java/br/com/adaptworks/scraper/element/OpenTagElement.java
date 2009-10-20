@@ -2,7 +2,7 @@ package br.com.adaptworks.scraper.element;
 
 import java.util.Map;
 
-import br.com.adaptworks.scraper.tag.Tag;
+import br.com.adaptworks.scraper.tag.DefaultTag;
 
 /**
  * @author jonasabreu
@@ -10,10 +10,10 @@ import br.com.adaptworks.scraper.tag.Tag;
  */
 final public class OpenTagElement implements Element {
 
-    private final Tag tag;
+    private final DefaultTag tag;
     private final String tagContent;
 
-    public OpenTagElement(final Tag tag, final String tagContent) {
+    public OpenTagElement(final DefaultTag tag, final String tagContent) {
         this.tagContent = tagContent == null ? "" : tagContent;
         this.tag = tag;
     }

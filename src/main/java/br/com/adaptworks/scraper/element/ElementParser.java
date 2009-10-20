@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import br.com.adaptworks.scraper.tag.Tag;
+import br.com.adaptworks.scraper.tag.DefaultTag;
 import br.com.adaptworks.scraper.tag.TagReader;
 
 /**
@@ -36,7 +36,7 @@ final public class ElementParser {
         ArrayList<Element> elements = new ArrayList<Element>();
         Matcher matcher = pattern.matcher(cleanTemplate);
         while (matcher.find()) {
-            Tag tag = new TagReader().readTag(matcher.group(1));
+            DefaultTag tag = new TagReader().readTag(matcher.group(1));
             String elementContent = null;
 
             if (matcher.group(2).length() != 0) {
