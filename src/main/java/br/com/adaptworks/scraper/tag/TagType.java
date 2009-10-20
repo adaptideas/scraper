@@ -1,6 +1,13 @@
 package br.com.adaptworks.scraper.tag;
 
+<<<<<<< HEAD:src/main/java/br/com/adaptworks/scraper/tag/TagType.java
 import java.util.Map;
+=======
+import br.com.adaptworks.scraper.element.BangTagElement;
+import br.com.adaptworks.scraper.element.CloseTagElement;
+import br.com.adaptworks.scraper.element.Element;
+import br.com.adaptworks.scraper.element.OpenTagElement;
+>>>>>>> changing element package:src/main/java/br/com/adaptworks/scraper/tag/TagType.java
 
 public enum TagType {
 
