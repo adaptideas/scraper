@@ -1,11 +1,10 @@
 package br.com.adaptworks.scraper.cleaner;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,30 +16,48 @@ import br.com.adaptworks.scraper.tag.Tag;
  * @author jonasabreu
  * 
  */
-@SuppressWarnings("unchecked")
 final public class IrrelevantTagCleanerTest {
 
     private TagCleaner cleaner;
+    private HashMap<String, String> attributes;
 
     @Before
     public void setup() {
         List<Tag> list = new ArrayList<Tag>();
-        list.add(new OpenTag("tr", "", Collections.EMPTY_MAP));
+        attributes = new HashMap<String, String>();
+        attributes.put("class", "title");
+
+        list.add(new OpenTag("tr", "", attributes));
         cleaner = new IrrelevantTagCleaner(list);
     }
 
     @Test
     public void testThatRemovesTagNotPresentOnRelevantTags() {
-        Assert.assertTrue(cleaner.shouldClean(new OpenTag("bla", "", Collections.EMPTY_MAP)));
+        Assert.assertTrue(cleaner.shouldClean(new OpenTag("bla", "", attributes)));
     }
 
     @Test
     public void testThatRemovesTagOfDifferentType() {
-        Assert.assertTrue(cleaner.shouldClean(new CloseTag("bla", "", Collections.EMPTY_MAP)));
+        Assert.assertTrue(cleaner.shouldClean(new CloseTag("bla", "", attributes)));
     }
 
     @Test
     public void testThatDoesNotRemovesTagPresentOnRelevantTags() {
-        Assert.assertFalse(cleaner.shouldClean(new OpenTag("tr", "", Collections.EMPTY_MAP)));
+        Assert.assertFalse(cleaner.shouldClean(new OpenTag("tr", "", attributes)));
     }
+
+    @Test
+    public void testThatDoesNotRemovesTagWithAttributes() {
+        HashMap<String, String> attributes = new HashMap<String, String>();
+        attributes.put("class", "title foo");
+        Assert.assertFalse(cleaner.shouldClean(new OpenTag("tr", "", attributes)));
+    }
+
+    @Test
+    public void testThatRemovesTagWithoutAttributes() {
+        HashMap<String, String> attributes = new HashMap<String, String>();
+        attributes.put("class", "ti tle");
+        Assert.assertTrue(cleaner.shouldClean(new OpenTag("tr", "", attributes)));
+    }
+
 }
