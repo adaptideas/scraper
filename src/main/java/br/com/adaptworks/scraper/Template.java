@@ -31,8 +31,6 @@ final public class Template<T> {
 
     private final Class<T> type;
     private final List<Tag> template;
-    private final Pattern pattern = Pattern.compile("\\$\\{(.*?)\\}");
-
     private static final String UTF8 = "UTF-8";
     private static final Logger log = Logger.getLogger(Template.class);
     private final List<Converter> converters;
@@ -109,9 +107,19 @@ final public class Template<T> {
         for (int i = 0; i < indexes.size(); i++) {
             Map<String, String> map = new HashMap<String, String>();
             for (int j = 0; j < template.size(); j++) {
-                Matcher matcher = pattern.matcher(template.get(j).content());
-                if (matcher.find()) {
-                    map.put(matcher.group(1), html.get(indexes.get(i) + j).content());
+                String templateContent = template.get(j).content();
+                String htmlContent = html.get(indexes.get(i) + j).content();
+
+                String regex = "(?s)(?i)\\Q" + templateContent.replaceAll("(\\$\\{.*?\\})", "\\\\E(.+?)\\\\Q") + "\\E$";
+                Matcher allGroupsFromHtml = Pattern.compile(regex).matcher(htmlContent);
+                if (allGroupsFromHtml.find()) {
+                    Matcher matcher = Pattern.compile("\\$\\{(.*?)\\}").matcher(templateContent);
+                    int k = 1;
+                    while (matcher.find()) {
+                        log.trace("setting [" + allGroupsFromHtml.group(k) + "] on " + matcher.group(1));
+                        map.put(matcher.group(1), allGroupsFromHtml.group(k));
+                        k++;
+                    }
                 }
             }
             list.add(map);

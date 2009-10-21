@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+
 import br.com.adaptworks.scraper.tag.Tag;
 
 /**
@@ -13,6 +15,8 @@ import br.com.adaptworks.scraper.tag.Tag;
 final public class IrrelevantTagCleaner implements TagCleaner {
 
     private final List<Tag> relevantTags;
+
+    private static final Logger log = Logger.getLogger(IrrelevantTagCleaner.class);
 
     public IrrelevantTagCleaner(final List<Tag> relevantTags) {
         this.relevantTags = relevantTags;
@@ -43,7 +47,8 @@ final public class IrrelevantTagCleaner implements TagCleaner {
             return true;
         }
         String regex = "(?s)(?i)\\Q" + tag.content().replaceAll("(\\$\\{.*?\\})", "\\\\E.*?\\\\Q") + "\\E";
-        System.out.println(regex);
-        return Pattern.compile(regex).matcher(element.content()).matches();
+        boolean matched = Pattern.compile(regex).matcher(element.content()).matches();
+        log.trace("Generated regex: " + regex + " to match " + element.content() + " resulting " + matched);
+        return matched;
     }
 }

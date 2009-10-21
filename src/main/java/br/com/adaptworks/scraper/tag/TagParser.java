@@ -49,7 +49,6 @@ final public class TagParser {
         }
 
         List<Tag> clean = cleaner.clean(tags);
-
         log.trace("Parsed html " + template + " and produced these tags: " + clean);
         return clean;
     }

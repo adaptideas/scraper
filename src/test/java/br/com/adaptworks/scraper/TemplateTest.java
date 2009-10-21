@@ -19,89 +19,98 @@ import br.com.adaptworks.scraper.exception.ScraperException;
  */
 final public class TemplateTest {
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testThatThrowsExceptionIfInputStreamIsNull() {
-		new Template<Item>((InputStream) null, Item.class);
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void testThatThrowsExceptionIfInputStreamIsNull() {
+        new Template<Item>((InputStream) null, Item.class);
+    }
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testThatThrowsExceptionIfTemplateIsNull() {
-		new Template<Item>((String) null, Item.class);
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void testThatThrowsExceptionIfTemplateIsNull() {
+        new Template<Item>((String) null, Item.class);
+    }
 
-	@Test(expected = IllegalArgumentException.class)
-	public void testThatThrowsExceptionIfTypeIsNull() {
-		new Template<Item>("", null);
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void testThatThrowsExceptionIfTypeIsNull() {
+        new Template<Item>("", null);
+    }
 
-	@Test(expected = ScraperException.class)
-	public void testThatThrowsExceptionFieldDoenstExists() {
-		new Template<Item>("<td>${fieldThatDoesntExist}</td>", Item.class).match(new Html("<td>123</td>"));
-	}
+    @Test(expected = ScraperException.class)
+    public void testThatThrowsExceptionFieldDoenstExists() {
+        new Template<Item>("<td>${fieldThatDoesntExist}</td>", Item.class).match(new Html("<td>123</td>"));
+    }
 
-	@Test
-	public void testThatRecoversData() {
-		List<Item> match = new Template<Item>("<td>${test}</td>", Item.class).match(new Html("<td>123</td>"));
-		Assert.assertEquals(1, match.size());
-		Assert.assertEquals("123", match.get(0).test());
-	}
+    @Test
+    public void testThatRecoversData() {
+        List<Item> match = new Template<Item>("<td>${test}</td>", Item.class).match(new Html("<td>123</td>"));
+        Assert.assertEquals(1, match.size());
+        Assert.assertEquals("123", match.get(0).test());
+    }
 
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testThatAddsNoOpConverterToConverterList() {
-		Mockery mockery = new Mockery();
-		final List converters = mockery.mock(List.class);
-		mockery.checking(new Expectations() {
-			{
-				oneOf(converters).add(with(any(NoOpConverter.class)));
-			}
-		});
-		new Template<Item>("<td>", Item.class, converters);
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testThatAddsNoOpConverterToConverterList() {
+        Mockery mockery = new Mockery();
+        final List converters = mockery.mock(List.class);
+        mockery.checking(new Expectations() {
+            {
+                oneOf(converters).add(with(any(NoOpConverter.class)));
+            }
+        });
+        new Template<Item>("<td>", Item.class, converters);
 
-		mockery.assertIsSatisfied();
-	}
+        mockery.assertIsSatisfied();
+    }
 
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testThatUsesConvertersWhenSetting() {
-		Mockery mockery = new Mockery();
-		final Converter converter = mockery.mock(Converter.class);
-		mockery.checking(new Expectations() {
-			{
-				oneOf(converter).accept(with(any(Class.class)));
-				will(returnValue(true));
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testThatUsesConvertersWhenSetting() {
+        Mockery mockery = new Mockery();
+        final Converter converter = mockery.mock(Converter.class);
+        mockery.checking(new Expectations() {
+            {
+                oneOf(converter).accept(with(any(Class.class)));
+                will(returnValue(true));
 
-				oneOf(converter).convert(with("123"));
-				will(returnValue("123"));
-			}
-		});
+                oneOf(converter).convert(with("123"));
+                will(returnValue("123"));
+            }
+        });
 
-		List<Converter> list = new ArrayList<Converter>();
-		list.add(converter);
+        List<Converter> list = new ArrayList<Converter>();
+        list.add(converter);
 
-		new Template<Item>("<td>${test}</td>", Item.class, list).match(new Html("<td>123</td>"));
+        new Template<Item>("<td>${test}</td>", Item.class, list).match(new Html("<td>123</td>"));
 
-		mockery.assertIsSatisfied();
-	}
+        mockery.assertIsSatisfied();
+    }
 
-	@Test
-	public void testThatOnlySearchTagsOnTemplate2() {
-		List<Item> match = new Template<Item>("<td>${test}</td>", Item.class).match(new Html("<td>123"));
-		Assert.assertEquals(0, match.size());
-	}
+    @Test
+    public void testThatOnlySearchTagsOnTemplate2() {
+        List<Item> match = new Template<Item>("<td>${test}</td>", Item.class).match(new Html("<td>123"));
+        Assert.assertEquals(0, match.size());
+    }
 
-	@Test
-	public void testThatOnlySearchTagsOnTemplate() {
-		List<Item> match = new Template<Item>("<td>${test}</td>", Item.class).match(new Html("<td><a>123</a></td>"));
-		Assert.assertEquals(1, match.size());
-		Assert.assertEquals("123", match.get(0).test());
-	}
+    @Test
+    public void testThatOnlySearchTagsOnTemplate() {
+        List<Item> match = new Template<Item>("<td>${test}</td>", Item.class).match(new Html("<td><a>123</a></td>"));
+        Assert.assertEquals(1, match.size());
+        Assert.assertEquals("123", match.get(0).test());
+    }
 
-	@Test
-	public void testThatOnlySearchTagsOnTemplate3() {
-		List<Item> match = new Template<Item>("<td>${test}</td>", Item.class).match(new Html("<td><a>123</td>a"));
-		Assert.assertEquals(1, match.size());
-		Assert.assertEquals("123", match.get(0).test());
-	}
+    @Test
+    public void testThatOnlySearchTagsOnTemplate3() {
+        List<Item> match = new Template<Item>("<td>${test}</td>", Item.class).match(new Html("<td><a>123</td>a"));
+        Assert.assertEquals(1, match.size());
+        Assert.assertEquals("123", match.get(0).test());
+    }
+
+    @Test
+    public void testThatOnlySearchTagsOnTemplateWithMultipleCaptureGroups() {
+        List<Item> match = new Template<Item>("<td>${test} (${foo})</td>a", Item.class).match(new Html(
+                "<td>123 (bar)</td>a"));
+        Assert.assertEquals(1, match.size());
+        Assert.assertEquals("123", match.get(0).test());
+        Assert.assertEquals("bar", match.get(0).foo());
+    }
 
 }
