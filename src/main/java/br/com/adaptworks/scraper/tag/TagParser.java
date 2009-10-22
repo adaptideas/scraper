@@ -22,7 +22,7 @@ final public class TagParser {
 
     private static final Logger log = Logger.getLogger(TagParser.class);
 
-    public TagParser(final List<Tag> relevantElements) {
+    public TagParser(final List<? extends Tag> relevantElements) {
         List<TagCleaner> cleaners = new ArrayList<TagCleaner>();
         cleaners.add(new IrrelevantTagCleaner(relevantElements));
         cleaner = new Cleaner(cleaners);

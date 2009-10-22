@@ -1,53 +1,43 @@
 package br.com.adaptworks.scraper;
 
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import net.vidageek.mirror.dsl.Mirror;
 
 import org.apache.log4j.Logger;
 
-import br.com.adaptworks.scraper.converter.Converter;
-import br.com.adaptworks.scraper.converter.NoOpConverter;
-import br.com.adaptworks.scraper.exception.ScraperException;
+import br.com.adaptworks.scraper.converter.DataConverter;
 import br.com.adaptworks.scraper.infra.InputStreamToStringReader;
-import br.com.adaptworks.scraper.tag.DefaultTagMatcher;
+import br.com.adaptworks.scraper.matcher.TemplateMatcher;
+import br.com.adaptworks.scraper.matcher.TemplateTag;
 import br.com.adaptworks.scraper.tag.Tag;
-import br.com.adaptworks.scraper.tag.TagListMatcher;
 import br.com.adaptworks.scraper.tag.TagParser;
 
 /**
  * @author jonasabreu
  * 
  */
-@SuppressWarnings("unchecked")
 final public class Template<T> {
 
     private final Class<T> type;
-    private final List<Tag> template;
+    private final List<TemplateTag> template;
+    private DataConverter converter;
     private static final String UTF8 = "UTF-8";
     private static final Logger log = Logger.getLogger(Template.class);
-    private final List<Converter> converters;
 
     public Template(final InputStream inputStream, final Class<T> type) {
-        this(new InputStreamToStringReader(UTF8).read(inputStream), type, new ArrayList<Converter>());
+        this(new InputStreamToStringReader(UTF8).read(inputStream), type, new DataConverter());
     }
 
-    public Template(final InputStream inputStream, final Class<T> type, final List<Converter> converters) {
-        this(new InputStreamToStringReader(UTF8).read(inputStream), type, converters);
+    public Template(final InputStream inputStream, final Class<T> type, final DataConverter dataConverter) {
+        this(new InputStreamToStringReader(UTF8).read(inputStream), type, dataConverter);
     }
 
     public Template(final String template, final Class<T> type) {
-        this(template, type, new ArrayList<Converter>());
+        this(template, type, new DataConverter());
     }
 
-    public Template(final String template, final Class<T> type, final List<Converter> converters) {
+    public Template(final String template, final Class<T> type, final DataConverter dataConverter) {
         if (template == null) {
             throw new IllegalArgumentException("template cannot be null");
         }
@@ -57,76 +47,26 @@ final public class Template<T> {
 
         log.debug("Creating template for type " + type.getName());
 
-        this.converters = converters;
-        converters.add(new NoOpConverter());
-        this.template = new TagParser().parse(template);
-
+        converter = dataConverter;
+        this.template = new ArrayList<TemplateTag>();
+        for (Tag tag : new TagParser().parse(template)) {
+            this.template.add(new TemplateTag(tag));
+        }
         this.type = type;
     }
 
     public List<T> match(final Html html) {
-        log.debug("Matching html: " + html);
+        log.trace("Matching html: " + html);
         List<Tag> htmlTags = html.tags(template);
-        List<Integer> indexes = new TagListMatcher(new DefaultTagMatcher()).match(template, htmlTags);
-        List<Map<String, String>> data = recoverData(template, htmlTags, indexes);
-        return convertDataToList(type, data);
-    }
 
-    private List<T> convertDataToList(final Class<T> type, final List<Map<String, String>> data) {
         List<T> list = new ArrayList<T>();
-        for (Map<String, String> map : data) {
-            T instance = new Mirror().on(type).invoke().constructor().withoutArgs();
-            for (String field : map.keySet()) {
-                String value = map.get(field);
-                Converter converter = getConverterFor(field);
-                new Mirror().on(instance).set().field(field).withValue(converter.convert(value));
-            }
-            list.add(instance);
+        TemplateMatcher matcher = new TemplateMatcher(template, htmlTags, converter);
+
+        while (matcher.find()) {
+            list.add(matcher.recoverData(type));
+            matcher = matcher.next();
         }
         return list;
     }
 
-    private Converter<?> getConverterFor(final String fieldName) {
-        Field field = new Mirror().on(type).reflect().field(fieldName);
-        if (field == null) {
-            throw new ScraperException("Could not find field for " + fieldName + " on class " + type.getName());
-        }
-
-        for (Converter converter : converters) {
-            if (converter.accept(field.getType())) {
-                return converter;
-            }
-        }
-        return new NoOpConverter();
-    }
-
-    private List<Map<String, String>> recoverData(final List<Tag> template, final List<Tag> html,
-            final List<Integer> indexes) {
-        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-
-        for (int i = 0; i < indexes.size(); i++) {
-            Map<String, String> map = new HashMap<String, String>();
-            for (int j = 0; j < template.size(); j++) {
-                String templateContent = template.get(j).content();
-                String htmlContent = html.get(indexes.get(i) + j).content();
-
-                String regex = "(?s)(?i)\\Q" + templateContent.replaceAll("(\\$\\{.*?\\})", "\\\\E(.+?)\\\\Q") + "\\E$";
-                Matcher allGroupsFromHtml = Pattern.compile(regex).matcher(htmlContent);
-                if (allGroupsFromHtml.find()) {
-                    Matcher matcher = Pattern.compile("\\$\\{(.*?)\\}").matcher(templateContent);
-                    int k = 1;
-                    while (matcher.find()) {
-                        log.trace("setting [" + allGroupsFromHtml.group(k) + "] on " + matcher.group(1));
-                        map.put(matcher.group(1), allGroupsFromHtml.group(k));
-                        k++;
-                    }
-                }
-            }
-            list.add(map);
-        }
-
-        log.trace("Maps generated: " + list);
-
-        return list;
-    }
 }

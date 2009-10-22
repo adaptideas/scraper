@@ -8,10 +8,6 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.adaptworks.scraper.tag.Tag;
-import br.com.adaptworks.scraper.tag.TagMatcher;
-import br.com.adaptworks.scraper.tag.TagType;
-
 /**
  * @author jonasabreu
  * 
@@ -156,7 +152,7 @@ final public class DefaultTagMatcherTest {
         }
 
         public TagType type() {
-            return TagType.OPEN;
+            return TagType.CLOSE;
         }
 
     }

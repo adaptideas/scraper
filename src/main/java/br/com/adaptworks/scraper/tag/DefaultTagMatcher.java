@@ -5,7 +5,6 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
-
 /**
  * @author jonasabreu
  * 
@@ -16,14 +15,14 @@ final public class DefaultTagMatcher implements TagMatcher {
 
     public boolean matches(final Tag template, final Tag html) {
 
-        boolean result = typeMatches(template.getClass(), html.getClass()) && nameMatches(template.name(), html.name())
+        boolean result = typeMatches(template.type(), html.type()) && nameMatches(template.name(), html.name())
                 && attributesMatches(template.attributes(), html.attributes());
         log.trace("Matching: " + template + " with " + html + " resulted " + result);
         return result;
     }
 
-    private boolean typeMatches(final Class<? extends Tag> template, final Class<? extends Tag> html) {
-        return template.equals(html);
+    private boolean typeMatches(final TagType tagType, final TagType tagType2) {
+        return tagType.equals(tagType2);
     }
 
     private boolean nameMatches(final String template, final String html) {

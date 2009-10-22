@@ -14,11 +14,11 @@ import br.com.adaptworks.scraper.tag.Tag;
  */
 final public class IrrelevantTagCleaner implements TagCleaner {
 
-    private final List<Tag> relevantTags;
+    private final List<? extends Tag> relevantTags;
 
     private static final Logger log = Logger.getLogger(IrrelevantTagCleaner.class);
 
-    public IrrelevantTagCleaner(final List<Tag> relevantTags) {
+    public IrrelevantTagCleaner(final List<? extends Tag> relevantTags) {
         this.relevantTags = relevantTags;
     }
 

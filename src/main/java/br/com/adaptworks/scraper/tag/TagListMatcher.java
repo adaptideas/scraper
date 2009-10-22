@@ -19,7 +19,7 @@ final public class TagListMatcher {
         this.matcher = matcher;
     }
 
-    public List<Integer> match(final List<Tag> template, final List<Tag> tags) {
+    public List<Integer> match(final List<? extends Tag> template, final List<Tag> tags) {
 
         log.debug("Generating Indexes");
         log.trace("Template: " + template);

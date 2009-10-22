@@ -10,7 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import br.com.adaptworks.scraper.converter.Converter;
-import br.com.adaptworks.scraper.converter.NoOpConverter;
+import br.com.adaptworks.scraper.converter.DataConverter;
 import br.com.adaptworks.scraper.exception.ScraperException;
 
 /**
@@ -48,21 +48,6 @@ final public class TemplateTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testThatAddsNoOpConverterToConverterList() {
-        Mockery mockery = new Mockery();
-        final List converters = mockery.mock(List.class);
-        mockery.checking(new Expectations() {
-            {
-                oneOf(converters).add(with(any(NoOpConverter.class)));
-            }
-        });
-        new Template<Item>("<td>", Item.class, converters);
-
-        mockery.assertIsSatisfied();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Test
     public void testThatUsesConvertersWhenSetting() {
         Mockery mockery = new Mockery();
         final Converter converter = mockery.mock(Converter.class);
@@ -79,7 +64,7 @@ final public class TemplateTest {
         List<Converter> list = new ArrayList<Converter>();
         list.add(converter);
 
-        new Template<Item>("<td>${test}</td>", Item.class, list).match(new Html("<td>123</td>"));
+        new Template<Item>("<td>${test}</td>", Item.class, new DataConverter(list)).match(new Html("<td>123</td>"));
 
         mockery.assertIsSatisfied();
     }
