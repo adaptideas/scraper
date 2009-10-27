@@ -18,24 +18,21 @@ final public class Cleaner {
     }
 
     public List<Tag> clean(final List<Tag> tags) {
-        List<Tag> result = new ArrayList<Tag>();
-        for (Tag tag : tags) {
-            boolean mustClean = false;
+        List<Tag> result = tags;
+        for (TagCleaner cleaner : cleaners) {
+            List<Tag> temp = new ArrayList<Tag>();
+            for (Tag tag : result) {
 
-            for (TagCleaner cleaner : cleaners) {
-                if (cleaner.shouldClean(tag)) {
-                    mustClean = true;
+                if (!cleaner.shouldClean(tag)) {
+                    temp.add(tag);
+                } else {
+                    if (temp.size() != 0) {
+                        Tag last = temp.remove(temp.size() - 1);
+                        temp.add(last.type().createTag(last.name(), last.content() + tag.content(), last.attributes()));
+                    }
                 }
             }
-
-            if (!mustClean) {
-                result.add(tag);
-            } else {
-                if (result.size() != 0) {
-                    Tag last = result.remove(result.size() - 1);
-                    result.add(last.type().createTag(last.name(), last.content() + tag.content(), last.attributes()));
-                }
-            }
+            result = temp;
         }
         return result;
     }

@@ -72,13 +72,14 @@ final public class DefaultTagMatcherTest {
 
     @Test
     public void testThatDoesNotMatchIfAttributeValueIsDifferent() {
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("foo", "bar");
-        map.put("foo2", "bar2");
-        Map<String, String> map2 = new HashMap<String, String>(map);
-        map2.remove("foo2");
-        map2.put("foo2", "bar");
-        Assert.assertFalse(matcher.matches(new TemplateTag(new FakeTag("td", "", map2)), new FakeTag("td", "", map)));
+        Map<String, String> contentMap = new HashMap<String, String>();
+        contentMap.put("foo", "bar");
+        contentMap.put("foo2", "bar");
+        Map<String, String> templateMap = new HashMap<String, String>(contentMap);
+        templateMap.remove("foo2");
+        templateMap.put("foo2", "bar2");
+        Assert.assertFalse(matcher.matches(new TemplateTag(new FakeTag("td", "", templateMap)), new FakeTag("td", "",
+                contentMap)));
     }
 
     @Test
@@ -88,6 +89,18 @@ final public class DefaultTagMatcherTest {
         Map<String, String> map2 = new HashMap<String, String>();
         map2.put("foo2", "bar");
         Assert.assertFalse(matcher.matches(new TemplateTag(new FakeTag("td", "", map2)), new FakeTag("td", "", map)));
+    }
+
+    @Test
+    public void testThatMatchesIfAttributeContentIsContainedInHtmlAttribute() {
+        Map<String, String> templateMap = new HashMap<String, String>();
+        templateMap.put("class", "titulo");
+
+        Map<String, String> contentMap = new HashMap<String, String>();
+        contentMap.put("class", "titulo foo");
+
+        Assert.assertTrue(matcher.matches(new TemplateTag(new FakeTag("td", "", templateMap)), new FakeTag("td", "",
+                contentMap)));
     }
 
     private static class FakeTag implements Tag {

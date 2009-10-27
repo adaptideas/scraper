@@ -48,7 +48,7 @@ final public class DefaultTagMatcher implements TagMatcher {
             if (htmlValue == null) {
                 return false;
             }
-            if (!htmlValue.equals(entry.getValue())) {
+            if (!htmlValue.contains(entry.getValue())) {
                 return false;
             }
         }

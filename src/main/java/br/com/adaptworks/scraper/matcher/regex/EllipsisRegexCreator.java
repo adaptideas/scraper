@@ -7,11 +7,11 @@ package br.com.adaptworks.scraper.matcher.regex;
 final public class EllipsisRegexCreator implements RegexCreator {
 
     public boolean accepts(final String token) {
-        return "...".equals(token);
+        return token.contains("...");
     }
 
     public String regexFor(final String token) {
-        return ".*?";
+        return "\\Q" + token.replaceAll("\\.\\.\\.", "\\\\E.*?\\\\Q") + "\\E";
     }
 
 }

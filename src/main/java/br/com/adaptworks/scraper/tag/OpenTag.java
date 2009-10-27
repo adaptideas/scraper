@@ -40,6 +40,6 @@ final public class OpenTag implements Tag {
 
     @Override
     public String toString() {
-        return name + " with attributes " + attributes.entrySet();
+        return name + " with attributes " + attributes.entrySet() + " and content=" + content;
     }
 }

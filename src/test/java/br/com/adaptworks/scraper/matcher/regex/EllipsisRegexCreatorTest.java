@@ -22,13 +22,20 @@ final public class EllipsisRegexCreatorTest {
     public void testThatAcceptsAnything() {
         Assert.assertFalse(creator.accepts(""));
         Assert.assertTrue(creator.accepts("..."));
+        Assert.assertTrue(creator.accepts("...text"));
+        Assert.assertTrue(creator.accepts("text..."));
         Assert.assertFalse(creator.accepts("${name}"));
         Assert.assertFalse(creator.accepts("simple text"));
     }
 
     @Test
     public void testThatCreatesEllipsisRegex() {
-        Assert.assertEquals(".*?", creator.regexFor("..."));
+        Assert.assertEquals("\\Q\\E.*?\\Q\\E", creator.regexFor("..."));
+    }
+
+    @Test
+    public void testThatCreatesEllipsisRegexWithText() {
+        Assert.assertEquals("\\Q\\E.*?\\Qtext\\E", creator.regexFor("...text"));
     }
 
 }

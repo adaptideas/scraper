@@ -56,8 +56,8 @@ final public class Template<T> {
     }
 
     public List<T> match(final Html html) {
-        log.trace("Matching html: " + html);
         List<Tag> htmlTags = html.tags(template);
+        log.trace("Matching html: " + htmlTags);
 
         List<T> list = new ArrayList<T>();
         TemplateMatcher matcher = new TemplateMatcher(template, htmlTags, converter);

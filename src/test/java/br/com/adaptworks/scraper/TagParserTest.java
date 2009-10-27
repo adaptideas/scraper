@@ -267,6 +267,18 @@ final public class TagParserTest {
         Assert.assertEquals(1, elements.size());
         Assert.assertEquals(OpenTag.class, elements.get(0).getClass());
         Assert.assertEquals("tr", elements.get(0).name());
+    }
 
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testThatKeepsTagsWithContent() {
+        List<TemplateTag> relevanteElements = new ArrayList<TemplateTag>();
+        relevanteElements.add(new TemplateTag(new OpenTag("tr", "content ${test}", Collections.EMPTY_MAP)));
+        List<Tag> elements = new TagParser(relevanteElements).parse("<tr><a>content value");
+
+        Assert.assertEquals(1, elements.size());
+        Assert.assertEquals(OpenTag.class, elements.get(0).getClass());
+        Assert.assertEquals("tr", elements.get(0).name());
+        Assert.assertEquals("content value", elements.get(0).content());
     }
 }

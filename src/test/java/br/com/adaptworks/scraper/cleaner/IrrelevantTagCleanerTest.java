@@ -69,14 +69,6 @@ final public class IrrelevantTagCleanerTest {
     }
 
     @Test
-    public void testThatRemovesTagWithDifferentContent() {
-        List<TemplateTag> list = new ArrayList<TemplateTag>();
-        list.add(new TemplateTag(new OpenTag("b", "Número de Horas", attributes)));
-        TagCleaner cleaner = new IrrelevantTagCleaner(list);
-        Assert.assertTrue(cleaner.shouldClean(new OpenTag("b", "Carga Horária", attributes)));
-    }
-
-    @Test
     public void testThatDoesNotRemoveTagsWithMultipleCaptureGroups() {
         List<TemplateTag> list = new ArrayList<TemplateTag>();
         list.add(new TemplateTag(new OpenTag("b", "${test} (${foo})a", attributes)));

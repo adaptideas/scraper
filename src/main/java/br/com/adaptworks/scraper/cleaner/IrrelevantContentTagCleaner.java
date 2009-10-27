@@ -10,18 +10,18 @@ import br.com.adaptworks.scraper.tag.Tag;
  * @author jonasabreu
  * 
  */
-final public class IrrelevantTagCleaner implements TagCleaner {
+final public class IrrelevantContentTagCleaner implements TagCleaner {
 
     private final List<TemplateTag> relevantTags;
 
-    public IrrelevantTagCleaner(final List<TemplateTag> relevantTags) {
+    public IrrelevantContentTagCleaner(final List<TemplateTag> relevantTags) {
         this.relevantTags = relevantTags;
     }
 
     public boolean shouldClean(final Tag element) {
         for (TemplateTag tag : relevantTags) {
             if (tag.name().equals(element.name()) && tag.type().equals(element.type())
-                    && attributesMatches(tag, element)) {
+                    && attributesMatches(tag, element) && contentMatches(tag, element)) {
                 return false;
             }
         }
@@ -36,6 +36,13 @@ final public class IrrelevantTagCleaner implements TagCleaner {
             }
         }
         return true;
+    }
+
+    private boolean contentMatches(final TemplateTag tag, final Tag element) {
+        if (tag.content().trim().length() == 0) {
+            return true;
+        }
+        return tag.matches(element.content());
     }
 
 }

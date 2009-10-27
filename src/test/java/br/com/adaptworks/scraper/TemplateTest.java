@@ -98,4 +98,14 @@ final public class TemplateTest {
         Assert.assertEquals("bar", match.get(0).foo());
     }
 
+    @Test
+    public void testname() {
+        List<Item> match = new Template<Item>("<h1 class=\"titulo\">${test}</h1>", Item.class)
+            .match(new Html(
+                    "<h1 class=\"titulo seguran-a-em-servidores-linux-norma-iso-27002-dist-ncia-466-\">Segurança em Servidores Linux: Norma ISO 27002 à distância (466)</h1>"));
+        Assert.assertEquals(1, match.size());
+        Assert.assertEquals("Segurança em Servidores Linux: Norma ISO 27002 à distância (466)", match.get(0).test());
+
+    }
+
 }

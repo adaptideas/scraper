@@ -25,8 +25,7 @@ final public class CloseTagTest {
 
     @Test
     public void testThatToStringReturnsSomethingGoodToRead() {
-        Assert.assertEquals("/td with attributes [class=bla]", new TagReader()
-            .readTag("/td class=\"bla\"", null)
-            .toString());
+        Assert.assertEquals("/td with attributes [class=bla] and content=content", new TagReader().readTag(
+                "/td class=\"bla\"", "content").toString());
     }
 }

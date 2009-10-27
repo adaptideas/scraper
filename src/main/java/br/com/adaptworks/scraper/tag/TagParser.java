@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 
 import br.com.adaptworks.scraper.cleaner.Cleaner;
+import br.com.adaptworks.scraper.cleaner.IrrelevantContentTagCleaner;
 import br.com.adaptworks.scraper.cleaner.IrrelevantTagCleaner;
 import br.com.adaptworks.scraper.cleaner.TagCleaner;
 import br.com.adaptworks.scraper.matcher.TemplateTag;
@@ -26,6 +27,7 @@ final public class TagParser {
     public TagParser(final List<TemplateTag> relevantElements) {
         List<TagCleaner> cleaners = new ArrayList<TagCleaner>();
         cleaners.add(new IrrelevantTagCleaner(relevantElements));
+        cleaners.add(new IrrelevantContentTagCleaner(relevantElements));
         cleaner = new Cleaner(cleaners);
     }
 
