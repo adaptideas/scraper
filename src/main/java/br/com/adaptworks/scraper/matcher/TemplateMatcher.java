@@ -34,9 +34,8 @@ final public class TemplateMatcher {
         this.template = template;
         this.htmlTags = htmlTags;
         this.converter = converter;
-        List<Integer> match = new TagListMatcher(new DefaultTagMatcher()).match(template, htmlTags);
-        found = match.size() != 0;
-        offset = found ? match.get(0) : -1;
+        offset = new TagListMatcher(new DefaultTagMatcher()).match(template, htmlTags);
+        found = offset != -1;
     }
 
     public boolean find() {

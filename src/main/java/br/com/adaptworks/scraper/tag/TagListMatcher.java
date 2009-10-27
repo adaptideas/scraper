@@ -1,9 +1,10 @@
 package br.com.adaptworks.scraper.tag;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+
+import br.com.adaptworks.scraper.matcher.TemplateTag;
 
 /**
  * @author jonasabreu
@@ -19,24 +20,20 @@ final public class TagListMatcher {
         this.matcher = matcher;
     }
 
-    public List<Integer> match(final List<? extends Tag> template, final List<Tag> tags) {
+    public Integer match(final List<TemplateTag> template, final List<? extends Tag> tags) {
 
-        log.debug("Generating Indexes");
-        log.trace("Template: " + template);
-
-        List<Integer> list = new ArrayList<Integer>();
         for (int i = 0; i < tags.size(); i++) {
             int j = 0;
             while ((j < template.size()) && (i + j < tags.size()) && matcher.matches(template.get(j), tags.get(i + j))) {
                 j++;
             }
             if (j == template.size()) {
-                list.add(i);
-                i += j - 1;
+                log.trace("Match found: " + i);
+                return i;
             }
         }
-        log.trace("Indices Generated: " + list);
-        return list;
+        log.trace("Could not find match: -1");
+        return -1;
     }
 
 }

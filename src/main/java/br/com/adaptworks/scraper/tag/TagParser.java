@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import br.com.adaptworks.scraper.cleaner.Cleaner;
 import br.com.adaptworks.scraper.cleaner.IrrelevantTagCleaner;
 import br.com.adaptworks.scraper.cleaner.TagCleaner;
+import br.com.adaptworks.scraper.matcher.TemplateTag;
 
 /**
  * @author jonasabreu
@@ -22,7 +23,7 @@ final public class TagParser {
 
     private static final Logger log = Logger.getLogger(TagParser.class);
 
-    public TagParser(final List<? extends Tag> relevantElements) {
+    public TagParser(final List<TemplateTag> relevantElements) {
         List<TagCleaner> cleaners = new ArrayList<TagCleaner>();
         cleaners.add(new IrrelevantTagCleaner(relevantElements));
         cleaner = new Cleaner(cleaners);

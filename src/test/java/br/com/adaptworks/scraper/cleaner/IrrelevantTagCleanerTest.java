@@ -8,9 +8,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.adaptworks.scraper.matcher.TemplateTag;
 import br.com.adaptworks.scraper.tag.CloseTag;
 import br.com.adaptworks.scraper.tag.OpenTag;
-import br.com.adaptworks.scraper.tag.Tag;
 
 /**
  * @author jonasabreu
@@ -23,11 +23,11 @@ final public class IrrelevantTagCleanerTest {
 
     @Before
     public void setup() {
-        List<Tag> list = new ArrayList<Tag>();
+        List<TemplateTag> list = new ArrayList<TemplateTag>();
         attributes = new HashMap<String, String>();
         attributes.put("class", "title");
 
-        list.add(new OpenTag("tr", "", attributes));
+        list.add(new TemplateTag(new OpenTag("tr", "", attributes)));
         cleaner = new IrrelevantTagCleaner(list);
     }
 
@@ -62,24 +62,24 @@ final public class IrrelevantTagCleanerTest {
 
     @Test
     public void testThatDoesNotRemovesTagWithSimilarContent() {
-        List<Tag> list = new ArrayList<Tag>();
-        list.add(new OpenTag("b", "Carga Horária", attributes));
+        List<TemplateTag> list = new ArrayList<TemplateTag>();
+        list.add(new TemplateTag(new OpenTag("b", "Carga Horária", attributes)));
         TagCleaner cleaner = new IrrelevantTagCleaner(list);
         Assert.assertFalse(cleaner.shouldClean(new OpenTag("b", "Carga Horária", attributes)));
     }
 
     @Test
     public void testThatRemovesTagWithDifferentContent() {
-        List<Tag> list = new ArrayList<Tag>();
-        list.add(new OpenTag("b", "Número de Horas", attributes));
+        List<TemplateTag> list = new ArrayList<TemplateTag>();
+        list.add(new TemplateTag(new OpenTag("b", "Número de Horas", attributes)));
         TagCleaner cleaner = new IrrelevantTagCleaner(list);
         Assert.assertTrue(cleaner.shouldClean(new OpenTag("b", "Carga Horária", attributes)));
     }
 
     @Test
     public void testThatDoesNotRemoveTagsWithMultipleCaptureGroups() {
-        List<Tag> list = new ArrayList<Tag>();
-        list.add(new OpenTag("b", "${test} (${foo})a", attributes));
+        List<TemplateTag> list = new ArrayList<TemplateTag>();
+        list.add(new TemplateTag(new OpenTag("b", "${test} (${foo})a", attributes)));
         TagCleaner cleaner = new IrrelevantTagCleaner(list);
         Assert.assertFalse(cleaner.shouldClean(new OpenTag("b", "123 (bar)a", attributes)));
     }

@@ -14,6 +14,7 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
+import br.com.adaptworks.scraper.matcher.TemplateTag;
 import br.com.adaptworks.scraper.tag.OpenTag;
 import br.com.adaptworks.scraper.tag.Tag;
 
@@ -43,8 +44,8 @@ final public class HtmlTest {
     @Test
     public void testThatIgnoresTags() {
         Html html = new Html("<a><tr><td>blablabla</tr></a>");
-        List<Tag> relevantTags = new ArrayList<Tag>();
-        relevantTags.add(new OpenTag("tr", "", Collections.EMPTY_MAP));
+        List<TemplateTag> relevantTags = new ArrayList<TemplateTag>();
+        relevantTags.add(new TemplateTag(new OpenTag("tr", "", Collections.EMPTY_MAP)));
         List<Tag> tags = html.tags(relevantTags);
 
         Assert.assertEquals(1, tags.size());
@@ -58,8 +59,8 @@ final public class HtmlTest {
     public void testLatin1ToUTF8Conversion(final String charsetName) throws UnsupportedEncodingException {
         byte[] latin1 = new String("<a><tr>áéíóú</tr></a>").getBytes(charsetName);
         Html html = new Html(new ByteArrayInputStream(latin1), charsetName);
-        List<Tag> relevantElements = new ArrayList<Tag>();
-        relevantElements.add(new OpenTag("tr", "", Collections.EMPTY_MAP));
+        List<TemplateTag> relevantElements = new ArrayList<TemplateTag>();
+        relevantElements.add(new TemplateTag(new OpenTag("tr", "", Collections.EMPTY_MAP)));
         List<Tag> elements = html.tags(relevantElements);
 
         Assert.assertEquals(1, elements.size());

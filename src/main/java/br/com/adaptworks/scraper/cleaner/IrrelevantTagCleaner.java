@@ -2,10 +2,8 @@ package br.com.adaptworks.scraper.cleaner;
 
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
-
+import br.com.adaptworks.scraper.matcher.TemplateTag;
 import br.com.adaptworks.scraper.tag.Tag;
 
 /**
@@ -14,16 +12,14 @@ import br.com.adaptworks.scraper.tag.Tag;
  */
 final public class IrrelevantTagCleaner implements TagCleaner {
 
-    private final List<? extends Tag> relevantTags;
+    private final List<TemplateTag> relevantTags;
 
-    private static final Logger log = Logger.getLogger(IrrelevantTagCleaner.class);
-
-    public IrrelevantTagCleaner(final List<? extends Tag> relevantTags) {
+    public IrrelevantTagCleaner(final List<TemplateTag> relevantTags) {
         this.relevantTags = relevantTags;
     }
 
     public boolean shouldClean(final Tag element) {
-        for (Tag tag : relevantTags) {
+        for (TemplateTag tag : relevantTags) {
             if (tag.name().equals(element.name()) && tag.type().equals(element.type())
                     && attributesMatches(tag, element) && contentMatches(tag, element)) {
                 return false;
@@ -42,13 +38,10 @@ final public class IrrelevantTagCleaner implements TagCleaner {
         return true;
     }
 
-    private boolean contentMatches(final Tag tag, final Tag element) {
-        if ("".equals(tag.content().trim())) {
+    private boolean contentMatches(final TemplateTag tag, final Tag element) {
+        if (tag.content().trim().length() == 0) {
             return true;
         }
-        String regex = "(?s)(?i)\\Q" + tag.content().replaceAll("(\\$\\{.*?\\})", "\\\\E.*?\\\\Q") + "\\E";
-        boolean matched = Pattern.compile(regex).matcher(element.content()).matches();
-        log.trace("Generated regex: " + regex + " to match " + element.content() + " resulting " + matched);
-        return matched;
+        return tag.matches(element.content());
     }
 }

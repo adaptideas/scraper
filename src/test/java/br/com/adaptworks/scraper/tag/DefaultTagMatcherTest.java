@@ -8,6 +8,8 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.adaptworks.scraper.matcher.TemplateTag;
+
 /**
  * @author jonasabreu
  * 
@@ -24,32 +26,28 @@ final public class DefaultTagMatcherTest {
 
     @Test
     public void testThatMatchesSameElement() {
-        Assert.assertTrue(matcher.matches(new FakeTag("td", "", emptyMap), new FakeTag("td", "", emptyMap)));
-    }
-
-    @Test
-    public void testThatIgnoresContent() {
-        Assert
-            .assertTrue(matcher.matches(new FakeTag("td", "sdkjsadkajsd", emptyMap), new FakeTag("td", "", emptyMap)));
-        Assert
-            .assertTrue(matcher.matches(new FakeTag("td", "", emptyMap), new FakeTag("td", "sdkjsadkajsd", emptyMap)));
+        Assert.assertTrue(matcher.matches(new TemplateTag(new FakeTag("td", "", emptyMap)), new FakeTag("td", "",
+                emptyMap)));
     }
 
     @Test
     public void testThatDoesntMatchDifferentElementType() {
-        Assert.assertFalse(matcher.matches(new FakeTag("td", "", emptyMap), new OtherFakeTag("td", "", emptyMap)));
+        Assert.assertFalse(matcher.matches(new TemplateTag(new FakeTag("td", "", emptyMap)), new OtherFakeTag("td", "",
+                emptyMap)));
     }
 
     @Test
     public void testThatDoenstMatchIfTagNameIsDifferent() {
-        Assert.assertFalse(matcher.matches(new FakeTag("td", "", emptyMap), new FakeTag("td2", "", emptyMap)));
+        Assert.assertFalse(matcher.matches(new TemplateTag(new FakeTag("td", "", emptyMap)), new FakeTag("td2", "",
+                emptyMap)));
     }
 
     @Test
     public void testThatIgnoresAttributesNotSettedOnTemplateElement() {
         Map<String, String> map = new HashMap<String, String>();
         map.put("foo", "bar");
-        Assert.assertTrue(matcher.matches(new FakeTag("td", "", emptyMap), new FakeTag("td", "", map)));
+        Assert
+            .assertTrue(matcher.matches(new TemplateTag(new FakeTag("td", "", emptyMap)), new FakeTag("td", "", map)));
     }
 
     @Test
@@ -59,7 +57,7 @@ final public class DefaultTagMatcherTest {
         map.put("foo2", "bar2");
         Map<String, String> map2 = new HashMap<String, String>(map);
         map2.put("foo3", "bar3");
-        Assert.assertTrue(matcher.matches(new FakeTag("td", "", map), new FakeTag("td", "", map2)));
+        Assert.assertTrue(matcher.matches(new TemplateTag(new FakeTag("td", "", map)), new FakeTag("td", "", map2)));
     }
 
     @Test
@@ -69,7 +67,7 @@ final public class DefaultTagMatcherTest {
         map.put("foo2", "bar2");
         Map<String, String> map2 = new HashMap<String, String>(map);
         map2.put("foo3", "bar3");
-        Assert.assertFalse(matcher.matches(new FakeTag("td", "", map2), new FakeTag("td", "", map)));
+        Assert.assertFalse(matcher.matches(new TemplateTag(new FakeTag("td", "", map2)), new FakeTag("td", "", map)));
     }
 
     @Test
@@ -80,7 +78,7 @@ final public class DefaultTagMatcherTest {
         Map<String, String> map2 = new HashMap<String, String>(map);
         map2.remove("foo2");
         map2.put("foo2", "bar");
-        Assert.assertFalse(matcher.matches(new FakeTag("td", "", map2), new FakeTag("td", "", map)));
+        Assert.assertFalse(matcher.matches(new TemplateTag(new FakeTag("td", "", map2)), new FakeTag("td", "", map)));
     }
 
     @Test
@@ -89,7 +87,7 @@ final public class DefaultTagMatcherTest {
         map.put("foo", "bar");
         Map<String, String> map2 = new HashMap<String, String>();
         map2.put("foo2", "bar");
-        Assert.assertFalse(matcher.matches(new FakeTag("td", "", map2), new FakeTag("td", "", map)));
+        Assert.assertFalse(matcher.matches(new TemplateTag(new FakeTag("td", "", map2)), new FakeTag("td", "", map)));
     }
 
     private static class FakeTag implements Tag {

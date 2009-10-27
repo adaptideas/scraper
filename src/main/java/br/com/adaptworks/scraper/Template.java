@@ -49,7 +49,7 @@ final public class Template<T> {
 
         converter = dataConverter;
         this.template = new ArrayList<TemplateTag>();
-        for (Tag tag : new TagParser().parse(template)) {
+        for (Tag tag : new TagParser().parse(template.replaceAll("\\s+", " ").trim())) {
             this.template.add(new TemplateTag(tag));
         }
         this.type = type;

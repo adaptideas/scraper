@@ -9,6 +9,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.adaptworks.scraper.matcher.TemplateTag;
 import br.com.adaptworks.scraper.tag.BangTag;
 import br.com.adaptworks.scraper.tag.CloseTag;
 import br.com.adaptworks.scraper.tag.OpenTag;
@@ -26,18 +27,18 @@ final public class TagParserTest {
     @SuppressWarnings("unchecked")
     @Before
     public void setup() {
-        List<Tag> tags = new ArrayList<Tag>();
-        tags.add(new OpenTag("td", "", Collections.EMPTY_MAP));
-        tags.add(new OpenTag("tr", "", Collections.EMPTY_MAP));
-        tags.add(new OpenTag("foo", "", Collections.EMPTY_MAP));
-        tags.add(new OpenTag("bar", "", Collections.EMPTY_MAP));
-        tags.add(new OpenTag("a", "", Collections.EMPTY_MAP));
-        tags.add(new OpenTag("hr", "", Collections.EMPTY_MAP));
-        tags.add(new CloseTag("td", "", Collections.EMPTY_MAP));
-        tags.add(new CloseTag("tr", "", Collections.EMPTY_MAP));
-        tags.add(new CloseTag("foo", "", Collections.EMPTY_MAP));
-        tags.add(new CloseTag("bar", "", Collections.EMPTY_MAP));
-        tags.add(new CloseTag("a", "", Collections.EMPTY_MAP));
+        List<TemplateTag> tags = new ArrayList<TemplateTag>();
+        tags.add(new TemplateTag(new OpenTag("td", "", Collections.EMPTY_MAP)));
+        tags.add(new TemplateTag(new OpenTag("tr", "", Collections.EMPTY_MAP)));
+        tags.add(new TemplateTag(new OpenTag("foo", "", Collections.EMPTY_MAP)));
+        tags.add(new TemplateTag(new OpenTag("bar", "", Collections.EMPTY_MAP)));
+        tags.add(new TemplateTag(new OpenTag("a", "", Collections.EMPTY_MAP)));
+        tags.add(new TemplateTag(new OpenTag("hr", "", Collections.EMPTY_MAP)));
+        tags.add(new TemplateTag(new CloseTag("td", "", Collections.EMPTY_MAP)));
+        tags.add(new TemplateTag(new CloseTag("tr", "", Collections.EMPTY_MAP)));
+        tags.add(new TemplateTag(new CloseTag("foo", "", Collections.EMPTY_MAP)));
+        tags.add(new TemplateTag(new CloseTag("bar", "", Collections.EMPTY_MAP)));
+        tags.add(new TemplateTag(new CloseTag("a", "", Collections.EMPTY_MAP)));
         parser = new TagParser(tags);
     }
 
@@ -78,7 +79,7 @@ final public class TagParserTest {
 
     @Test
     public void testThatIgnoresWhiteChars() {
-        List<Tag> elements = parser.parse("\n\n </td>\n <td>");
+        List<Tag> elements = parser.parse(" </td> <td>");
 
         Assert.assertEquals(2, elements.size());
         Assert.assertEquals(CloseTag.class, elements.get(0).getClass());
@@ -259,8 +260,8 @@ final public class TagParserTest {
     @SuppressWarnings("unchecked")
     @Test
     public void testThatReadsOnlyRelevantTags() {
-        List<Tag> relevanteElements = new ArrayList<Tag>();
-        relevanteElements.add(new OpenTag("tr", "", Collections.EMPTY_MAP));
+        List<TemplateTag> relevanteElements = new ArrayList<TemplateTag>();
+        relevanteElements.add(new TemplateTag(new OpenTag("tr", "", Collections.EMPTY_MAP)));
         List<Tag> elements = new TagParser(relevanteElements).parse("<a> <b> <c> <tr> </tr> <td> <ty>");
 
         Assert.assertEquals(1, elements.size());

@@ -1,5 +1,6 @@
 package br.com.adaptworks.scraper.tag;
 
+import br.com.adaptworks.scraper.matcher.TemplateTag;
 
 /**
  * @author jonasabreu
@@ -7,6 +8,6 @@ package br.com.adaptworks.scraper.tag;
  */
 public interface TagMatcher {
 
-    public boolean matches(final Tag template, final Tag html);
+    public boolean matches(final TemplateTag template, final Tag html);
 
 }

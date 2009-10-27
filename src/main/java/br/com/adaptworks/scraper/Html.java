@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import br.com.adaptworks.scraper.infra.InputStreamToStringReader;
+import br.com.adaptworks.scraper.matcher.TemplateTag;
 import br.com.adaptworks.scraper.tag.Tag;
 import br.com.adaptworks.scraper.tag.TagParser;
 
@@ -28,7 +29,7 @@ final public class Html {
         this.html = html;
     }
 
-    public List<Tag> tags(final List<? extends Tag> relevantTags) {
+    public List<Tag> tags(final List<TemplateTag> relevantTags) {
         return new TagParser(relevantTags).parse(html);
     }
 

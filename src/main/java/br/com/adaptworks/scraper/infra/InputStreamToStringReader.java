@@ -13,22 +13,22 @@ import br.com.adaptworks.scraper.exception.ScraperException;
  */
 final public class InputStreamToStringReader {
 
-	private final String charset;
+    private final String charset;
 
-	public InputStreamToStringReader(final String charset) {
-		this.charset = charset;
-	}
+    public InputStreamToStringReader(final String charset) {
+        this.charset = charset;
+    }
 
-	public String read(final InputStream inputStream) {
-		if (inputStream == null) {
-			throw new IllegalArgumentException("inputStream cannot be null");
-		}
-		try {
-			String encodedString = new Scanner(new InputStreamReader(inputStream, charset)).useDelimiter("$$").next();
+    public String read(final InputStream inputStream) {
+        if (inputStream == null) {
+            throw new IllegalArgumentException("inputStream cannot be null");
+        }
+        try {
+            String encodedString = new Scanner(new InputStreamReader(inputStream, charset)).useDelimiter("$$").next();
 
-			return new String(encodedString.getBytes("UTF-8"), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			throw new ScraperException("Encode not supported: " + charset, e);
-		}
-	}
+            return new String(encodedString.getBytes("UTF-8"), "UTF-8").replaceAll("\\s+", " ").trim();
+        } catch (UnsupportedEncodingException e) {
+            throw new ScraperException("Encode not supported: " + charset, e);
+        }
+    }
 }
