@@ -8,12 +8,12 @@ import java.util.regex.Pattern;
  */
 final public class CaptureGroupsRegexCreator implements RegexCreator {
 
-    public boolean accepts(final String token) {
-        return Pattern.compile("\\$\\{.*?\\}").matcher(token).find();
-    }
+	public boolean accepts(final String token) {
+		return Pattern.compile("\\$\\{.*?\\}").matcher(token).find();
+	}
 
-    public String regexFor(final String token) {
-        return "\\Q" + token.replaceAll("\\$\\{.*?\\}", "\\\\E(.*?)\\\\Q") + "\\E";
-    }
+	public String regexFor(final String token) {
+		return "\\Q" + token.replaceAll("\\$\\{.*?\\}", "\\\\E(.*?)\\\\Q") + "\\E";
+	}
 
 }

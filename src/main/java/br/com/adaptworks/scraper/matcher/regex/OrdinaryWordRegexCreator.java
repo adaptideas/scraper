@@ -8,12 +8,12 @@ import java.util.regex.Pattern;
  */
 final public class OrdinaryWordRegexCreator implements RegexCreator {
 
-    public boolean accepts(final String token) {
-        return true;
-    }
+	public boolean accepts(final String token) {
+		return true;
+	}
 
-    public String regexFor(final String token) {
-        return Pattern.quote(token);
-    }
+	public String regexFor(final String token) {
+		return Pattern.quote(token);
+	}
 
 }
