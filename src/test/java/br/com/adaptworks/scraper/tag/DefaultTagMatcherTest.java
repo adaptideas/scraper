@@ -31,6 +31,12 @@ final public class DefaultTagMatcherTest {
     }
 
     @Test
+    public void testThatMatchingIsCaseInsensitive() {
+        Assert.assertTrue(matcher.matches(new TemplateTag(new FakeTag("Td", "", emptyMap)), new FakeTag("tD", "",
+                emptyMap)));
+    }
+
+    @Test
     public void testThatDoesntMatchDifferentElementType() {
         Assert.assertFalse(matcher.matches(new TemplateTag(new FakeTag("td", "", emptyMap)), new OtherFakeTag("td", "",
                 emptyMap)));

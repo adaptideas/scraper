@@ -36,7 +36,7 @@ final public class DefaultTagMatcher implements TagMatcher {
     }
 
     private boolean nameMatches(final String template, final String html) {
-        return template.equals(html);
+        return template.equalsIgnoreCase(html);
     }
 
     private boolean attributesMatches(final Map<String, String> template, final Map<String, String> html) {
