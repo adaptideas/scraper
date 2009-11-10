@@ -56,7 +56,7 @@ final public class HtmlTest {
 
     @SuppressWarnings("unchecked")
     @Theory
-    public void testLatin1ToUTF8Conversion(final String charsetName) throws UnsupportedEncodingException {
+    public void testCharsetConvertion(final String charsetName) throws UnsupportedEncodingException {
         byte[] latin1 = new String("<a><tr>áéíóú</tr></a>").getBytes(charsetName);
         Html html = new Html(new ByteArrayInputStream(latin1), charsetName);
         List<TemplateTag> relevantElements = new ArrayList<TemplateTag>();
