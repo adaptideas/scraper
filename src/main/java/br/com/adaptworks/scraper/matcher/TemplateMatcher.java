@@ -1,12 +1,14 @@
 package br.com.adaptworks.scraper.matcher;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import net.vidageek.mirror.dsl.Mirror;
+import net.vidageek.mirror.list.dsl.MirrorList;
 
 import org.apache.log4j.Logger;
 
@@ -62,18 +64,32 @@ final public class TemplateMatcher {
         for (Entry<String, String> entry : map.entrySet()) {
 
             log.trace("setting [" + entry.getValue() + "] on " + entry.getKey());
-            Field field = new Mirror().on((Class<?>) instance.getClass()).reflect().field(entry.getKey());
-            if (field == null) {
-                throw new ScraperException("Could not find field for " + entry.getKey() + " on class "
-                        + ((Class<?>) instance.getClass()).getName());
+            if (!setUsingSetter(instance, entry)) {
+                setUsingField(instance, entry);
             }
-            new Mirror()
-                .on(instance)
-                .set()
-                .field(field)
-                .withValue(converter.convert(entry.getValue(), field.getType()));
         }
 
+    }
+
+    private boolean setUsingSetter(final Object instance, final Entry<String, String> entry) {
+        MirrorList<Method> setters = new Mirror().on((Class<?>) instance.getClass()).reflectAll().setters();
+        for (Method setter : setters) {
+            if (setter.getName().equalsIgnoreCase("set" + entry.getKey())) {
+                new Mirror().on(instance).invoke().method(setter).withArgs(
+                        converter.convert(entry.getValue(), setter.getParameterTypes()[0]));
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void setUsingField(final Object instance, final Entry<String, String> entry) {
+        Field field = new Mirror().on((Class<?>) instance.getClass()).reflect().field(entry.getKey());
+        if (field == null) {
+            throw new ScraperException("Could not find field for " + entry.getKey() + " on class "
+                    + ((Class<?>) instance.getClass()).getName());
+        }
+        new Mirror().on(instance).set().field(field).withValue(converter.convert(entry.getValue(), field.getType()));
     }
 
     private List<Tag> subList(final List<Tag> tags, final int begin) {
