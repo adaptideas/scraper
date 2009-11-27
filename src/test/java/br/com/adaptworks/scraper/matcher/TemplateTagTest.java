@@ -53,6 +53,13 @@ final public class TemplateTagTest {
     }
 
     @Test
+    public void testThatMatcherIsCaseInsensitive() {
+        TemplateTag tag = new TemplateTag(new OpenTag("td", "... ANYthing ${name} simple ${other} text ...",
+                Collections.EMPTY_MAP));
+        Assert.assertTrue(tag.matches("a anything to JUST ignore simple and normal text after"));
+    }
+
+    @Test
     public void testThatRecoverCaptureGroup() {
         TemplateTag tag = new TemplateTag(new OpenTag("td", "${name} simple text", Collections.EMPTY_MAP));
         Assert.assertEquals("anything to just ignore", tag.match("anything to just ignore simple text").get("name"));
