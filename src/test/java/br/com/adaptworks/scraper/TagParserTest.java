@@ -146,7 +146,7 @@ final public class TagParserTest {
 		Assert.assertEquals(1, elements.size());
 		Assert.assertEquals(CloseTag.class, elements.get(0).getClass());
 		Assert.assertEquals("bar", elements.get(0).name());
-		Assert.assertEquals(" content ", elements.get(0).content());
+		Assert.assertEquals("content", elements.get(0).content());
 	}
 
 	@Test
@@ -160,8 +160,8 @@ final public class TagParserTest {
 		Assert.assertEquals("bar", elements.get(0).name());
 		Assert.assertEquals("foo", elements.get(1).name());
 		Assert.assertEquals("foo", elements.get(2).name());
-		Assert.assertEquals(" content ", elements.get(0).content());
-		Assert.assertEquals(" foo content ", elements.get(1).content());
+		Assert.assertEquals("content", elements.get(0).content());
+		Assert.assertEquals("foo content", elements.get(1).content());
 
 	}
 
@@ -176,8 +176,8 @@ final public class TagParserTest {
 		Assert.assertEquals("bar", elements.get(0).name());
 		Assert.assertEquals("foo", elements.get(1).name());
 		Assert.assertEquals("foo", elements.get(2).name());
-		Assert.assertEquals(" content ", elements.get(0).content());
-		Assert.assertEquals(" foo content ", elements.get(1).content());
+		Assert.assertEquals("content", elements.get(0).content());
+		Assert.assertEquals("foo content", elements.get(1).content());
 	}
 
 	@Test
@@ -193,8 +193,8 @@ final public class TagParserTest {
 		Assert.assertEquals("foo", elements.get(1).name());
 		Assert.assertEquals("foo", elements.get(2).name());
 
-		Assert.assertEquals(" content ", elements.get(0).content());
-		Assert.assertEquals(" foo content ", elements.get(1).content());
+		Assert.assertEquals("content", elements.get(0).content());
+		Assert.assertEquals("foo content", elements.get(1).content());
 
 		Assert.assertEquals("bla", elements.get(0).attributes().get("id"));
 		Assert.assertEquals("pong", elements.get(1).attributes().get("attr"));
@@ -294,5 +294,17 @@ final public class TagParserTest {
 		Assert.assertEquals(OpenTag.class, elements.get(0).getClass());
 		Assert.assertEquals("TR", elements.get(0).name());
 		Assert.assertEquals("tD", elements.get(1).name());
+	}
+
+	@Test
+	public void testThatTrimsContent() {
+		List<TemplateTag> relevanteElements = new ArrayList<TemplateTag>();
+		relevanteElements.add(new TemplateTag(new OpenTag("tr", "content ${test}", Collections.EMPTY_MAP)));
+		List<Tag> elements = new TagParser(relevanteElements).parse("<tr><a> content value ");
+
+		Assert.assertEquals(1, elements.size());
+		Assert.assertEquals(OpenTag.class, elements.get(0).getClass());
+		Assert.assertEquals("tr", elements.get(0).name());
+		Assert.assertEquals("content value", elements.get(0).content());
 	}
 }

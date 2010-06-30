@@ -16,12 +16,12 @@ import br.com.adaptworks.scraper.tag.OpenTag;
  */
 final public class IrrelevantContentTagCleanerTest {
 
-    @SuppressWarnings("unchecked")
-    @Test
-    public void testThatRemovesTagWithDifferentContent() {
-        List<TemplateTag> list = new ArrayList<TemplateTag>();
-        list.add(new TemplateTag(new OpenTag("b", "Número de Horas", Collections.EMPTY_MAP)));
-        TagCleaner cleaner = new IrrelevantContentTagCleaner(list);
-        Assert.assertTrue(cleaner.shouldClean(new OpenTag("b", "Carga Horária", Collections.EMPTY_MAP)));
-    }
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testThatRemovesTagWithDifferentContent() {
+		List<TemplateTag> list = new ArrayList<TemplateTag>();
+		list.add(new TemplateTag(new OpenTag("b", "Número de Horas", Collections.EMPTY_MAP)));
+		TagCleaner cleaner = new IrrelevantContentTagCleaner(list);
+		Assert.assertTrue(cleaner.shouldClean(new OpenTag("b", "Carga Horária", Collections.EMPTY_MAP)));
+	}
 }

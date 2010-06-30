@@ -46,7 +46,7 @@ final public class TagParser {
 				elementContent = matcher.group(2);
 			}
 
-			Tag tag = new TagReader().readTag(matcher.group(1), elementContent);
+			Tag tag = new TagReader().readTag(matcher.group(1), elementContent != null ? elementContent.trim() : null);
 			tags.add(tag);
 
 		}
