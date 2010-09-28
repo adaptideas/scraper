@@ -19,93 +19,103 @@ import br.com.adaptworks.scraper.exception.ScraperException;
  */
 final public class SingleTemplateTest {
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testThatThrowsExceptionIfInputStreamIsNull() {
-        new SingleTemplate<Item>((InputStream) null, Item.class);
-    }
+	@Test(expected = IllegalArgumentException.class)
+	public void testThatThrowsExceptionIfInputStreamIsNull() {
+		new SingleTemplate<Item>((InputStream) null, Item.class);
+	}
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testThatThrowsExceptionIfTemplateIsNull() {
-        new SingleTemplate<Item>((String) null, Item.class);
-    }
+	@Test(expected = IllegalArgumentException.class)
+	public void testThatThrowsExceptionIfTemplateIsNull() {
+		new SingleTemplate<Item>((String) null, Item.class);
+	}
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testThatThrowsExceptionIfTypeIsNull() {
-        new SingleTemplate<Item>("", null);
-    }
+	@Test(expected = IllegalArgumentException.class)
+	public void testThatThrowsExceptionIfTypeIsNull() {
+		new SingleTemplate<Item>("", null);
+	}
 
-    @Test(expected = ScraperException.class)
-    public void testThatThrowsExceptionFieldDoenstExists() {
-        new SingleTemplate<Item>("<td>${fieldThatDoesntExist}</td>", Item.class).match(new Html("<td>123</td>"));
-    }
+	@Test(expected = ScraperException.class)
+	public void testThatThrowsExceptionFieldDoenstExists() {
+		new SingleTemplate<Item>("<td>${fieldThatDoesntExist}</td>", Item.class).match(new Html("<td>123</td>"));
+	}
 
-    @Test
-    public void testThatRecoversData() {
-        List<Item> match = new SingleTemplate<Item>("<td>${test}</td>", Item.class).match(new Html("<td>123</td>"));
-        Assert.assertEquals(1, match.size());
-        Assert.assertEquals("123", match.get(0).test());
-    }
+	@Test
+	public void testThatRecoversData() {
+		List<Item> match = new SingleTemplate<Item>("<td>${test}</td>", Item.class).match(new Html("<td>123</td>"));
+		Assert.assertEquals(1, match.size());
+		Assert.assertEquals("123", match.get(0).test());
+	}
 
-    @SuppressWarnings("unchecked")
-    @Test
-    public void testThatUsesConvertersWhenSetting() {
-        Mockery mockery = new Mockery();
-        final Converter converter = mockery.mock(Converter.class);
-        mockery.checking(new Expectations() {
-            {
-                oneOf(converter).accept(with(any(Class.class)));
-                will(returnValue(true));
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testThatUsesConvertersWhenSetting() {
+		Mockery mockery = new Mockery();
+		final Converter converter = mockery.mock(Converter.class);
+		mockery.checking(new Expectations() {
+			{
+				oneOf(converter).accept(with(any(Class.class)));
+				will(returnValue(true));
 
-                oneOf(converter).convert(with("123"));
-                will(returnValue("123"));
-            }
-        });
+				oneOf(converter).convert(with("123"));
+				will(returnValue("123"));
+			}
+		});
 
-        List<Converter> list = new ArrayList<Converter>();
-        list.add(converter);
+		List<Converter> list = new ArrayList<Converter>();
+		list.add(converter);
 
-        new SingleTemplate<Item>("<td>${test}</td>", Item.class, new DataConverter(list)).match(new Html("<td>123</td>"));
+		new SingleTemplate<Item>("<td>${test}</td>", Item.class, new DataConverter(list))
+				.match(new Html("<td>123</td>"));
 
-        mockery.assertIsSatisfied();
-    }
+		mockery.assertIsSatisfied();
+	}
 
-    @Test
-    public void testThatOnlySearchTagsOnTemplate2() {
-        List<Item> match = new SingleTemplate<Item>("<td>${test}</td>", Item.class).match(new Html("<td>123"));
-        Assert.assertEquals(0, match.size());
-    }
+	@Test
+	public void testThatOnlySearchTagsOnTemplate2() {
+		List<Item> match = new SingleTemplate<Item>("<td>${test}</td>", Item.class).match(new Html("<td>123"));
+		Assert.assertEquals(0, match.size());
+	}
 
-    @Test
-    public void testThatOnlySearchTagsOnTemplate() {
-        List<Item> match = new SingleTemplate<Item>("<td>${test}</td>", Item.class).match(new Html("<td><a>123</a></td>"));
-        Assert.assertEquals(1, match.size());
-        Assert.assertEquals("123", match.get(0).test());
-    }
+	@Test
+	public void testThatOnlySearchTagsOnTemplate() {
+		List<Item> match = new SingleTemplate<Item>("<td>${test}</td>", Item.class).match(new Html(
+				"<td><a>123</a></td>"));
+		Assert.assertEquals(1, match.size());
+		Assert.assertEquals("123", match.get(0).test());
+	}
 
-    @Test
-    public void testThatOnlySearchTagsOnTemplate3() {
-        List<Item> match = new SingleTemplate<Item>("<td>${test}</td>", Item.class).match(new Html("<td><a>123</td>a"));
-        Assert.assertEquals(1, match.size());
-        Assert.assertEquals("123", match.get(0).test());
-    }
+	@Test
+	public void testThatDoesNotRemoveImportantWhitespace() {
+		List<Item> match = new SingleTemplate<Item>("<td>${test}</td>", Item.class).match(new Html(
+				"<td><p>more <b>some text </b>text</td>"));
+		Assert.assertEquals(1, match.size());
+		Assert.assertEquals("more some text text", match.get(0).test());
+	}
 
-    @Test
-    public void testThatOnlySearchTagsOnTemplateWithMultipleCaptureGroups() {
-        List<Item> match = new SingleTemplate<Item>("<td>${test} (${foo})</td>a", Item.class).match(new Html(
-                "<td>123 (bar)</td>a"));
-        Assert.assertEquals(1, match.size());
-        Assert.assertEquals("123", match.get(0).test());
-        Assert.assertEquals("bar", match.get(0).foo());
-    }
+	@Test
+	public void testThatOnlySearchTagsOnTemplate3() {
+		List<Item> match = new SingleTemplate<Item>("<td>${test}</td>", Item.class).match(new Html("<td><a>123</td>a"));
+		Assert.assertEquals(1, match.size());
+		Assert.assertEquals("123", match.get(0).test());
+	}
 
-    @Test
-    public void testname() {
-        List<Item> match = new SingleTemplate<Item>("<h1 class=\"titulo\">${test}</h1>", Item.class)
-            .match(new Html(
-                    "<h1 class=\"titulo seguran-a-em-servidores-linux-norma-iso-27002-dist-ncia-466-\">Segurança em Servidores Linux: Norma ISO 27002 à distância (466)</h1>"));
-        Assert.assertEquals(1, match.size());
-        Assert.assertEquals("Segurança em Servidores Linux: Norma ISO 27002 à distância (466)", match.get(0).test());
+	@Test
+	public void testThatOnlySearchTagsOnTemplateWithMultipleCaptureGroups() {
+		List<Item> match = new SingleTemplate<Item>("<td>${test} (${foo})</td>a", Item.class).match(new Html(
+				"<td>123 (bar)</td>a"));
+		Assert.assertEquals(1, match.size());
+		Assert.assertEquals("123", match.get(0).test());
+		Assert.assertEquals("bar", match.get(0).foo());
+	}
 
-    }
+	@Test
+	public void testname() {
+		List<Item> match = new SingleTemplate<Item>("<h1 class=\"titulo\">${test}</h1>", Item.class)
+				.match(new Html(
+						"<h1 class=\"titulo seguran-a-em-servidores-linux-norma-iso-27002-dist-ncia-466-\">Segurança em Servidores Linux: Norma ISO 27002 à distância (466)</h1>"));
+		Assert.assertEquals(1, match.size());
+		Assert.assertEquals("Segurança em Servidores Linux: Norma ISO 27002 à distância (466)", match.get(0).test());
+
+	}
 
 }

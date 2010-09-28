@@ -2,7 +2,7 @@ package br.com.adaptworks.scraper.matcher;
 
 import java.util.Collections;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 

@@ -2,7 +2,7 @@ package br.com.adaptworks.scraper.infra;
 
 import java.io.ByteArrayInputStream;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 
