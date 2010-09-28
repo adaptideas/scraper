@@ -16,26 +16,26 @@ import br.com.adaptworks.scraper.tag.TagParser;
  */
 final public class Html {
 
-    private final String html;
+	private final String html;
 
-    private static final Logger log = Logger.getLogger(Html.class);
+	private static final Logger log = Logger.getLogger(Html.class);
 
-    public Html(final InputStream inputStream, final String charset) {
-        this(new InputStreamToStringReader(charset).read(inputStream));
-    }
+	public Html(final InputStream inputStream, final String charset) {
+		this(new InputStreamToStringReader(charset).read(inputStream));
+	}
 
-    public Html(final String html) {
-        log.debug("Creating html");
-        this.html = html;
-    }
+	public Html(final String html) {
+		log.debug("Creating html");
+		this.html = html;
+	}
 
-    public List<Tag> tags(final List<TemplateTag> relevantTags) {
-        return new TagParser(relevantTags).parse(html);
-    }
+	public List<Tag> tags(final List<TemplateTag> relevantTags) {
+		return new TagParser(relevantTags).parse(html);
+	}
 
-    @Override
-    public String toString() {
-        return html;
-    }
+	@Override
+	public String toString() {
+		return html;
+	}
 
 }

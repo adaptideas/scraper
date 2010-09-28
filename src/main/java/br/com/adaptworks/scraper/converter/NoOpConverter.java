@@ -6,13 +6,13 @@ package br.com.adaptworks.scraper.converter;
  */
 final public class NoOpConverter implements Converter<Object> {
 
-    @SuppressWarnings("unchecked")
-    public boolean accept(final Class from) {
-        return true;
-    }
+	@SuppressWarnings("unchecked")
+	public boolean accept(final Class from) {
+		return true;
+	}
 
-    public Object convert(final String value) {
-        return value;
-    }
+	public Object convert(final String value) {
+		return value;
+	}
 
 }

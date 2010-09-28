@@ -6,8 +6,8 @@ package br.com.adaptworks.scraper.converter;
  */
 public interface Converter<T> {
 
-    boolean accept(Class<T> to);
+	boolean accept(Class<T> to);
 
-    T convert(String value);
+	T convert(String value);
 
 }

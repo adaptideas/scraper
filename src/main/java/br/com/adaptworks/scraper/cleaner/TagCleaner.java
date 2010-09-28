@@ -8,6 +8,6 @@ import br.com.adaptworks.scraper.tag.Tag;
  */
 public interface TagCleaner {
 
-    boolean shouldClean(Tag element);
+	boolean shouldClean(Tag element);
 
 }

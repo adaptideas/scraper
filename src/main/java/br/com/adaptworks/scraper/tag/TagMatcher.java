@@ -8,6 +8,6 @@ import br.com.adaptworks.scraper.matcher.TemplateTag;
  */
 public interface TagMatcher {
 
-    public boolean matches(final TemplateTag template, final Tag html);
+	public boolean matches(final TemplateTag template, final Tag html);
 
 }

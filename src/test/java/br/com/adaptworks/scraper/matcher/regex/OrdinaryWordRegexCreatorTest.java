@@ -11,24 +11,24 @@ import org.junit.Test;
  */
 final public class OrdinaryWordRegexCreatorTest {
 
-    private RegexCreator creator;
+	private RegexCreator creator;
 
-    @Before
-    public void setup() {
-        creator = new OrdinaryWordRegexCreator();
-    }
+	@Before
+	public void setup() {
+		creator = new OrdinaryWordRegexCreator();
+	}
 
-    @Test
-    public void testThatAcceptsAnything() {
-        Assert.assertTrue(creator.accepts(""));
-        Assert.assertTrue(creator.accepts("..."));
-        Assert.assertTrue(creator.accepts("${name}"));
-        Assert.assertTrue(creator.accepts("simple text"));
-    }
+	@Test
+	public void testThatAcceptsAnything() {
+		Assert.assertTrue(creator.accepts(""));
+		Assert.assertTrue(creator.accepts("..."));
+		Assert.assertTrue(creator.accepts("${name}"));
+		Assert.assertTrue(creator.accepts("simple text"));
+	}
 
-    @Test
-    public void testThatCreatesQuotingRegex() {
-        Assert.assertEquals("\\Qanything\\E", creator.regexFor("anything"));
-    }
+	@Test
+	public void testThatCreatesQuotingRegex() {
+		Assert.assertEquals("\\Qanything\\E", creator.regexFor("anything"));
+	}
 
 }

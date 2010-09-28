@@ -12,27 +12,27 @@ import org.apache.log4j.Logger;
 @SuppressWarnings("unchecked")
 final public class DataConverter {
 
-    private final List<Converter> converters;
+	private final List<Converter> converters;
 
-    private final Logger log = Logger.getLogger(DataConverter.class);
+	private final Logger log = Logger.getLogger(DataConverter.class);
 
-    public DataConverter() {
-        converters = new ArrayList<Converter>();
-    }
+	public DataConverter() {
+		converters = new ArrayList<Converter>();
+	}
 
-    public DataConverter(final List<Converter> converters) {
-        this.converters = converters;
-    }
+	public DataConverter(final List<Converter> converters) {
+		this.converters = converters;
+	}
 
-    public Object convert(final String value, final Class<?> type) {
-        Converter converter = new NoOpConverter();
-        for (Converter c : converters) {
-            if (c.accept(type)) {
-                converter = c;
-            }
-        }
-        log.debug("Converting data to " + type.getName());
-        return converter.convert(value);
-    }
+	public Object convert(final String value, final Class<?> type) {
+		Converter converter = new NoOpConverter();
+		for (Converter c : converters) {
+			if (c.accept(type)) {
+				converter = c;
+			}
+		}
+		log.debug("Converting data to " + type.getName());
+		return converter.convert(value);
+	}
 
 }

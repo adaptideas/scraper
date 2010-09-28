@@ -10,11 +10,11 @@ import org.junit.Test;
  */
 final public class DataConverterTest {
 
-    @Test
-    public void testThatDoesNotConvertValuesIfNotNeeded() {
-        DataConverter converter = new DataConverter();
+	@Test
+	public void testThatDoesNotConvertValuesIfNotNeeded() {
+		DataConverter converter = new DataConverter();
 
-        Assert.assertEquals("123", converter.convert("123", String.class));
-    }
+		Assert.assertEquals("123", converter.convert("123", String.class));
+	}
 
 }

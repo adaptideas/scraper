@@ -8,14 +8,14 @@ import java.util.Map;
  */
 public interface Tag {
 
-    public String name();
+	public String name();
 
-    public TagType type();
+	public TagType type();
 
-    public String content();
+	public String content();
 
-    public String attribute(final String key);
+	public String attribute(final String key);
 
-    public Map<String, String> attributes();
+	public Map<String, String> attributes();
 
 }

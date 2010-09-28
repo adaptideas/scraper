@@ -6,16 +6,16 @@ package br.com.adaptworks.scraper;
  */
 final public class Item {
 
-    private String test;
+	private String test;
 
-    private String foo;
+	private String foo;
 
-    public String test() {
-        return test;
-    }
+	public String test() {
+		return test;
+	}
 
-    public String foo() {
-        return foo;
-    }
+	public String foo() {
+		return foo;
+	}
 
 }

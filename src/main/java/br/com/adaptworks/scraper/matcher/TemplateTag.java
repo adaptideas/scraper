@@ -22,94 +22,94 @@ import br.com.adaptworks.scraper.tag.TagType;
  */
 final public class TemplateTag implements Tag {
 
-    private final Tag tag;
+	private final Tag tag;
 
-    private final List<RegexCreator> creators;
+	private final List<RegexCreator> creators;
 
-    private static Logger log = Logger.getLogger(TemplateTag.class);
+	private static Logger log = Logger.getLogger(TemplateTag.class);
 
-    private final Pattern tagPattern;
-    private final Pattern captureGroupPattern = Pattern.compile("\\$\\{\\s*(.*?)\\s*\\}");
+	private final Pattern tagPattern;
+	private final Pattern captureGroupPattern = Pattern.compile("\\$\\{\\s*(.*?)\\s*\\}");
 
-    private final String templateContent;
+	private final String templateContent;
 
-    public TemplateTag(final Tag tag) {
-        this.tag = tag;
-        creators = new ArrayList<RegexCreator>();
-        creators.add(new EllipsisRegexCreator());
-        creators.add(new CaptureGroupsRegexCreator());
-        creators.add(new OrdinaryWordRegexCreator());
+	public TemplateTag(final Tag tag) {
+		this.tag = tag;
+		creators = new ArrayList<RegexCreator>();
+		creators.add(new EllipsisRegexCreator());
+		creators.add(new CaptureGroupsRegexCreator());
+		creators.add(new OrdinaryWordRegexCreator());
 
-        templateContent = clearContent(tag.content());
-        tagPattern = createPattern(templateContent);
-    }
+		templateContent = clearContent(tag.content());
+		tagPattern = createPattern(templateContent);
+	}
 
-    private String clearContent(final String content) {
-        return captureGroupPattern.matcher(content).replaceAll("\\${$1}");
-    }
+	private String clearContent(final String content) {
+		return captureGroupPattern.matcher(content).replaceAll("\\${$1}");
+	}
 
-    private Pattern createPattern(final String content) {
-        String pattern = "(?i)(?s)^";
-        for (String token : content.split(" ")) {
-            if (token.length() != 0) {
-                for (RegexCreator creator : creators) {
-                    if (creator.accepts(token)) {
-                        pattern += creator.regexFor(token) + " ";
-                        break;
-                    }
-                }
-            }
-        }
-        String regex = pattern.trim() + "$";
-        log.trace("created regex [" + regex + "]");
+	private Pattern createPattern(final String content) {
+		String pattern = "(?i)(?s)^";
+		for (String token : content.split(" ")) {
+			if (token.length() != 0) {
+				for (RegexCreator creator : creators) {
+					if (creator.accepts(token)) {
+						pattern += creator.regexFor(token) + " ";
+						break;
+					}
+				}
+			}
+		}
+		String regex = pattern.trim() + "$";
+		log.trace("created regex [" + regex + "]");
 
-        return Pattern.compile(regex);
+		return Pattern.compile(regex);
 
-    }
+	}
 
-    public Map<String, String> match(final String content) {
-        Map<String, String> map = new HashMap<String, String>();
-        Matcher contentMatcher = tagPattern.matcher(content);
-        if (contentMatcher.find()) {
-            Matcher templateMatcher = captureGroupPattern.matcher(templateContent);
-            int i = 1;
-            while (templateMatcher.find()) {
-                log.trace("putting " + contentMatcher.group(i) + " on " + templateMatcher.group(1));
-                map.put(templateMatcher.group(1), contentMatcher.group(i));
-                i++;
-            }
-        }
-        return map;
-    }
+	public Map<String, String> match(final String content) {
+		Map<String, String> map = new HashMap<String, String>();
+		Matcher contentMatcher = tagPattern.matcher(content);
+		if (contentMatcher.find()) {
+			Matcher templateMatcher = captureGroupPattern.matcher(templateContent);
+			int i = 1;
+			while (templateMatcher.find()) {
+				log.trace("putting " + contentMatcher.group(i) + " on " + templateMatcher.group(1));
+				map.put(templateMatcher.group(1), contentMatcher.group(i));
+				i++;
+			}
+		}
+		return map;
+	}
 
-    public boolean matches(final String content) {
-        return tagPattern.matcher(content).matches();
-    }
+	public boolean matches(final String content) {
+		return tagPattern.matcher(content).matches();
+	}
 
-    public String content() {
-        return templateContent;
-    }
+	public String content() {
+		return templateContent;
+	}
 
-    // Delegate Methods
-    public String attribute(final String key) {
-        return tag.attribute(key);
-    }
+	// Delegate Methods
+	public String attribute(final String key) {
+		return tag.attribute(key);
+	}
 
-    public Map<String, String> attributes() {
-        return tag.attributes();
-    }
+	public Map<String, String> attributes() {
+		return tag.attributes();
+	}
 
-    public String name() {
-        return tag.name();
-    }
+	public String name() {
+		return tag.name();
+	}
 
-    public TagType type() {
-        return tag.type();
-    }
+	public TagType type() {
+		return tag.type();
+	}
 
-    @Override
-    public String toString() {
-        return tag.toString();
-    }
+	@Override
+	public String toString() {
+		return tag.toString();
+	}
 
 }

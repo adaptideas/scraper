@@ -11,31 +11,31 @@ import org.junit.Test;
  */
 final public class EllipsisRegexCreatorTest {
 
-    private RegexCreator creator;
+	private RegexCreator creator;
 
-    @Before
-    public void setup() {
-        creator = new EllipsisRegexCreator();
-    }
+	@Before
+	public void setup() {
+		creator = new EllipsisRegexCreator();
+	}
 
-    @Test
-    public void testThatAcceptsAnything() {
-        Assert.assertFalse(creator.accepts(""));
-        Assert.assertTrue(creator.accepts("..."));
-        Assert.assertTrue(creator.accepts("...text"));
-        Assert.assertTrue(creator.accepts("text..."));
-        Assert.assertFalse(creator.accepts("${name}"));
-        Assert.assertFalse(creator.accepts("simple text"));
-    }
+	@Test
+	public void testThatAcceptsAnything() {
+		Assert.assertFalse(creator.accepts(""));
+		Assert.assertTrue(creator.accepts("..."));
+		Assert.assertTrue(creator.accepts("...text"));
+		Assert.assertTrue(creator.accepts("text..."));
+		Assert.assertFalse(creator.accepts("${name}"));
+		Assert.assertFalse(creator.accepts("simple text"));
+	}
 
-    @Test
-    public void testThatCreatesEllipsisRegex() {
-        Assert.assertEquals("\\Q\\E.*?\\Q\\E", creator.regexFor("..."));
-    }
+	@Test
+	public void testThatCreatesEllipsisRegex() {
+		Assert.assertEquals("\\Q\\E.*?\\Q\\E", creator.regexFor("..."));
+	}
 
-    @Test
-    public void testThatCreatesEllipsisRegexWithText() {
-        Assert.assertEquals("\\Q\\E.*?\\Qtext\\E", creator.regexFor("...text"));
-    }
+	@Test
+	public void testThatCreatesEllipsisRegexWithText() {
+		Assert.assertEquals("\\Q\\E.*?\\Qtext\\E", creator.regexFor("...text"));
+	}
 
 }

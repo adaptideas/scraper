@@ -6,8 +6,8 @@ package br.com.adaptworks.scraper.matcher.regex;
  */
 public interface RegexCreator {
 
-    boolean accepts(String token);
+	boolean accepts(String token);
 
-    String regexFor(String token);
+	String regexFor(String token);
 
 }
