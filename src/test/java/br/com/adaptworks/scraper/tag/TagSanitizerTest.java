@@ -1,7 +1,6 @@
 package br.com.adaptworks.scraper.tag;
 
 import org.junit.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 

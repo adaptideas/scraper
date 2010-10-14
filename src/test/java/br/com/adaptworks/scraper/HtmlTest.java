@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.junit.Assert;
-
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.Theories;

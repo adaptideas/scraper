@@ -1,14 +1,8 @@
 package br.com.adaptworks.scraper.tag;
 
 import org.junit.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
-
-import br.com.adaptworks.scraper.tag.CloseTag;
-import br.com.adaptworks.scraper.tag.OpenTag;
-import br.com.adaptworks.scraper.tag.Tag;
-import br.com.adaptworks.scraper.tag.TagReader;
 
 /**
  * @author jonasabreu

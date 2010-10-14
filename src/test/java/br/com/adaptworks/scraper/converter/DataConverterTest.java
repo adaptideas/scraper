@@ -1,7 +1,6 @@
 package br.com.adaptworks.scraper.converter;
 
 import org.junit.Assert;
-
 import org.junit.Test;
 
 /**

@@ -3,7 +3,6 @@ package br.com.adaptworks.scraper.matcher;
 import java.util.Collections;
 
 import org.junit.Assert;
-
 import org.junit.Test;
 
 import br.com.adaptworks.scraper.tag.OpenTag;
