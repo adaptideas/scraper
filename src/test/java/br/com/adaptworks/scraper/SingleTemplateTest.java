@@ -115,7 +115,22 @@ final public class SingleTemplateTest {
 						"<h1 class=\"titulo seguran-a-em-servidores-linux-norma-iso-27002-dist-ncia-466-\">Segurança em Servidores Linux: Norma ISO 27002 à distância (466)</h1>"));
 		Assert.assertEquals(1, match.size());
 		Assert.assertEquals("Segurança em Servidores Linux: Norma ISO 27002 à distância (466)", match.get(0).test());
+	}
 
+	@Test
+	public void testThatMatchesWithTextSpreadedAcrossTags() {
+		List<Item> match = new SingleTemplate<Item>("<span>A ${test} B...", Item.class).match(new Html(
+				"<span> A<br>de<em>sc <p> B <td> asdf"));
+		Assert.assertEquals(1, match.size());
+		Assert.assertEquals("de sc", match.get(0).test());
+	}
+
+	@Test
+	public void testThatMatchesIfAttributeHasSharp() {
+		List<Item> match = new SingleTemplate<Item>("<span color=\"#ffffff\">${test}</span>", Item.class)
+				.match(new Html("<span color=\"#ffffff\" asd=\"fgh\">abc</span>"));
+		Assert.assertEquals(1, match.size());
+		Assert.assertEquals("abc", match.get(0).test());
 	}
 
 }
