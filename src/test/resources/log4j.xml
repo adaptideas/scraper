@@ -9,7 +9,7 @@
                 </layout>
         </appender>
 
-        <logger name="br.com.adaptworks">
+        <logger name="br.com.adaptideas">
                 <level value="TRACE" />
         </logger>
 
