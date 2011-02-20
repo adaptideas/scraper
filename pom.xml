@@ -61,6 +61,37 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<profiles>
+		<profile>
+			<id>en</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>br.com.caelum.tubaina</groupId>
+						<artifactId>tubaina-maven-plugin</artifactId>
+						<version>1.1-SNAPSHOT</version>
+						<configuration>
+							<bookName>Scraper</bookName>
+							<format>html</format>
+							<inputDir>src/docs/</inputDir>
+							<outputDir>target/tubaina</outputDir>
+							<templateDir>src/tubainaTemplates</templateDir>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>install</phase>
+								<goals>
+									<goal>build</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	
 
 	<developers>
 		<developer>
@@ -69,6 +100,16 @@
 			<email>jonas@vidageek.net</email>
 			<organization>VidaGeek.net</organization>
 			<organizationUrl>http://vidageek.net</organizationUrl>
+			<roles>
+				<role>Project Owner</role>
+				<role>Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<name>Edmilson Miyasaki</name>
+			<id>emiyasaki</id>
+			<organization>AdaptIdeas</organization>
+			<organizationUrl>http://www.adaptideas.com.br</organizationUrl>
 			<roles>
 				<role>Developer</role>
 			</roles>

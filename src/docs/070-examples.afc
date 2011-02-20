@@ -42,7 +42,7 @@ This is kind of trick. It first will match the h2 tag. After that, will capture 
 
 Sometimes, the crawler we are using (http://projetos.vidageek.net/crawler) is not able to understand the encoding (even using IBM icu4j). So, sometimes we use the ellipsis matcher to ignore some chars.
 
-[section To Lazy to get the tag structure]
+[section Too Lazy to get the tag structure]
 
 [code]
 <body>...CARGA HOR&Aacute;RIA ${duration} Local ...

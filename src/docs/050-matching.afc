@@ -33,7 +33,7 @@ As you can see, the tags ::body::, ::p::. ::/p::, ::b::, ::/b:: and ::/body:: wi
 
 But ignoring tag does not mean ignoring text. Anytime a tag is removed, it's content (text) is appended to the previous tag. 
 
-Ah, scraper has no notion of nesting or well-formed html. It simply recognizes anything inside ::<:: and ::>:: as a tag. Why did we do that? Because the web is a really heterogeneous environment. After analyzing more than 20,000 pages, we found lots of crappy coded pages, including mistyped tags, invalid tags, crazy tags on strange namespaces (I'm looking at you, MicroSoft!) and a whole lot more of things that shouldn't exist. The only way we found of consistently parsing that was being able to execute on any kind of awful environment. This also brought a benefit. We can extract information from anything that is marked using ::<:: and ::>::. This includes any Html, Xml or your custom format!
+Ah, scraper has no notion of nesting or well-formed html. It simply recognizes anything inside :: < :: and :: > :: as a tag. Why did we do that? Because the web is a really heterogeneous environment. After analyzing more than 20,000 pages, we found lots of crappy coded pages, including mistyped tags, invalid tags, crazy tags on strange namespaces (I'm looking at you, MicroSoft!) and a whole lot more of things that shouldn't exist. The only way we found of consistently parsing that was being able to execute on any kind of awful environment. This also brought a benefit. We can extract information from anything that is marked using :: < :: and :: > ::. This includes any Html, Xml or your custom format!
 
 [section Tag name]
 

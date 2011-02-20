@@ -6,8 +6,10 @@ This is a good example to start with:
 final public class A {
 
 	public static void main(final String[] args) {
-		Template<Item> template = new SingleTemplate<Item>("<h1>${content}</h1>", Item.class);
-		Item item = template.match(new Html("<h1 class='content'>what <br /> you <b> really </b> want</h1>"));
+		Template<Item> template = new SingleTemplate<Item>(
+					"<h1>${content}</h1>", Item.class);
+		Item item = template.match(new Html(
+					"<h1 class='content'>what <br /> you <b> really </b> want</h1>"));
 		System.out.println(item.getContent());
 	}
 
