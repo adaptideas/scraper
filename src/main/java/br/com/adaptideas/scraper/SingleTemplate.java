@@ -25,12 +25,12 @@ final public class SingleTemplate<T> implements Template<T> {
 	private static final String UTF8 = "UTF-8";
 	private static final Logger log = Logger.getLogger(SingleTemplate.class);
 
-	public SingleTemplate(final InputStream inputStream, final Class<T> type) {
-		this(new InputStreamToStringReader(UTF8).read(inputStream), type, new DataConverter());
+	public SingleTemplate(final InputStream template, final Class<T> type) {
+		this(new InputStreamToStringReader(UTF8).read(template), type, new DataConverter());
 	}
 
-	public SingleTemplate(final InputStream inputStream, final Class<T> type, final DataConverter dataConverter) {
-		this(new InputStreamToStringReader(UTF8).read(inputStream), type, dataConverter);
+	public SingleTemplate(final InputStream template, final Class<T> type, final DataConverter dataConverter) {
+		this(new InputStreamToStringReader(UTF8).read(template), type, dataConverter);
 	}
 
 	public SingleTemplate(final String template, final Class<T> type) {
