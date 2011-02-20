@@ -82,7 +82,7 @@
 		</repository>
 		<repository>
 			<id>Archiva external</id>
-			<url>http://adaptworks.dynalias.com:8081/archiva/repository/internal/</url>
+			<url>http://adaptideas.dynalias.com:8081/archiva/repository/internal/</url>
 		</repository>
 	</repositories>
 

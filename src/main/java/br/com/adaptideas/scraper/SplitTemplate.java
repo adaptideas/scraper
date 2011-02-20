@@ -30,12 +30,12 @@ final public class SplitTemplate<T> implements Template<T> {
 		templates = list;
 	}
 
-	public List<T> match(final Html html) {
-		List<T> found = new ArrayList<T>();
+	public T match(final Html html) {
+		T found = null;
 		int nullsFound = Integer.MAX_VALUE;
 
 		for (Template<T> template : templates) {
-			List<T> match = template.match(html);
+			T match = template.match(html);
 			int nulls = countNulls(match);
 			if (nulls < nullsFound) {
 				nullsFound = nulls;
@@ -45,24 +45,20 @@ final public class SplitTemplate<T> implements Template<T> {
 		return found;
 	}
 
-	private int countNulls(final List<T> match) {
-		int nullCounter = 0;
-		final Mirror mirror = new Mirror();
-		if (match.size() == 0) {
+	private int countNulls(final T match) {
+		if (match == null) {
 			return Integer.MAX_VALUE;
 		}
 
-		final MirrorList<Field> fields = mirror.on(match.get(0).getClass()).reflectAll().fields();
+		final Mirror mirror = new Mirror();
 
-		for (final T type : match) {
-			nullCounter += fields.matching(new Matcher<Field>() {
-				public boolean accepts(final Field element) {
-					return mirror.on(type).get().field(element) == null;
-				}
-			}).size();
-		}
+		final MirrorList<Field> fields = mirror.on(match.getClass()).reflectAll().fields();
 
-		return nullCounter;
+		return fields.matching(new Matcher<Field>() {
+			public boolean accepts(final Field element) {
+				return mirror.on(match).get().field(element) == null;
+			}
+		}).size();
 
 	}
 }

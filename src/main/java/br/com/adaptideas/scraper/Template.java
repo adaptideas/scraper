@@ -1,6 +1,5 @@
 package br.com.adaptideas.scraper;
 
-import java.util.List;
 
 /**
  * @author jonasabreu
@@ -8,6 +7,6 @@ import java.util.List;
  */
 public interface Template<T> {
 
-	List<T> match(Html html);
+	T match(Html html);
 
 }

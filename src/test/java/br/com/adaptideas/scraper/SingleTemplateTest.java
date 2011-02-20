@@ -9,8 +9,6 @@ import org.jmock.Mockery;
 import org.junit.Assert;
 import org.junit.Test;
 
-import br.com.adaptideas.scraper.Html;
-import br.com.adaptideas.scraper.SingleTemplate;
 import br.com.adaptideas.scraper.converter.Converter;
 import br.com.adaptideas.scraper.converter.DataConverter;
 import br.com.adaptideas.scraper.exception.ScraperException;
@@ -43,12 +41,12 @@ final public class SingleTemplateTest {
 
 	@Test
 	public void testThatRecoversData() {
-		List<Item> match = new SingleTemplate<Item>("<td>${test}</td>", Item.class).match(new Html("<td>123</td>"));
-		Assert.assertEquals(1, match.size());
-		Assert.assertEquals("123", match.get(0).test());
+		Item match = new SingleTemplate<Item>("<td>${test}</td>", Item.class).match(new Html("<td>123</td>"));
+		Assert.assertNotNull(match);
+		Assert.assertEquals("123", match.test());
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testThatUsesConvertersWhenSetting() {
 		Mockery mockery = new Mockery();
@@ -74,65 +72,64 @@ final public class SingleTemplateTest {
 
 	@Test
 	public void testThatOnlySearchTagsOnTemplate2() {
-		List<Item> match = new SingleTemplate<Item>("<td>${test}</td>", Item.class).match(new Html("<td>123"));
-		Assert.assertEquals(0, match.size());
+		Item match = new SingleTemplate<Item>("<td>${test}</td>", Item.class).match(new Html("<td>123"));
+		Assert.assertNull(match);
 	}
 
 	@Test
 	public void testThatOnlySearchTagsOnTemplate() {
-		List<Item> match = new SingleTemplate<Item>("<td>${test}</td>", Item.class).match(new Html(
-				"<td><a>123</a></td>"));
-		Assert.assertEquals(1, match.size());
-		Assert.assertEquals("123", match.get(0).test());
+		Item match = new SingleTemplate<Item>("<td>${test}</td>", Item.class).match(new Html("<td><a>123</a></td>"));
+		Assert.assertNotNull(match);
+		Assert.assertEquals("123", match.test());
 	}
 
 	@Test
 	public void testThatDoesNotRemoveImportantWhitespace() {
-		List<Item> match = new SingleTemplate<Item>("<td>${test}</td>", Item.class).match(new Html(
+		Item match = new SingleTemplate<Item>("<td>${test}</td>", Item.class).match(new Html(
 				"<td><p>more <b>some text </b>text</td>"));
-		Assert.assertEquals(1, match.size());
-		Assert.assertEquals("more some text text", match.get(0).test());
+		Assert.assertNotNull(match);
+		Assert.assertEquals("more some text text", match.test());
 	}
 
 	@Test
 	public void testThatOnlySearchTagsOnTemplate3() {
-		List<Item> match = new SingleTemplate<Item>("<td>${test}</td>", Item.class).match(new Html("<td><a>123</td>a"));
-		Assert.assertEquals(1, match.size());
-		Assert.assertEquals("123", match.get(0).test());
+		Item match = new SingleTemplate<Item>("<td>${test}</td>", Item.class).match(new Html("<td><a>123</td>a"));
+		Assert.assertNotNull(match);
+		Assert.assertEquals("123", match.test());
 	}
 
 	@Test
 	public void testThatOnlySearchTagsOnTemplateWithMultipleCaptureGroups() {
-		List<Item> match = new SingleTemplate<Item>("<td>${test} (${foo})</td>a", Item.class).match(new Html(
+		Item match = new SingleTemplate<Item>("<td>${test} (${foo})</td>a", Item.class).match(new Html(
 				"<td>123 (bar)</td>a"));
-		Assert.assertEquals(1, match.size());
-		Assert.assertEquals("123", match.get(0).test());
-		Assert.assertEquals("bar", match.get(0).foo());
+		Assert.assertNotNull(match);
+		Assert.assertEquals("123", match.test());
+		Assert.assertEquals("bar", match.foo());
 	}
 
 	@Test
 	public void testname() {
-		List<Item> match = new SingleTemplate<Item>("<h1 class=\"titulo\">${test}</h1>", Item.class)
+		Item match = new SingleTemplate<Item>("<h1 class=\"titulo\">${test}</h1>", Item.class)
 				.match(new Html(
 						"<h1 class=\"titulo seguran-a-em-servidores-linux-norma-iso-27002-dist-ncia-466-\">Segurança em Servidores Linux: Norma ISO 27002 à distância (466)</h1>"));
-		Assert.assertEquals(1, match.size());
-		Assert.assertEquals("Segurança em Servidores Linux: Norma ISO 27002 à distância (466)", match.get(0).test());
+		Assert.assertNotNull(match);
+		Assert.assertEquals("Segurança em Servidores Linux: Norma ISO 27002 à distância (466)", match.test());
 	}
 
 	@Test
 	public void testThatMatchesWithTextSpreadedAcrossTags() {
-		List<Item> match = new SingleTemplate<Item>("<span>A ${test} B...", Item.class).match(new Html(
+		Item match = new SingleTemplate<Item>("<span>A ${test} B...", Item.class).match(new Html(
 				"<span> A<br>de<em>sc <p> B <td> asdf"));
-		Assert.assertEquals(1, match.size());
-		Assert.assertEquals("de sc", match.get(0).test());
+		Assert.assertNotNull(match);
+		Assert.assertEquals("de sc", match.test());
 	}
 
 	@Test
 	public void testThatMatchesIfAttributeHasSharp() {
-		List<Item> match = new SingleTemplate<Item>("<span color=\"#ffffff\">${test}</span>", Item.class)
-				.match(new Html("<span color=\"#ffffff\" asd=\"fgh\">abc</span>"));
-		Assert.assertEquals(1, match.size());
-		Assert.assertEquals("abc", match.get(0).test());
+		Item match = new SingleTemplate<Item>("<span color=\"#ffffff\">${test}</span>", Item.class).match(new Html(
+				"<span color=\"#ffffff\" asd=\"fgh\">abc</span>"));
+		Assert.assertNotNull(match);
+		Assert.assertEquals("abc", match.test());
 	}
 
 }

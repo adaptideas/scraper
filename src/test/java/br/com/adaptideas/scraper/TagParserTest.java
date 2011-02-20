@@ -295,6 +295,7 @@ final public class TagParserTest {
 		Assert.assertEquals("tD", elements.get(1).name());
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testThatTrimsContent() {
 		List<TemplateTag> relevanteElements = new ArrayList<TemplateTag>();

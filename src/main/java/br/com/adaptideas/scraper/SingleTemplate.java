@@ -55,18 +55,15 @@ final public class SingleTemplate<T> implements Template<T> {
 		this.type = type;
 	}
 
-	public List<T> match(final Html html) {
+	public T match(final Html html) {
 		List<Tag> htmlTags = html.tags(template);
 		log.trace("Matching html: " + htmlTags);
 
-		List<T> list = new ArrayList<T>();
 		TemplateMatcher matcher = new TemplateMatcher(template, htmlTags, converter);
 
-		while (matcher.find()) {
-			list.add(matcher.recoverData(type));
-			matcher = matcher.next();
+		if (matcher.find()) {
+			return matcher.recoverData(type);
 		}
-		return list;
+		return null;
 	}
-
 }
