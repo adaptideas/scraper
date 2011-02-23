@@ -6,6 +6,9 @@
 	<version>0.2</version>
 	<name>Html Scraper</name>
 	<packaging>jar</packaging>
+	<description>An easy to use and maintain html scraper</description>
+	<url>http://projetos.vidageek.net/scraper</url>
+	
 	<organization>
 		<name>AdaptIdeas</name>
 		<url>http://www.adaptideas.com.br</url>
@@ -16,7 +19,7 @@
 		<dependency>
 			<groupId>net.vidageek</groupId>
 			<artifactId>mirror</artifactId>
-			<version>1.6-SNAPSHOT</version>
+			<version>1.6</version>
 		</dependency>
 
 		<dependency>
