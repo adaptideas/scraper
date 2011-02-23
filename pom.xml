@@ -8,11 +8,24 @@
 	<packaging>jar</packaging>
 	<description>An easy to use and maintain html scraper</description>
 	<url>http://projetos.vidageek.net/scraper</url>
-	
+
 	<organization>
 		<name>AdaptIdeas</name>
 		<url>http://www.adaptideas.com.br</url>
 	</organization>
+
+	<licenses>
+		<license>
+			<distribution>repo</distribution>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>scm:git:git://github.com:adaptideas/scraper.git</connection>
+		<url>git://github.com:adaptideas/scraper.git</url>
+	</scm>
 
 	<dependencies>
 
@@ -34,7 +47,7 @@
 			<version>4.7</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.jmock</groupId>
 			<artifactId>jmock</artifactId>
@@ -64,7 +77,7 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<profiles>
 		<profile>
 			<id>en</id>
@@ -94,7 +107,7 @@
 			</build>
 		</profile>
 	</profiles>
-	
+
 
 	<developers>
 		<developer>
@@ -117,18 +130,14 @@
 				<role>Developer</role>
 			</roles>
 		</developer>
+		<developer>
+			<name>Fabio Massa</name>
+			<id>fabiomassa</id>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
 	</developers>
-	
-	<repositories>
-		<repository>
-			<id>Archiva interno</id>
-			<url>http://192.168.0.123:8081/archiva/repository/internal/</url>
-		</repository>
-		<repository>
-			<id>Archiva external</id>
-			<url>http://adaptideas.dynalias.com:8081/archiva/repository/internal/</url>
-		</repository>
-	</repositories>
 
 	<reporting>
 		<plugins>
