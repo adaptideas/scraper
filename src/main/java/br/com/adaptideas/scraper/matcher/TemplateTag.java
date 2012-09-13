@@ -13,6 +13,7 @@ import br.com.adaptideas.scraper.matcher.regex.CaptureGroupsRegexCreator;
 import br.com.adaptideas.scraper.matcher.regex.EllipsisRegexCreator;
 import br.com.adaptideas.scraper.matcher.regex.OrdinaryWordRegexCreator;
 import br.com.adaptideas.scraper.matcher.regex.RegexCreator;
+import br.com.adaptideas.scraper.tag.Attribute;
 import br.com.adaptideas.scraper.tag.Tag;
 import br.com.adaptideas.scraper.tag.TagType;
 
@@ -91,11 +92,11 @@ final public class TemplateTag implements Tag {
 	}
 
 	// Delegate Methods
-	public String attribute(final String key) {
+	public Attribute attribute(final String key) {
 		return tag.attribute(key);
 	}
 
-	public Map<String, String> attributes() {
+	public Map<String, Attribute> attributes() {
 		return tag.attributes();
 	}
 

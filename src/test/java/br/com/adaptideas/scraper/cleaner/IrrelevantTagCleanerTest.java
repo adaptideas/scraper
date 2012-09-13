@@ -8,11 +8,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import br.com.adaptideas.scraper.cleaner.IrrelevantTagCleaner;
-import br.com.adaptideas.scraper.cleaner.TagCleaner;
 import br.com.adaptideas.scraper.matcher.TemplateTag;
+import br.com.adaptideas.scraper.tag.Attribute;
 import br.com.adaptideas.scraper.tag.CloseTag;
 import br.com.adaptideas.scraper.tag.OpenTag;
+import br.com.adaptideas.scraper.tag.StringAttribute;
 
 /**
  * @author jonasabreu
@@ -21,13 +21,13 @@ import br.com.adaptideas.scraper.tag.OpenTag;
 final public class IrrelevantTagCleanerTest {
 
 	private TagCleaner cleaner;
-	private HashMap<String, String> attributes;
+	private HashMap<String, Attribute> attributes;
 
 	@Before
 	public void setup() {
 		List<TemplateTag> list = new ArrayList<TemplateTag>();
-		attributes = new HashMap<String, String>();
-		attributes.put("class", "title");
+		attributes = new HashMap<String, Attribute>();
+		attributes.put("class", new StringAttribute("title"));
 
 		list.add(new TemplateTag(new OpenTag("tr", "", attributes)));
 		cleaner = new IrrelevantTagCleaner(list);
@@ -50,15 +50,15 @@ final public class IrrelevantTagCleanerTest {
 
 	@Test
 	public void testThatDoesNotRemovesTagWithAttributes() {
-		HashMap<String, String> attributes = new HashMap<String, String>();
-		attributes.put("class", "title foo");
+		HashMap<String, Attribute> attributes = new HashMap<String, Attribute>();
+		attributes.put("class", new StringAttribute("title foo"));
 		Assert.assertFalse(cleaner.shouldClean(new OpenTag("tr", "", attributes)));
 	}
 
 	@Test
 	public void testThatRemovesTagWithoutAttributes() {
-		HashMap<String, String> attributes = new HashMap<String, String>();
-		attributes.put("class", "ti tle");
+		HashMap<String, Attribute> attributes = new HashMap<String, Attribute>();
+		attributes.put("class", new StringAttribute("ti tle"));
 		Assert.assertTrue(cleaner.shouldClean(new OpenTag("tr", "", attributes)));
 	}
 

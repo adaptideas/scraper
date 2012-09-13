@@ -8,10 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import br.com.adaptideas.scraper.matcher.TemplateTag;
-import br.com.adaptideas.scraper.tag.DefaultTagMatcher;
-import br.com.adaptideas.scraper.tag.Tag;
-import br.com.adaptideas.scraper.tag.TagMatcher;
-import br.com.adaptideas.scraper.tag.TagType;
 
 /**
  * @author jonasabreu
@@ -20,7 +16,7 @@ import br.com.adaptideas.scraper.tag.TagType;
 final public class DefaultTagMatcherTest {
 
 	private TagMatcher matcher;
-	private final Map<String, String> emptyMap = new HashMap<String, String>();
+	private final HashMap<String, Attribute> emptyMap = new HashMap<String, Attribute>();
 
 	@Before
 	public void setup() {
@@ -53,78 +49,76 @@ final public class DefaultTagMatcherTest {
 
 	@Test
 	public void testThatIgnoresAttributesNotSettedOnTemplateElement() {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("foo", "bar");
-		Assert
-				.assertTrue(matcher.matches(new TemplateTag(new FakeTag("td", "", emptyMap)),
-											new FakeTag("td", "", map)));
+		Map<String, Attribute> map = new HashMap<String, Attribute>();
+		map.put("foo", new StringAttribute("bar"));
+		Assert.assertTrue(matcher.matches(new TemplateTag(new FakeTag("td", "", emptyMap)), new FakeTag("td", "", map)));
 	}
 
 	@Test
 	public void testThatOnlyMatchesIfAttributesSettedOnTemplateWereSettedOnHtml() {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("foo", "bar");
-		map.put("foo2", "bar2");
-		Map<String, String> map2 = new HashMap<String, String>(map);
-		map2.put("foo3", "bar3");
+		HashMap<String, Attribute> map = new HashMap<String, Attribute>();
+		map.put("foo", new StringAttribute("bar"));
+		map.put("foo2", new StringAttribute("bar2"));
+		HashMap<String, Attribute> map2 = new HashMap<String, Attribute>(map);
+		map2.put("foo3", new StringAttribute("bar3"));
 		Assert.assertTrue(matcher.matches(new TemplateTag(new FakeTag("td", "", map)), new FakeTag("td", "", map2)));
 	}
 
 	@Test
 	public void testThatDoesNotMatchIfTemplateAttributeIsNotFoundOnHtml() {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("foo", "bar");
-		map.put("foo2", "bar2");
-		Map<String, String> map2 = new HashMap<String, String>(map);
-		map2.put("foo3", "bar3");
+		HashMap<String, Attribute> map = new HashMap<String, Attribute>();
+		map.put("foo", new StringAttribute("bar"));
+		map.put("foo2", new StringAttribute("bar2"));
+		HashMap<String, Attribute> map2 = new HashMap<String, Attribute>(map);
+		map2.put("foo3", new StringAttribute("bar3"));
 		Assert.assertFalse(matcher.matches(new TemplateTag(new FakeTag("td", "", map2)), new FakeTag("td", "", map)));
 	}
 
 	@Test
 	public void testThatDoesNotMatchIfAttributeValueIsDifferent() {
-		Map<String, String> contentMap = new HashMap<String, String>();
-		contentMap.put("foo", "bar");
-		contentMap.put("foo2", "bar");
-		Map<String, String> templateMap = new HashMap<String, String>(contentMap);
+		HashMap<String, Attribute> contentMap = new HashMap<String, Attribute>();
+		contentMap.put("foo", new StringAttribute("bar"));
+		contentMap.put("foo2", new StringAttribute("bar"));
+		HashMap<String, Attribute> templateMap = new HashMap<String, Attribute>(contentMap);
 		templateMap.remove("foo2");
-		templateMap.put("foo2", "bar2");
+		templateMap.put("foo2", new StringAttribute("bar2"));
 		Assert.assertFalse(matcher.matches(new TemplateTag(new FakeTag("td", "", templateMap)), new FakeTag("td", "",
 				contentMap)));
 	}
 
 	@Test
 	public void testThatDoesNotMatchIfAttributeIsNotSettedOnHtml() {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put("foo", "bar");
-		Map<String, String> map2 = new HashMap<String, String>();
-		map2.put("foo2", "bar");
+		HashMap<String, Attribute> map = new HashMap<String, Attribute>();
+		map.put("foo", new StringAttribute("bar"));
+		HashMap<String, Attribute> map2 = new HashMap<String, Attribute>();
+		map2.put("foo2", new StringAttribute("bar"));
 		Assert.assertFalse(matcher.matches(new TemplateTag(new FakeTag("td", "", map2)), new FakeTag("td", "", map)));
 	}
 
 	@Test
 	public void testThatMatchesIfAttributeContentIsContainedInHtmlAttribute() {
-		Map<String, String> templateMap = new HashMap<String, String>();
-		templateMap.put("class", "titulo");
+		HashMap<String, Attribute> templateMap = new HashMap<String, Attribute>();
+		templateMap.put("class", new StringAttribute("titulo"));
 
-		Map<String, String> contentMap = new HashMap<String, String>();
-		contentMap.put("class", "titulo foo");
+		HashMap<String, Attribute> contentMap = new HashMap<String, Attribute>();
+		contentMap.put("class", new StringAttribute("titulo foo"));
 
 		Assert.assertTrue(matcher.matches(new TemplateTag(new FakeTag("td", "", templateMap)), new FakeTag("td", "",
 				contentMap)));
 	}
 
 	private static class FakeTag implements Tag {
-		private final Map<String, String> attributes;
+		private final Map<String, Attribute> attributes;
 		private final String content;
 		private final String name;
 
-		public FakeTag(final String name, final String content, final Map<String, String> attributes) {
+		public FakeTag(final String name, final String content, final Map<String, Attribute> attributes) {
 			this.name = name;
 			this.content = content;
 			this.attributes = attributes;
 		}
 
-		public Map<String, String> attributes() {
+		public Map<String, Attribute> attributes() {
 			return attributes;
 		}
 
@@ -136,7 +130,7 @@ final public class DefaultTagMatcherTest {
 			return name;
 		}
 
-		public String attribute(final String key) {
+		public Attribute attribute(final String key) {
 			return attributes.get(key);
 		}
 
@@ -146,17 +140,17 @@ final public class DefaultTagMatcherTest {
 	}
 
 	private static class OtherFakeTag implements Tag {
-		private final Map<String, String> attributes;
+		private final Map<String, Attribute> attributes;
 		private final String content;
 		private final String name;
 
-		public OtherFakeTag(final String name, final String content, final Map<String, String> attributes) {
+		public OtherFakeTag(final String name, final String content, final Map<String, Attribute> attributes) {
 			this.name = name;
 			this.content = content;
 			this.attributes = attributes;
 		}
 
-		public Map<String, String> attributes() {
+		public Map<String, Attribute> attributes() {
 			return attributes;
 		}
 
@@ -168,7 +162,7 @@ final public class DefaultTagMatcherTest {
 			return name;
 		}
 
-		public String attribute(final String key) {
+		public Attribute attribute(final String key) {
 			return attributes.get(key);
 		}
 

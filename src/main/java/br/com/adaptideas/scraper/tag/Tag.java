@@ -14,8 +14,8 @@ public interface Tag {
 
 	public String content();
 
-	public String attribute(final String key);
+	public Attribute attribute(final String attributeName);
 
-	public Map<String, String> attributes();
+	public Map<String, Attribute> attributes();
 
 }

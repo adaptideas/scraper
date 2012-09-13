@@ -6,21 +6,21 @@ public enum TagType {
 
 	OPEN(' ') {
 		@Override
-		public Tag createTag(final String name, final String content, final Map<String, String> attributes) {
+		public Tag createTag(final String name, final String content, final Map<String, Attribute> attributes) {
 			return new OpenTag(name, content, attributes);
 		}
 	},
 
 	CLOSE('/') {
 		@Override
-		public Tag createTag(final String name, final String content, final Map<String, String> attributes) {
+		public Tag createTag(final String name, final String content, final Map<String, Attribute> attributes) {
 			return new CloseTag(name, content, attributes);
 		}
 	},
 
 	BANG('!') {
 		@Override
-		public Tag createTag(final String name, final String content, final Map<String, String> attributes) {
+		public Tag createTag(final String name, final String content, final Map<String, Attribute> attributes) {
 			return new BangTag(name, content, attributes);
 		}
 	};
@@ -31,7 +31,7 @@ public enum TagType {
 		this.character = character;
 	}
 
-	public abstract Tag createTag(String name, String content, Map<String, String> attributes);
+	public abstract Tag createTag(String name, String content, Map<String, Attribute> map);
 
 	public static TagType fromValue(final char character) {
 		for (TagType type : values()) {

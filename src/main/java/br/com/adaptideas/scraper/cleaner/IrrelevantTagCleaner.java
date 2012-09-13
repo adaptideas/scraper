@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import br.com.adaptideas.scraper.matcher.TemplateTag;
+import br.com.adaptideas.scraper.tag.Attribute;
 import br.com.adaptideas.scraper.tag.Tag;
 
 /**
@@ -29,9 +30,9 @@ final public class IrrelevantTagCleaner implements TagCleaner {
 	}
 
 	private boolean attributesMatches(final Tag tag, final Tag element) {
-		for (Entry<String, String> entry : tag.attributes().entrySet()) {
+		for (Entry<String, Attribute> entry : tag.attributes().entrySet()) {
 			if (!element.attributes().containsKey(entry.getKey())
-					|| !element.attributes().get(entry.getKey()).contains(entry.getValue())) {
+					|| !element.attributes().get(entry.getKey()).matches(entry.getValue())) {
 				return false;
 			}
 		}

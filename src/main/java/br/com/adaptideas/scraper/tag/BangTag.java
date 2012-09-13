@@ -8,21 +8,21 @@ import java.util.Map;
  */
 final public class BangTag implements Tag {
 
-	private final Map<String, String> attributes;
+	private final Map<String, Attribute> attributes;
 	private final String name;
 	private final String content;
 
-	public BangTag(final String name, final String content, final Map<String, String> attributes) {
+	public BangTag(final String name, final String content, final Map<String, Attribute> attributes) {
 		this.name = name;
 		this.content = content == null ? "" : content;
 		this.attributes = attributes;
 	}
 
-	public String attribute(final String key) {
+	public Attribute attribute(final String key) {
 		return attributes.get(key);
 	}
 
-	public Map<String, String> attributes() {
+	public Map<String, Attribute> attributes() {
 		return attributes;
 	}
 

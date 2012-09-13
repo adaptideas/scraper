@@ -195,8 +195,8 @@ final public class TagParserTest {
 		Assert.assertEquals("content", elements.get(0).content());
 		Assert.assertEquals("foo content", elements.get(1).content());
 
-		Assert.assertEquals("bla", elements.get(0).attributes().get("id"));
-		Assert.assertEquals("pong", elements.get(1).attributes().get("attr"));
+		Assert.assertEquals("bla", elements.get(0).attributes().get("id").value());
+		Assert.assertEquals("pong", elements.get(1).attributes().get("attr").value());
 	}
 
 	@Test
@@ -211,8 +211,8 @@ final public class TagParserTest {
 		Assert.assertEquals("a", elements.get(0).name());
 		Assert.assertEquals("a", elements.get(1).name());
 
-		Assert.assertEquals("http://blog.caelum.com.br ", elements.get(0).attributes().get("href"));
-		Assert.assertEquals("b", elements.get(0).attributes().get("a"));
+		Assert.assertEquals("http://blog.caelum.com.br ", elements.get(0).attributes().get("href").value());
+		Assert.assertEquals("b", elements.get(0).attributes().get("a").value());
 
 		Assert.assertEquals("Comunidade", elements.get(0).content());
 	}
@@ -224,7 +224,7 @@ final public class TagParserTest {
 		Assert.assertEquals(1, elements.size());
 		Assert.assertEquals(OpenTag.class, elements.get(0).getClass());
 		Assert.assertEquals("a", elements.get(0).name());
-		Assert.assertEquals("http://bla", elements.get(0).attributes().get("href"));
+		Assert.assertEquals("http://bla", elements.get(0).attributes().get("href").value());
 
 	}
 
@@ -253,7 +253,7 @@ final public class TagParserTest {
 		Assert.assertEquals(1, elements.size());
 		Assert.assertEquals(OpenTag.class, elements.get(0).getClass());
 		Assert.assertEquals("hr", elements.get(0).name());
-		Assert.assertEquals("b", elements.get(0).attributes().get("a"));
+		Assert.assertEquals("b", elements.get(0).attributes().get("a").value());
 	}
 
 	@SuppressWarnings("unchecked")

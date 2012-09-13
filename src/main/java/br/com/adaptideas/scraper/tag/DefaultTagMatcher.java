@@ -39,16 +39,17 @@ final public class DefaultTagMatcher implements TagMatcher {
 		return template.equalsIgnoreCase(html);
 	}
 
-	private boolean attributesMatches(final Map<String, String> template, final Map<String, String> html) {
-		if (template.size() > html.size()) {
+	private boolean attributesMatches(final Map<String, Attribute> templateAttributes,
+			final Map<String, Attribute> htmlAttributes) {
+		if (templateAttributes.size() > htmlAttributes.size()) {
 			return false;
 		}
-		for (Entry<String, String> entry : template.entrySet()) {
-			String htmlValue = html.get(entry.getKey());
+		for (Entry<String, Attribute> entry : templateAttributes.entrySet()) {
+			Attribute htmlValue = htmlAttributes.get(entry.getKey());
 			if (htmlValue == null) {
 				return false;
 			}
-			if (!htmlValue.contains(entry.getValue())) {
+			if (!htmlValue.matches(entry.getValue())) {
 				return false;
 			}
 		}

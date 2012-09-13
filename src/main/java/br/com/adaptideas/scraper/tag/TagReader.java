@@ -11,7 +11,7 @@ final public class TagReader {
 
 	public Tag readTag(final String declaration, final String content) {
 		String tag = new TagSanitizer().sanitize(declaration);
-		Map<String, String> attributes = recoverAttributes(tag);
+		Map<String, Attribute> attributes = recoverAttributes(tag);
 		String tagName = recoverName(tag);
 		TagType tagType = recoverType(tag);
 
@@ -28,14 +28,14 @@ final public class TagReader {
 		return tagName.startsWith("/") || tagName.startsWith("!") ? tagName.substring(1) : tagName;
 	}
 
-	private Map<String, String> recoverAttributes(final String declaration) {
+	private Map<String, Attribute> recoverAttributes(final String declaration) {
 		String[] tokens = tokenize(declaration);
-		Map<String, String> map = new HashMap<String, String>();
+		Map<String, Attribute> map = new HashMap<String, Attribute>();
 
 		for (int i = 1; i < tokens.length; i++) {
 			String[] attribute = tokens[i].split("=\"|\"");
 			if (attribute.length == 2) {
-				map.put(attribute[0], attribute[1]);
+				map.put(attribute[0], Attribute.from(attribute[1]));
 			}
 		}
 		return map;
