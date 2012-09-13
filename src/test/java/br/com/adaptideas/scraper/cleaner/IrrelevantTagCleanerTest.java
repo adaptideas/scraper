@@ -77,4 +77,18 @@ final public class IrrelevantTagCleanerTest {
 		TagCleaner cleaner = new IrrelevantTagCleaner(list);
 		Assert.assertFalse(cleaner.shouldClean(new OpenTag("b", "123 (bar)a", attributes)));
 	}
+
+	@Test
+	public void testThatDoesNotRemoveTagsWithCaptureGroupsInsideAttributes() {
+		List<TemplateTag> list = new ArrayList<TemplateTag>();
+		HashMap<String, String> attributesTemplate = new HashMap<String, String>();
+		attributesTemplate.put("href", "${test}");
+		list.add(new TemplateTag(new OpenTag("a", "", attributesTemplate)));
+		TagCleaner cleaner = new IrrelevantTagCleaner(list);
+
+		HashMap<String, String> attributesTag = new HashMap<String, String>();
+		attributesTag.put("href", "www.google.com");
+
+		Assert.assertFalse(cleaner.shouldClean(new OpenTag("a", "", attributesTag)));
+	}
 }

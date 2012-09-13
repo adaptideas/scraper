@@ -138,6 +138,14 @@ final public class ScraperSpecificationTest {
 				.match(new Html("<strong> Carga hor&aacute;ria - 16h</strong>"));
 		Assert.assertNotNull(item);
 		Assert.assertEquals("16", item.test());
+	}
 
+	@Test
+	public void testThatAttributeCaptureGroupsWork() {
+		Item item = new SingleTemplate<Item>("<a href=\"${test}\">", Item.class).match(new Html(
+				"<a href=\"www.google.com\">"));
+
+		Assert.assertNotNull(item);
+		Assert.assertEquals("www.google.com", item.test());
 	}
 }
