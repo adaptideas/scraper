@@ -81,13 +81,13 @@ final public class IrrelevantTagCleanerTest {
 	@Test
 	public void testThatDoesNotRemoveTagsWithCaptureGroupsInsideAttributes() {
 		List<TemplateTag> list = new ArrayList<TemplateTag>();
-		HashMap<String, String> attributesTemplate = new HashMap<String, String>();
-		attributesTemplate.put("href", "${test}");
+		HashMap<String, Attribute> attributesTemplate = new HashMap<String, Attribute>();
+		attributesTemplate.put("href", Attribute.from("${test}"));
 		list.add(new TemplateTag(new OpenTag("a", "", attributesTemplate)));
 		TagCleaner cleaner = new IrrelevantTagCleaner(list);
 
-		HashMap<String, String> attributesTag = new HashMap<String, String>();
-		attributesTag.put("href", "www.google.com");
+		HashMap<String, Attribute> attributesTag = new HashMap<String, Attribute>();
+		attributesTag.put("href", Attribute.from("www.google.com"));
 
 		Assert.assertFalse(cleaner.shouldClean(new OpenTag("a", "", attributesTag)));
 	}
