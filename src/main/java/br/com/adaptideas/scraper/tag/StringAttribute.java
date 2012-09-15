@@ -22,4 +22,14 @@ final public class StringAttribute extends Attribute {
 	public String toString() {
 		return value;
 	}
+
+	@Override
+	public boolean canExtract() {
+		return false;
+	}
+
+	@Override
+	public String[] extract(final Attribute attribute) {
+		return null;
+	}
 }

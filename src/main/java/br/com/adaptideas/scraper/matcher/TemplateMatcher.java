@@ -59,7 +59,7 @@ final public class TemplateMatcher {
 	}
 
 	private void set(final Object instance, final TemplateTag templateTag, final Tag htmlTag) {
-		Map<String, String> map = templateTag.match(htmlTag.content());
+		Map<String, String> map = templateTag.match(htmlTag);
 
 		for (Entry<String, String> entry : map.entrySet()) {
 
@@ -75,9 +75,8 @@ final public class TemplateMatcher {
 		MirrorList<Method> setters = new Mirror().on((Class<?>) instance.getClass()).reflectAll().setters();
 		for (Method setter : setters) {
 			if (setter.getName().equalsIgnoreCase("set" + entry.getKey())) {
-				new Mirror().on(instance).invoke().method(setter).withArgs(
-																			converter.convert(entry.getValue(), setter
-																					.getParameterTypes()[0]));
+				new Mirror().on(instance).invoke().method(setter)
+						.withArgs(converter.convert(entry.getValue(), setter.getParameterTypes()[0]));
 				return true;
 			}
 		}

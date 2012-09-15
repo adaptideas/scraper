@@ -8,6 +8,10 @@ public abstract class Attribute {
 
 	public abstract String value();
 
+	public abstract boolean canExtract();
+
+	public abstract String[] extract(Attribute attribute);
+
 	public static Attribute from(final String value) {
 		String cleanValue = new ContentCleaner().clean(value);
 		if (cleanValue.contains("${") || cleanValue.contains("...")) {
