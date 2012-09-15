@@ -26,4 +26,9 @@ final public class PatternAttribute extends Attribute {
 		return value;
 	}
 
+	@Override
+	public String toString() {
+		return "[" + pattern.pattern() + "]";
+	}
+
 }

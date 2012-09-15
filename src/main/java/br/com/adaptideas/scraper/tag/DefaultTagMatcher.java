@@ -49,7 +49,7 @@ final public class DefaultTagMatcher implements TagMatcher {
 			if (htmlValue == null) {
 				return false;
 			}
-			if (!htmlValue.matches(entry.getValue())) {
+			if (!entry.getValue().matches(htmlValue)) {
 				return false;
 			}
 		}

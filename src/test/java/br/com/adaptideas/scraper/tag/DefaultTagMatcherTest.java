@@ -81,7 +81,7 @@ final public class DefaultTagMatcherTest {
 		contentMap.put("foo2", new StringAttribute("bar"));
 		HashMap<String, Attribute> templateMap = new HashMap<String, Attribute>(contentMap);
 		templateMap.remove("foo2");
-		templateMap.put("foo2", new StringAttribute("bar2"));
+		templateMap.put("foo2", new StringAttribute("ber2"));
 		Assert.assertFalse(matcher.matches(new TemplateTag(new FakeTag("td", "", templateMap)), new FakeTag("td", "",
 				contentMap)));
 	}

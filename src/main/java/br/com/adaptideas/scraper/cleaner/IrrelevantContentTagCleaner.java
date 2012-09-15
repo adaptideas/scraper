@@ -32,7 +32,7 @@ final public class IrrelevantContentTagCleaner implements TagCleaner {
 	private boolean attributesMatches(final Tag tag, final Tag element) {
 		for (Entry<String, Attribute> entry : tag.attributes().entrySet()) {
 			if (!element.attributes().containsKey(entry.getKey())
-					|| !element.attributes().get(entry.getKey()).matches(entry.getValue())) {
+					|| !entry.getValue().matches(element.attributes().get(entry.getKey()))) {
 				return false;
 			}
 		}

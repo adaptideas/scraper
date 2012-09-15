@@ -108,7 +108,7 @@ final public class SingleTemplateTest {
 	}
 
 	@Test
-	public void testname() {
+	public void shouldMatchTagOnStrangeTags() {
 		Item match = new SingleTemplate<Item>("<h1 class=\"titulo\">${test}</h1>", Item.class)
 				.match(new Html(
 						"<h1 class=\"titulo seguran-a-em-servidores-linux-norma-iso-27002-dist-ncia-466-\">Segurança em Servidores Linux: Norma ISO 27002 à distância (466)</h1>"));

@@ -10,7 +10,7 @@ final public class StringAttribute extends Attribute {
 
 	@Override
 	public boolean matches(final Attribute attribute) {
-		return value.contains(attribute.value());
+		return attribute.value().contains(value);
 	}
 
 	@Override

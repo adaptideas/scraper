@@ -29,14 +29,22 @@ final public class IrrelevantTagCleaner implements TagCleaner {
 		return true;
 	}
 
-	private boolean attributesMatches(final Tag tag, final Tag element) {
-		for (Entry<String, Attribute> entry : tag.attributes().entrySet()) {
-			if (!element.attributes().containsKey(entry.getKey())
-					|| !element.attributes().get(entry.getKey()).matches(entry.getValue())) {
+	private boolean attributesMatches(final Tag templateTag, final Tag element) {
+		for (Entry<String, Attribute> entry : templateTag.attributes().entrySet()) {
+			if (!elementContainsAttribute(element, entry)
+					|| !templateMatchesElement(element, entry)) {
 				return false;
 			}
 		}
 		return true;
+	}
+
+	private boolean templateMatchesElement(final Tag element, Entry<String, Attribute> entry) {
+		return entry.getValue().matches(element.attributes().get(entry.getKey()));
+	}
+
+	private boolean elementContainsAttribute(final Tag element, Entry<String, Attribute> entry) {
+		return element.attributes().containsKey(entry.getKey());
 	}
 
 }
