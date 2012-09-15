@@ -29,14 +29,14 @@ final public class TagListMatcherTest {
 
 	@Test
 	public void testThatMatchesSameSequence() {
-		Integer match = matcher.match(this.list(openTag, openTag, closeTag), this.list(openTag, openTag, closeTag));
+		Integer match = matcher.match(this.list(openTag, openTag, closeTag), this.list(openTag, openTag, closeTag), 0);
 		Assert.assertEquals(new Integer(0), match);
 	}
 
 	@Test
 	public void testThatMatchesMoreThanOneSequence() {
 		Integer match = matcher.match(	this.list(openTag, openTag),
-										this.list(openTag, openTag, openTag, openTag, closeTag));
+										this.list(openTag, openTag, openTag, openTag, closeTag), 0);
 		Assert.assertEquals(new Integer(0), match);
 	}
 
@@ -44,7 +44,7 @@ final public class TagListMatcherTest {
 	public void testThatDoesNotMatchIfThereIsNoMatchingSequence() {
 		Assert.assertEquals(new Integer(-1),
 							matcher.match(	this.list(openTag, openTag),
-											this.list(closeTag, openTag, closeTag, closeTag, openTag)));
+											this.list(closeTag, openTag, closeTag, closeTag, openTag), 0));
 	}
 
 	private <T extends Tag> List<T> list(final T... ts) {

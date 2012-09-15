@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import br.com.adaptideas.scraper.converter.DataConverter;
 import br.com.adaptideas.scraper.infra.InputStreamToStringReader;
+import br.com.adaptideas.scraper.infra.Tuple2;
 import br.com.adaptideas.scraper.matcher.TemplateMatcher;
 import br.com.adaptideas.scraper.matcher.TemplateTag;
 import br.com.adaptideas.scraper.tag.Tag;
@@ -56,10 +57,18 @@ final public class SingleTemplate<T> implements Template<T> {
 	}
 
 	public T match(final Html html) {
+		final Tuple2<T, Integer> match = match(html, 0);
+		if (match == null) {
+			return null;
+		}
+		return match._1;
+	}
+
+	Tuple2<T, Integer> match(final Html html, final Integer offset) {
 		List<Tag> htmlTags = html.tags(template);
 		log.trace("Matching html: " + htmlTags);
 
-		TemplateMatcher matcher = new TemplateMatcher(template, htmlTags, converter);
+		TemplateMatcher matcher = new TemplateMatcher(template, htmlTags, converter, offset);
 
 		if (matcher.find()) {
 			return matcher.recoverData(type);

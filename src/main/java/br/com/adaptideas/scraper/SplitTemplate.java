@@ -9,6 +9,7 @@ import net.vidageek.mirror.dsl.Mirror;
 import net.vidageek.mirror.list.dsl.Matcher;
 import net.vidageek.mirror.list.dsl.MirrorList;
 import br.com.adaptideas.scraper.converter.DataConverter;
+import br.com.adaptideas.scraper.infra.Tuple2;
 
 /**
  * @author jonasabreu
@@ -16,14 +17,14 @@ import br.com.adaptideas.scraper.converter.DataConverter;
  */
 final public class SplitTemplate<T> implements Template<T> {
 
-	private List<Template<T>> templates;
+	private List<SingleTemplate<T>> templates;
 
 	public SplitTemplate(final String templateStrings, final Class<T> type) {
 		this(templateStrings, type, new DataConverter());
 	}
 
 	public SplitTemplate(final String templateStrings, final Class<T> type, final DataConverter converter) {
-		List<Template<T>> list = new ArrayList<Template<T>>();
+		List<SingleTemplate<T>> list = new ArrayList<SingleTemplate<T>>();
 		for (String templateString : templateStrings.split(Pattern.quote("<split>"))) {
 			list.add(new SingleTemplate<T>(templateString, type, converter));
 		}
@@ -31,12 +32,23 @@ final public class SplitTemplate<T> implements Template<T> {
 	}
 
 	public T match(final Html html) {
-		T found = null;
+		Tuple2<T, Integer> match = match(html, 0);
+		if (match == null) {
+			return null;
+		}
+		return match._1;
+	}
+
+	Tuple2<T, Integer> match(final Html html, final Integer offset) {
+		Tuple2<T, Integer> found = null;
 		int nullsFound = Integer.MAX_VALUE;
 
-		for (Template<T> template : templates) {
-			T match = template.match(html);
-			int nulls = countNulls(match);
+		for (SingleTemplate<T> template : templates) {
+			Tuple2<T, Integer> match = template.match(html, offset);
+			if (match == null) {
+				continue;
+			}
+			int nulls = countNulls(match._1);
 			if (nulls < nullsFound) {
 				nullsFound = nulls;
 				found = match;

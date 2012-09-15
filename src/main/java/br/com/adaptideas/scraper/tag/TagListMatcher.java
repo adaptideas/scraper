@@ -20,9 +20,9 @@ final public class TagListMatcher {
 		this.matcher = matcher;
 	}
 
-	public Integer match(final List<TemplateTag> template, final List<? extends Tag> tags) {
+	public Integer match(final List<TemplateTag> template, final List<? extends Tag> tags, final int offset) {
 
-		for (int i = 0; i < tags.size(); i++) {
+		for (int i = offset; i < tags.size(); i++) {
 			int j = 0;
 			while ((j < template.size()) && (i + j < tags.size()) && matcher.matches(template.get(j), tags.get(i + j))) {
 				j++;
