@@ -6,8 +6,7 @@ package br.com.adaptideas.scraper.converter;
  */
 final public class NoOpConverter implements Converter<Object> {
 
-	@SuppressWarnings("unchecked")
-	public boolean accept(final Class from) {
+	public boolean accept(final Class<Object> from) {
 		return true;
 	}
 

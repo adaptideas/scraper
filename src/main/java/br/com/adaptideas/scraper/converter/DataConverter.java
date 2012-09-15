@@ -12,21 +12,21 @@ import org.apache.log4j.Logger;
 @SuppressWarnings("unchecked")
 final public class DataConverter {
 
-	private final List<Converter> converters;
+	private final List<Converter<?>> converters;
 
 	private final Logger log = Logger.getLogger(DataConverter.class);
 
 	public DataConverter() {
-		converters = new ArrayList<Converter>();
+		converters = new ArrayList<Converter<?>>();
 	}
 
-	public DataConverter(final List<Converter> converters) {
+	public DataConverter(final List<Converter<?>> converters) {
 		this.converters = converters;
 	}
 
-	public Object convert(final String value, final Class<?> type) {
-		Converter converter = new NoOpConverter();
-		for (Converter c : converters) {
+	public Object convert(final String value, @SuppressWarnings("rawtypes") final Class type) {
+		Converter<?> converter = new NoOpConverter();
+		for (Converter<?> c : converters) {
 			if (c.accept(type)) {
 				converter = c;
 			}

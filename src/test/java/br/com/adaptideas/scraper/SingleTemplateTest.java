@@ -61,7 +61,7 @@ final public class SingleTemplateTest {
 			}
 		});
 
-		List<Converter> list = new ArrayList<Converter>();
+		List<Converter<?>> list = new ArrayList<Converter<?>>();
 		list.add(converter);
 
 		new SingleTemplate<Item>("<td>${test}</td>", Item.class, new DataConverter(list))
