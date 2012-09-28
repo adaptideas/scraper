@@ -13,10 +13,8 @@ final public class PatternAttribute extends Attribute {
 
 	public PatternAttribute(final String value) {
 		this.value = value;
-		System.out.println(value);
 		pattern = new PatternCreator(false).create(value);
 		extractionPattern = new PatternCreator().create(value);
-		System.out.println(pattern.pattern());
 	}
 
 	@Override
